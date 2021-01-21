@@ -7,7 +7,7 @@ app.use(express.json()); // -> req.body
 //ROUTES
 app.get("/", async (req, res) => {
   try {
-    res.json("ok server");
+    res.json("ok servers");
   } catch (err) {
     console.error(err.message);
   }
