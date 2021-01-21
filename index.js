@@ -1,3 +1,4 @@
+var PORT = process.env.PORT || 5000;
 const express = require("express");
 const app = express();
 // const pool = require("./db");
@@ -86,6 +87,6 @@ app.get("/", async (req, res) => {
 // });
 
 //Listen to port
-app.listen(5000, () => {
-  console.log("Server is listening to port 5000");
+app.listen(PORT, () => {
+  console.log("Server is listening to port " + PORT);
 });
