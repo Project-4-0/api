@@ -1,6 +1,7 @@
 //express framework
 const express = require("express");
 const router = express.Router();
+router.use(express.json());
 
 //Controller import
 const boxController = require('../controllers/boxController');
