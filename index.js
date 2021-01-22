@@ -21,6 +21,10 @@ app.get("/", (req, res) => {res.send("Api has loaded succesfully" )});
     const boxuserRoute = require("./app/routes/boxuserRoute");
     app.use('/boxUser' , boxuserRoute);
 
+    //location
+    const locationRoute = require("./app/routes/locationRoute");
+    app.use('/locationUser' , locationRoute);
+
     //monitoring
     //const monitoringRoute = require("./app/routes/monitoringRoute");
     //app.use('/monitoring' , monitoringRoute);
