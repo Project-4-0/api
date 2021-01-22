@@ -2,6 +2,8 @@
 const express = require("express");
 const router = express.Router();
 
+router.use(express.json());
+
 //Controller import
 const boxController = require('../controllers/boxController');
 
@@ -14,4 +16,3 @@ router.delete("/:id", boxController.box_delete);
 
 //Export route
 module.exports = router;
-  

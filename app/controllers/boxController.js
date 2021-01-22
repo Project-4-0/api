@@ -1,9 +1,6 @@
 //DataBase connection
 const pool = require("../db/db"); 
 
-
-
-
 //Get all boxes
 const box_indexs = async (req, res) => {
     try {

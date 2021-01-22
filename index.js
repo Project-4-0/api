@@ -3,11 +3,8 @@ const express = require("express");
 //app object
 const app = express();
 
-express.json(); // -> req.body
 //main 
-app.get("/", (req, res) => {
-    res.send("Api has loaded succesfully" );
-    });
+app.get("/", (req, res) => {res.send("Api has loaded succesfully" )});
 
 //routes
     //box
@@ -15,19 +12,32 @@ app.get("/", (req, res) => {
     app.use('/box' , boxRoute);
 
     //user
-    //require("./app/routes/user.routes")(app);
+    const userRoute = require("./app/routes/userRoute");
+    app.use('/users' , userRoute);
+
     //boxuser
-    //require("./app/routes/boxuser.routes")(app);
+    const boxuserRoute = require("./app/routes/boxuserRoute");
+    app.use('/boxUser' , boxuserRoute);
+
     //monitoring
-    //require("./app/routes/monitoring.routes")(app);
+    //const monitoringRoute = require("./app/routes/monitoringRoute");
+    //app.use('/monitoring' , monitoringRoute);
+
     //sensorbox
-    //require("./app/routes/sensorbox.routes")(app);
+    //const sensorboxRoute = require("./app/routes/sensorboxRoute");
+    //app.use('/sensorbox' , sensorboxRoute);
+
     //sensor
-    //require("./app/routes/sensor.routes")(app);
+    //const sensorRoute = require("./app/routes/sensorRoute");
+    //app.use('/sensors' , sensorRoute);
+
     //measurement
-    //require("./app/routes/measurement.routes")(app);
+    //const measurementRoute = require("./app/routes/measurementRoute");
+    //app.use('/measurements' , measurementRoute);
+
     //sensortype
-    //require("./app/routes/sensortype.routes")(app);
+    //const sensortypeRoute = require("./app/routes/sensortypeRoute");
+    //app.use('/sensortypes' , sensortypeRoute);
 
 
 //Listen to port (non static)
