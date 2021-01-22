@@ -33,6 +33,19 @@ app.get("/", (req, res) => {
 // const pool = require("./db");
 app.use(express.json()); // -> req.body
 
+//ROUTES
+
+
+app.get("/", async (req, res) => {
+  try {
+    res.json("ok servers");
+
+
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //Listen to port
 app.listen(PORT, () => {
   console.log("Server is listening to port " + PORT);
