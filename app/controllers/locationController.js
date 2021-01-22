@@ -37,7 +37,7 @@ const location_create = async  (req, res) => {
     const { boxuserid,latitude,longitude,startdate,enddate } = req.body;
     const newLocation = await pool.query("INSERT INTO location (boxuserid,latitude,longitude,startdate,enddate) VALUES ($1,$2,$3,$4,$5) RETURNING *", [boxuserid,latitude,longitude,startdate,enddate])
 
-    if (req.boxuserid.name == null || req.body.name.length < 3) {
+    if (req.boxuserid.boxuserid == null) {
         res.status(404).send("This location needs to belong to a boxuser" );} 
     if (req.body.latitude == null) {
         res.status(404).send("This location needs a latitude" );}
@@ -59,11 +59,11 @@ const location_update = async  (req, res) => {
   try {
     const { id } = req.params; //WHERE
     const { boxuserid, latitude, longitude, startdate, enddate } = req.body;
-    const updateLocation = await pool.query("UPDATE location SET boxuserid = $1 WHERE boxid = $2",[boxuserid, id]);  
-                           await pool.query("UPDATE location SET latitude = $1 WHERE latitude = $2",[latitude, id]);  
-                           await pool.query("UPDATE location SET longitude = $1 WHERE longitude = $2",[longitude, id]);  
-                           await pool.query("UPDATE location SET startdate = $1 WHERE startdate = $2",[startdate, id]);
-                           await pool.query("UPDATE location SET enddate = $1 WHERE enddate = $2",[enddate, id]);
+    const updateLocation = await pool.query("UPDATE location SET boxuserid = $1 WHERE controllerid = $2",[boxuserid, id]);  
+                           await pool.query("UPDATE location SET latitude = $1 WHERE controllerid = $2",[latitude, id]);  
+                           await pool.query("UPDATE location SET longitude = $1 WHERE controllerid = $2",[longitude, id]);  
+                           await pool.query("UPDATE location SET startdate = $1 WHERE controllerid = $2",[startdate, id]);
+                           await pool.query("UPDATE location SET enddate = $1 WHERE controllerid = $2",[enddate, id]);
     res.json("location was updated");
 } catch(err) {
     console.error(err.message)

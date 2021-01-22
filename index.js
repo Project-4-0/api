@@ -26,8 +26,8 @@ app.get("/", (req, res) => {res.send("Api has loaded succesfully" )});
     app.use('/locationUser' , locationRoute);
 
     //monitoring
-    //const monitoringRoute = require("./app/routes/monitoringRoute");
-    //app.use('/monitoring' , monitoringRoute);
+    const monitoringRoute = require("./app/routes/monitoringRoute");
+    app.use('/monitoring' , monitoringRoute);
 
     //sensorbox
     //const sensorboxRoute = require("./app/routes/sensorboxRoute");
