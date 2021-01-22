@@ -41,6 +41,19 @@ app.get("/", (req, res) => {res.send("Api has loaded succesfully" )});
     //const sensortypeRoute = require("./app/routes/sensortypeRoute");
     //app.use('/sensortypes' , sensortypeRoute);
 
+//ROUTES
+
+
+app.get("/", async (req, res) => {
+  try {
+    res.json("ok servers");
+
+
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //Listen to port
 app.listen(PORT, () => {
   console.log("Server is listening to port " + PORT);
