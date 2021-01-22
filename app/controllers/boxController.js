@@ -38,7 +38,7 @@ const box_create = async  (req, res) => {
     const newBox = await pool.query("INSERT INTO box (macadress,name,comment,active) VALUES ($1,$2,$3,$4) RETURNING *", [macadress,name,comment,active])
 
     if (req.body.name == null || req.body.name.length < 3) {
-        res.status(404).send("This box needs a name of atleast 3 chaaracters" );} 
+        res.status(404).send("This box needs a name of atleast 3 characters" );} 
     if (req.body.macadress == null) {
         res.status(404).send("This box needs a macadress" );}
     else {
