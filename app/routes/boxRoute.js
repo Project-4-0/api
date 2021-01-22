@@ -1,6 +1,7 @@
 //express framework
 const express = require("express");
 const router = express.Router();
+router.use(express.json());
 
 router.use(express.json());
 
@@ -16,3 +17,4 @@ router.delete("/:id", boxController.box_delete);
 
 //Export route
 module.exports = router;
+  

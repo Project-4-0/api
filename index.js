@@ -1,5 +1,7 @@
 //express framework
+var PORT = process.env.PORT || 5000;
 const express = require("express");
+
 //app object
 const app = express();
 
@@ -35,13 +37,11 @@ app.get("/", (req, res) => {res.send("Api has loaded succesfully" )});
     //const measurementRoute = require("./app/routes/measurementRoute");
     //app.use('/measurements' , measurementRoute);
 
-    //sensortype
+    //sensortype 
     //const sensortypeRoute = require("./app/routes/sensortypeRoute");
     //app.use('/sensortypes' , sensortypeRoute);
 
-
-//Listen to port (non static)
-const port =  process.env.Port || 5000;
-app.listen(port, () => {
-    console.log("Server is listening to port " + port + "...");
+//Listen to port
+app.listen(PORT, () => {
+  console.log("Server is listening to port " + PORT);
 });
