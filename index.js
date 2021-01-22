@@ -6,9 +6,11 @@ const app = express();
 app.use(express.json()); // -> req.body
 
 //ROUTES
-app.get("/", async (req, res) => {
+
+app.get("/test", async (req, res) => {
   try {
-    res.json("ok servers");
+    res.json("Dev mode");
+
   } catch (err) {
     console.error(err.message);
   }
