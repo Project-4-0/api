@@ -2,9 +2,8 @@ var express = require("express");
 var router = express.Router();
 
 /*Controllers*/
-
-const userController = require("../controllers").user;
 const userTypeController = require("../controllers").userType;
+const userController = require("../controllers").user;
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -13,17 +12,16 @@ router.get("/", function (req, res, next) {
 
 /* UserType Router */
 router.get("/userTypes", userTypeController.list);
+router.get("/userTypes/:id", userTypeController.getById);
 router.post("/userTypes", userTypeController.add);
+// router.put("userTypes/:id", userTypeController.update);
+// router.delete("userTypes/:id", userTypeController.delete);
 
 /* users Router */
 router.get("/users", userController.list);
+router.get("/users/:id", userController.getById);
 router.post("/users", userController.add);
-
-/* Classroom Router */
-// router.get("/api/classroom", classroomController.list);
-// router.get("/api/classroom/:id", classroomController.getById);
-// router.post("/api/classroom", classroomController.add);
-// router.put("/api/classroom/:id", classroomController.update);
-// router.delete("/api/classroom/:id", classroomController.delete);
+router.put("/users", userController.update);
+router.delete("/users/:id", userController.delete);
 
 module.exports = router;
