@@ -9,6 +9,8 @@ const userTypeController = require("../controllers").userType;
 const userController = require("../controllers").user;
 const sensorTypeController = require("../controllers").sensorType;
 const sensorController = require("../controllers").sensor;
+const locatoinController = require("../controllers").location;
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
@@ -34,6 +36,13 @@ router.get("/sensor/:id", sensorController.getById);
 router.post("/sensor", sensorController.add);
 router.put("/sensor", sensorController.update);
 router.delete("/sensor/:id", sensorController.delete);
+
+/* Locations Router */
+router.get("/locations", locatoinController.list);
+router.get("/locations/:id", locatoinController.getById);
+router.post("/locations", locatoinController.add);
+router.put("/locations", locatoinController.update);
+router.delete("/locations/:id", locatoinController.delete);
 
 /* users Router */
 router.get(
