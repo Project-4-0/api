@@ -12,12 +12,12 @@ router.get("/", function (req, res, next) {
 });
 
 /* UserType Router */
-router.get("/api/userTypes", userTypeController.list);
-router.post("/api/userTypes", userTypeController.add);
+router.get("/userTypes", userTypeController.list);
+router.post("/userTypes", userTypeController.add);
 
 /* users Router */
-router.get("/api/users", userController.list);
-router.post("/api/users", userController.add);
+router.get("/users", userController.list);
+router.post("/users", userController.add);
 
 /* Classroom Router */
 // router.get("/api/classroom", classroomController.list);
