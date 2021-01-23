@@ -8,8 +8,8 @@ const creds = {
     dialect: "postgresql",
     dialectOptions: {
       ssl: {
-        require: false,
-        rejectUnauthorized: true,
+        require: true,
+        rejectUnauthorized: false,
       },
     },
     define: {
@@ -24,8 +24,8 @@ const creds = {
     dialect: "postgresql",
     dialectOptions: {
       ssl: {
-        require: false,
-        rejectUnauthorized: true,
+        require: true,
+        rejectUnauthorized: false,
       },
     },
     define: {
@@ -40,8 +40,8 @@ const creds = {
     dialect: "postgresql",
     dialectOptions: {
       ssl: {
-        require: false,
-        rejectUnauthorized: true,
+        require: true,
+        rejectUnauthorized: false,
       },
     },
   },
