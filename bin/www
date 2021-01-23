@@ -13,8 +13,8 @@ var models = require("../app/models");
  * Sync Database
  */
 
-
- models.sequelize.sync();
+//  models.sequelize.sync();
+models.sequelize.authenticate();
 
 /**
  * Get port from environment and store in Express.
