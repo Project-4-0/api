@@ -1,6 +1,10 @@
 const User = require("../models").User;
 const UserType = require("../models").UserType;
 
+//library
+var jwt = require("jsonwebtoken");
+// var bcrypt = require("bcryptjs");
+
 //Validation User
 userValidate = (req, res) => {
   let validationMessages = [];
@@ -13,9 +17,9 @@ userValidate = (req, res) => {
     validationMessages.push("LastName is required.");
   }
 
-  if (!req.body.Password) {
-    validationMessages.push("Password is required.");
-  }
+  //   if (!req.body.Password) {
+  //     validationMessages.push("Password is required.");
+  //   }
 
   if (!req.body.Email) {
     validationMessages.push("Email is required.");
@@ -90,6 +94,8 @@ module.exports = {
       return res.status(400).send({ message: "Email already exist!" });
     }
 
+    //TODO PASSWORD DESCREPT
+
     //create
     User.create({
       FirstName: req.body.FirstName,
@@ -127,7 +133,7 @@ module.exports = {
   },
 
   delete(req, res) {
-    return User.findByPk(req.params.id)
+    User.findByPk(req.params.id)
       .then((val) => {
         if (!val) {
           return res.status(400).send({
@@ -140,5 +146,43 @@ module.exports = {
           .catch((error) => res.status(400).send(error));
       })
       .catch((error) => res.status(400).send(error));
+  },
+
+  //EXTRA
+  async login(req, res) {
+    var user = await User.findOne({ where: { Email: req.body.Email } });
+    if (!user) {
+      return res.status(400).send({ message: "Email not found" });
+    }
+
+    //TODO PASSWORD DESCREPT
+    if (req.body.Password == user.Password) {
+      passwordIsValid = true;
+    }
+
+    if (!passwordIsValid) {
+      return res.status(400).send({
+        user: null,
+        message: "Invalid Password!",
+      });
+    }
+
+    var token = jwt.sign(
+      {
+        UserID: user.UserID,
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        UserType: user.UserType,
+      },
+      "vito-secret-key",
+      {
+        expiresIn: 86400, // 24 hours
+      }
+    );
+
+    res.status(200).send({
+      UserID: user.UserID,
+      Token: token,
+    });
   },
 };
