@@ -9,7 +9,7 @@ const creds = {
     dialectOptions: {
       ssl: {
         require: false,
-        rejectUnauthorized: false,
+        rejectUnauthorized: true,
       },
     },
     define: {
@@ -25,7 +25,7 @@ const creds = {
     dialectOptions: {
       ssl: {
         require: false,
-        rejectUnauthorized: false,
+        rejectUnauthorized: true,
       },
     },
     define: {
@@ -41,7 +41,7 @@ const creds = {
     dialectOptions: {
       ssl: {
         require: false,
-        rejectUnauthorized: false,
+        rejectUnauthorized: true,
       },
     },
   },
