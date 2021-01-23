@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "SensorBox33",
       freezeTableName: true,
+      timestamps: false,
     }
   );
   return SensorBox33;

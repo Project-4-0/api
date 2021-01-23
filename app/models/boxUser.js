@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "BoxUser",
       freezeTableName: true,
+      timestamps: false,
     }
   );
   return BoxUser;

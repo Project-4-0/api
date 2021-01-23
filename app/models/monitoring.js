@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Monitoring",
       freezeTableName: true,
+      timestamps: false,
     }
   );
   return Monitoring;
