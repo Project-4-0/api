@@ -12,6 +12,9 @@ const creds = {
         rejectUnauthorized: false,
       },
     },
+    define: {
+      timestamps: false,
+    },
   },
   test: {
     username: process.env.DB_USERNAME,
@@ -24,6 +27,9 @@ const creds = {
         require: true,
         rejectUnauthorized: false,
       },
+    },
+    define: {
+      timestamps: false,
     },
   },
   production: {
@@ -38,6 +44,9 @@ const creds = {
         rejectUnauthorized: false,
       },
     },
+  },
+  define: {
+    timestamps: false,
   },
 };
 

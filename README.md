@@ -11,3 +11,5 @@ To run locally:
 * Run `npm install` or `yarn install`
 * Run `sequelize db:migrate`
 * Run `nodemon` or `npm start`
+
+sequelize db:migrate
