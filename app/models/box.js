@@ -1,40 +1,38 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Box extends Model {
     static associate(models) {
-      //   User.belongsTo(models.Classroom, {
+      //   Box.belongsTo(models.Classroom, {
       //     foreignKey: 'classroom_id',
       //     as: 'classroom'
       //   });
-      //   User.belongsToMany(models.Course, {
+      //   Box.belongsToMany(models.Course, {
       //     through: 'UserCourse',
       //     as: 'courses',
       //     foreignKey: 'User_id'
       //   });
     }
   }
-  User.init(
+  Box.init(
     {
-      UserID: {
+      LocationID: {
         type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      FirstName: DataTypes.STRING,
-      LastName: DataTypes.STRING,
-      Password: DataTypes.STRING,
-      Email: DataTypes.STRING,
-      Address: DataTypes.STRING,
-      PostalCode: DataTypes.STRING,
-      City: DataTypes.STRING,
+      BoxUserID: DataTypes.STRING,
+      Latitude: DataTypes.STRING,
+      Longitude: DataTypes.STRING,
+      StartDate: DataTypes.DATE,
+      EndDate: DataTypes.DATE,
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "Box",
       freezeTableName: true,
     }
   );
-  return User;
+  return Box;
 };
