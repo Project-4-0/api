@@ -13,7 +13,7 @@ const creds = {
       },
     },
     define: {
-      timestamps: false,
+      timestamps: true,
     },
   },
   test: {
@@ -29,7 +29,7 @@ const creds = {
       },
     },
     define: {
-      timestamps: false,
+      timestamps: true,
     },
   },
   production: {
@@ -46,7 +46,7 @@ const creds = {
     },
   },
   define: {
-    timestamps: false,
+    timestamps: true,
   },
 };
 
