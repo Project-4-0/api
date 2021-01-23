@@ -20,8 +20,9 @@ router.post("/userTypes", userTypeController.add);
 // router.put("userTypes/:id", userTypeController.update);
 // router.delete("userTypes/:id", userTypeController.delete);
 
+//hasPermisionAdmin
 /* users Router */
-router.get("/users", [authJwt.verifyToken], userController.list);
+router.get("/users", [authJwt.verifyToken, authJwt.hasPermisionAdmin], userController.list);
 router.get("/users/:id", [authJwt.verifyToken], userController.getById);
 router.post("/users", userController.add);
 router.put("/users", userController.update);
