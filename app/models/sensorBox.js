@@ -1,38 +1,34 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class SensorBox extends Model {
+  class SensorBox33 extends Model {
     static associate(models) {
-      //   SensorBox.belongsTo(models.Classroom, {
-      //     foreignKey: 'classroom_id',
-      //     as: 'classroom'
+      // SensorBox33.belongsTo(models.Box, {
+      //   foreignKey: 'boxID',
+      //   as: 'Box'
+      // });
+      //   SensorBox33.belongsToMany(models.Box, {
+      //     through: "SensorBox33",
+      //     as: "Box",
+      //     foreignKey: "BoxID",
       //   });
-      //   SensorBox.belongsToMany(models.Course, {
-      //     through: 'UserCourse',
-      //     as: 'courses',
-      //     foreignKey: 'User_id'
+      //   SensorBox33.belongsToMany(models.Sensor, {
+      //     through: "SensorBox33",
+      //     as: "Sensor",
+      //     foreignKey: "SensorID",
       //   });
     }
   }
-  SensorBox.init(
+  SensorBox33.init(
     {
-      LocationID: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      BoxUserID: DataTypes.STRING,
-      Latitude: DataTypes.STRING,
-      Longitude: DataTypes.STRING,
-      StartDate: DataTypes.DATE,
-      EndDate: DataTypes.DATE,
+      BoxID: DataTypes.INTEGER,
+      SensorID: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "SensorBox",
+      modelName: "SensorBox33",
       freezeTableName: true,
     }
   );
-  return SensorBox;
+  return SensorBox33;
 };

@@ -42,6 +42,7 @@ module.exports = {
       Address: req.body.Address,
       PostalCode: req.body.PostalCode,
       City: req.body.City,
+      UserTypeID: req.body.UserTypeID,
     })
       .then((user) => res.status(201).send(user))
       .catch((error) => res.status(400).send(error));

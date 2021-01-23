@@ -3,30 +3,28 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Measurement extends Model {
     static associate(models) {
-      //   Measurement.belongsTo(models.Classroom, {
-      //     foreignKey: 'classroom_id',
-      //     as: 'classroom'
-      //   });
-      //   Measurement.belongsToMany(models.Course, {
-      //     through: 'UserCourse',
-      //     as: 'courses',
-      //     foreignKey: 'User_id'
-      //   });
+      Measurement.belongsTo(models.Box, {
+        foreignKey: "BoxID",
+        as: "Box",
+      });
+      Measurement.belongsTo(models.Sensor, {
+        foreignKey: "SensorID",
+        as: "Sensor",
+      });
     }
   }
   Measurement.init(
     {
-      LocationID: {
+      MeasurementID: {
         type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      BoxUserID: DataTypes.STRING,
-      Latitude: DataTypes.STRING,
-      Longitude: DataTypes.STRING,
-      StartDate: DataTypes.DATE,
-      EndDate: DataTypes.DATE,
+      BoxID: DataTypes.STRING,
+      SensorID: DataTypes.STRING,
+      Value: DataTypes.STRING,
+      TimeStamp: DataTypes.DATE,
     },
     {
       sequelize,

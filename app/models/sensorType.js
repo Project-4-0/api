@@ -2,31 +2,18 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class SensorType extends Model {
-    static associate(models) {
-      //   SensorType.belongsTo(models.Classroom, {
-      //     foreignKey: 'classroom_id',
-      //     as: 'classroom'
-      //   });
-      //   SensorType.belongsToMany(models.Course, {
-      //     through: 'UserCourse',
-      //     as: 'courses',
-      //     foreignKey: 'User_id'
-      //   });
-    }
+    static associate(models) {}
   }
   SensorType.init(
     {
-      LocationID: {
+      SensorTypeID: {
         type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      BoxUserID: DataTypes.STRING,
-      Latitude: DataTypes.STRING,
-      Longitude: DataTypes.STRING,
-      StartDate: DataTypes.DATE,
-      EndDate: DataTypes.DATE,
+      Name: DataTypes.STRING,
+      Unit: DataTypes.STRING,
     },
     {
       sequelize,
