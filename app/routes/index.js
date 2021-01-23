@@ -7,7 +7,8 @@ const { authJwt } = require("../middlewares");
 /*Controllers*/
 const userTypeController = require("../controllers").userType;
 const userController = require("../controllers").user;
-
+const sensorTypeController = require("../controllers").sensorType;
+const sensorController = require("../controllers").sensor;
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
@@ -20,9 +21,26 @@ router.post("/userTypes", userTypeController.add);
 // router.put("userTypes/:id", userTypeController.update);
 // router.delete("userTypes/:id", userTypeController.delete);
 
-//hasPermisionAdmin
+/* SensorType Router */
+router.get("/sensorTypes", sensorTypeController.list);
+router.get("/sensorTypes/:id", sensorTypeController.getById);
+router.post("/sensorTypes", sensorTypeController.add);
+// router.put("userTypes/:id", userTypeController.update);
+// router.delete("userTypes/:id", userTypeController.delete);
+
+/* Sensor Router */
+router.get("/sensor", sensorController.list);
+router.get("/sensor/:id", sensorController.getById);
+router.post("/sensor", sensorController.add);
+router.put("/sensor", sensorController.update);
+router.delete("/sensor/:id", sensorController.delete);
+
 /* users Router */
-router.get("/users", [authJwt.verifyToken, authJwt.hasPermisionAdmin], userController.list);
+router.get(
+  "/users",
+  [authJwt.verifyToken, authJwt.hasPermisionAdmin],
+  userController.list
+);
 router.get("/users/:id", [authJwt.verifyToken], userController.getById);
 router.post("/users", userController.add);
 router.put("/users", userController.update);

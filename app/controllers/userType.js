@@ -29,7 +29,7 @@ module.exports = {
   },
 
   getById(req, res) {
-    UserType.findByPk(req.params.id)
+    UserType.findByPk(req.params.UserTypeID)
       .then((val) => {
         if (!val) {
           return res.status(404).send({
