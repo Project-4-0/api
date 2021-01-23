@@ -48,7 +48,6 @@ hasPermisionAdmin = (req, res, next) => {
         },
       ],
     }).then((user) => {
-      console.log(user);
       if (user.UserType.UserTypeName == "Admin") {
         next();
       } else {
@@ -77,8 +76,10 @@ hasPermisionMonteur = (req, res, next) => {
         },
       ],
     }).then((user) => {
-      console.log(user);
-      if (user.UserType.UserTypeName == "Monteur") {
+      if (
+        user.UserType.UserTypeName == "Monteur" ||
+        user.UserType.UserTypeName == "Admin"
+      ) {
         next();
       } else {
         return res.status(403).send({ message: "Route requires privileges" });
