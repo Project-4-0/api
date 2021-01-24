@@ -50,10 +50,10 @@ router.get(
   [authJwt.verifyToken, authJwt.hasPermisionAdmin],
   userController.list
 );
-router.get("/users/:id", [authJwt.verifyToken], userController.getById);
+router.get("/users/:id", userController.getById);
 router.post("/users", userController.add);
 router.put("/users", userController.update);
-router.delete("/users/:id", userController.delete);
+router.delete("/users/:id", [authJwt.verifyToken], userController.delete);
 //LOGIN
 router.post("/login", userController.login);
 
