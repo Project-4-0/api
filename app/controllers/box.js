@@ -1,5 +1,6 @@
 const Box = require("../models").Box;
 
+
 //Validation Box
 boxValidate = (req, res) => {
   let validationMessages = [];
@@ -10,6 +11,14 @@ boxValidate = (req, res) => {
 
   if (!req.body.Name) {
     validationMessages.push("Name is required.");
+  }
+
+  if (!req.body.Comment) {
+    validationMessages.push("Comment is required.");
+  }
+
+  if (!req.body.ConfiguratieString) {
+    validationMessages.push("ConfiguratieString is required.");
   }
 
   if (!req.body.Active) {

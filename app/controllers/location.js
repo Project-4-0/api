@@ -1,4 +1,5 @@
 const Location = require("../models").Location;
+const BoxUser = require("../models").BoxUser;
 
 //Validation Location
 locationValidate = (req, res) => {
@@ -16,15 +17,19 @@ locationValidate = (req, res) => {
     validationMessages.push("Longitude is required.");
   }
 
+  if (!req.body.EndDate) {
+    validationMessages.push("EndDate is required.");
+  }
+
   return validationMessages;
 };
 
 //Check if exist
-async function locationExist(val) {
-  return await Location.findOne({
-    where: { Name: val },
-  });
-}
+//async function locationExist(val) {
+//  return await Location.findOne({
+//    where: { Latitude: val },
+//  });
+//}
 
 //Models
 module.exports = {
@@ -37,7 +42,14 @@ module.exports = {
   },
 
   getById(req, res) {
-    Location.findByPk(req.params.id)
+    Location.findByPk(req.params.id, {
+      include: [
+        {
+          model: BoxUser,
+          as: "BoxUser",
+        },
+      ],
+    })
       .then((val) => {
         if (!val) {
           return res.status(404).send({
@@ -64,6 +76,7 @@ module.exports = {
       Latitude: req.body.Latitude,
       Longitude: req.body.Longitude,
       StartDate: new Date().toISOString(),
+      EndDate: req.body.Longitude,
     })
       .then((location) => res.status(201).send(location))
       .catch((error) => res.status(400).send(error));

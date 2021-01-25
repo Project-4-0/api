@@ -1,4 +1,6 @@
 const Measurement = require("../models").Measurement;
+const Sensor = require("../models").Sensor;
+const Box = require("../models").Box;
 
 //Validation Measurement
 measurementValidate = (req, res) => {
@@ -26,7 +28,7 @@ measurementValidate = (req, res) => {
 //Check if exist
 async function measurementExist(val) {
   return await Measurement.findOne({
-    where: { Name: val },
+    where: { SensorID: val },
   });
 }
 
@@ -42,6 +44,30 @@ module.exports = {
 
   getById(req, res) {
     Measurement.findByPk(req.params.id)
+      .then((val) => {
+        if (!val) {
+          return res.status(404).send({
+            message: "Measurement Not Found",
+          });
+        }
+        return res.status(200).send(val);
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
+  getById(req, res) {
+    Measurement.findByPk(req.params.id, {
+      include: [
+        {
+          model: Sensor,
+          as: "Sensor",
+        },
+        {
+          model: Box,
+          as: "Box",
+        },
+      ],
+    })
       .then((val) => {
         if (!val) {
           return res.status(404).send({
@@ -74,12 +100,31 @@ module.exports = {
       Value: req.body.Value,
       TimeStamp: req.body.TimeStamp,
     })
-      .then((userType) => res.status(201).send(userType))
+      .then((val) => res.status(201).send(val))
       .catch((error) => res.status(400).send(error));
   },
 
   //TODO Update functie
+  async update(req, res) {
+    //validation
+    let validationMessages = this.measurementValidate(req, res);
 
+    if (validationMessages.length != 0) {
+      return res.status(400).send({ messages: validationMessages });
+    }
+
+    //find
+    let measurement = await Measurement.findByPk(req.body.MeasurementID);
+    if (user == null) {
+      return res.status(400).send({ message: "MeasurementID not found" });
+    }
+
+    //update user
+    measurement
+      .update(req.body)
+      .then((val) => res.status(200).send(val))
+      .catch((error) => res.status(400).send(error));
+  },
   
 
   //Delete functie
