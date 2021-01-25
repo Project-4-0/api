@@ -17,6 +17,10 @@ locationValidate = (req, res) => {
     validationMessages.push("Longitude is required.");
   }
 
+  if (!req.body.StartDate) {
+    validationMessages.push("StartDate is required.");
+  }
+
   if (!req.body.EndDate) {
     validationMessages.push("EndDate is required.");
   }
@@ -25,11 +29,7 @@ locationValidate = (req, res) => {
 };
 
 //Check if exist
-//async function locationExist(val) {
-//  return await Location.findOne({
-//    where: { Latitude: val },
-//  });
-//}
+
 
 //Models
 module.exports = {

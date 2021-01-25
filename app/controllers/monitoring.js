@@ -14,7 +14,7 @@ monitoringValidate = (req, res) => {
   }
 
   if (!req.body.BatteryStatus) {
-    validationMessages.push("Unit is required.");
+    validationMessages.push("BatteryStatus is required.");
   }
 
   if (!req.body.BatteryPercentage) {
@@ -25,11 +25,7 @@ monitoringValidate = (req, res) => {
 };
 
 //Check if exist
-async function sensorTypeExist(val) {
-  return await Monitoring.findOne({
-    where: { MonitoringID: val },
-  });
-}
+
 
 //Models
 module.exports = {
