@@ -92,7 +92,7 @@ module.exports = {
     }
 
     //find
-    let boxUser = await BoxUser.findByPk(req.body.UserBoxID);
+    let boxUser = await BoxUser.findByPk(req.body.BoxUserID);
     if (boxUser == null) {
       return res.status(400).send({ message: "UserBoxID not found" });
     }
