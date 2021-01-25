@@ -7,7 +7,7 @@ const { authJwt } = require("../middlewares");
 /*Controllers*/
 
 const boxController = require("../controllers").box;
-const boxUserController = require('../controllers').boxUser;
+const boxUserController = require("../controllers").boxUser;
 const userTypeController = require("../controllers").userType;
 const userController = require("../controllers").user;
 const sensorTypeController = require("../controllers").sensorType;
@@ -72,13 +72,13 @@ router.delete("/sensors/:id", sensorController.delete);
 /* users Router WORKS*/
 router.get(
   "/users",
-  [authJwt.verifyToken, authJwt.hasPermisionAdmin],
+  // [authJwt.verifyToken, authJwt.hasPermisionAdmin],
   userController.list
 );
 router.get("/users/:id", userController.getById);
 router.post("/users", userController.add);
 router.put("/users", userController.update);
-router.delete("/users/:id", [authJwt.verifyToken], userController.delete);
+router.delete("/users/:id", userController.delete);
 //LOGIN
 router.post("/login", userController.login);
 
