@@ -31,7 +31,7 @@ router.delete("boxes/:id", boxController.delete);
 router.get("/measurements", measurementController.list);
 router.get("/measurements/:id", measurementController.getById);
 router.post("/measurements", measurementController.add);
-router.put("measurements/:id", measurementController.update);
+//router.put("measurements/:id", measurementController.update);
 router.delete("measurements/:id", measurementController.delete);
 
 /* Locations Router */
