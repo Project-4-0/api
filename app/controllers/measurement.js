@@ -1,14 +1,23 @@
 const Measurement = require("../models").Measurement;
+const Sensor = require("../models").Sensor;
+
+// const { QueryTypes } = require("sequelize");
+
+const sequelize = require("../models/index").sequelize;
 
 //Validation Measurement
 measurementValidate = (req, res) => {
   let validationMessages = [];
 
-  if (!req.body.Name) {
-    validationMessages.push("Name is required.");
+  if (!req.body.BoxID) {
+    validationMessages.push("BoxID is required.");
   }
 
-  if (!req.body.Unit) {
+  if (!req.body.SensorID) {
+    validationMessages.push("Unite is required.");
+  }
+
+  if (!req.body.Value) {
     validationMessages.push("Unite is required.");
   }
 
@@ -55,21 +64,41 @@ module.exports = {
 
     //if exist
 
-    
     //TODO BOX
 
     //TODO SensorID
+    // var sensor = await Sensor.findByPk(1);
 
-    
+    // let sensor = await Sensor.findByPk(req.body.SensorID);
+    // if (sensor == null) {
+    //   return res.status(400).send({ message: "SensorID not found" });
+    // }
+    // console.log(sensor);
+
+    // const users = await sequelize.query("SELECT * FROM User", {
+    //   type: QueryTypes.SELECT,
+    // });
+    // console.log("user", users);
+
+    // console.log(await sequelize.query("SELECT * FROM box"));
+
+    //Test
+    // const users = sequelize
+    //   .query('SELECT * FROM "Box"', {
+    //     type: sequelize.QueryTypes.SELECT,
+    //   })
+    //   .then((val) => console.log(val));
+
+    // console.log(req.body.Value);
 
     //create
     Measurement.create({
       BoxID: req.body.BoxID,
       SensorID: req.body.SensorID,
       Value: req.body.Value,
-      TimeStamp: req.body.TimeStamp,
+      TimeStamp: new Date().toISOString(),
     })
-      .then((userType) => res.status(201).send(userType))
+      .then((measurement) => res.status(201).send(measurement))
       .catch((error) => res.status(400).send(error));
   },
 };
