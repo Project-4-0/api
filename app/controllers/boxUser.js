@@ -85,7 +85,7 @@ module.exports = {
   //Update BoxUser functie
   async update(req, res) {
     //validation
-    let validationMessages = boxUserValidate(req, res);
+    let validationMessages = this.boxUserValidate(req, res);
 
     if (validationMessages.length != 0) {
       return res.status(400).send({ messages: validationMessages });
@@ -94,10 +94,10 @@ module.exports = {
     //find
     let boxUser = await BoxUser.findByPk(req.body.BoxUserID);
     if (boxUser == null) {
-      return res.status(400).send({ message: "UserBoxID not found" });
+      return res.status(400).send({ message: "BoxUserID not found" });
     }
 
-    //update sensor
+    //update BoxUser
     boxUser
       .update(req.body)
       .then((val) => res.status(200).send(val))
