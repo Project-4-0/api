@@ -10,6 +10,7 @@ const userController = require("../controllers").user;
 const sensorTypeController = require("../controllers").sensorType;
 const sensorController = require("../controllers").sensor;
 const locatoinController = require("../controllers").location;
+const measurementController = require("../controllers").measurement;
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -43,6 +44,13 @@ router.get("/locations/:id", locatoinController.getById);
 router.post("/locations", locatoinController.add);
 router.put("/locations", locatoinController.update);
 router.delete("/locations/:id", locatoinController.delete);
+
+/* Measurements Router */
+router.get("/measurements", measurementController.list);
+router.get("/measurements/:id", measurementController.getById);
+router.post("/measurements", measurementController.add);
+// router.put("/measurements", measurementController.update);
+// router.delete("/measurements/:id", measurementController.delete);
 
 /* users Router */
 router.get(
