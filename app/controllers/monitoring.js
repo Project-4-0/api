@@ -14,7 +14,7 @@ monitoringValidate = (req, res) => {
   }
 
   if (!req.body.BatteryStatus) {
-    validationMessages.push("Unit is required.");
+    validationMessages.push("BatteryStatus is required.");
   }
 
   if (!req.body.BatteryPercentage) {
