@@ -31,11 +31,11 @@ router.post("/sensorTypes", sensorTypeController.add);
 // router.delete("userTypes/:id", userTypeController.delete);
 
 /* Sensor Router */
-router.get("/sensor", sensorController.list);
-router.get("/sensor/:id", sensorController.getById);
-router.post("/sensor", sensorController.add);
-router.put("/sensor", sensorController.update);
-router.delete("/sensor/:id", sensorController.delete);
+router.get("/sensors", sensorController.list);
+router.get("/sensors/:id", sensorController.getById);
+router.post("/sensors", sensorController.add);
+router.put("/sensors", sensorController.update);
+router.delete("/sensors/:id", sensorController.delete);
 
 /* Locations Router */
 router.get("/locations", locatoinController.list);
@@ -50,10 +50,10 @@ router.get(
   [authJwt.verifyToken, authJwt.hasPermisionAdmin],
   userController.list
 );
-router.get("/users/:id", [authJwt.verifyToken], userController.getById);
+router.get("/users/:id", userController.getById);
 router.post("/users", userController.add);
 router.put("/users", userController.update);
-router.delete("/users/:id", userController.delete);
+router.delete("/users/:id", [authJwt.verifyToken], userController.delete);
 //LOGIN
 router.post("/login", userController.login);
 
