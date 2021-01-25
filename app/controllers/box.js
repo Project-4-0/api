@@ -17,10 +17,6 @@ boxValidate = (req, res) => {
     validationMessages.push("Comment is required.");
   }
 
-  if (!req.body.Active) {
-    validationMessages.push("Active is required.");
-  }
-
   return validationMessages;
 };
 
