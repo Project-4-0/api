@@ -1,47 +1,47 @@
-const Location = require("../models").Location;
+const Box = require("../models").Box;
 
-//Validation Location
-locationValidate = (req, res) => {
+//Validation Box
+boxValidate = (req, res) => {
   let validationMessages = [];
 
-  if (!req.body.BoxUserID) {
-    validationMessages.push("BoxUserID is required.");
+  if (!req.body.MacAdress) {
+    validationMessages.push("MacAdress is required.");
   }
 
-  if (!req.body.Latitude) {
-    validationMessages.push("Latitude is required.");
+  if (!req.body.Name) {
+    validationMessages.push("Name is required.");
   }
 
-  if (!req.body.Longitude) {
-    validationMessages.push("Longitude is required.");
+  if (!req.body.Active) {
+    validationMessages.push("Active is required.");
   }
 
   return validationMessages;
 };
 
 //Check if exist
-async function locationExist(val) {
-  return await Location.findOne({
-    where: { Name: val },
+async function boxExist(val) {
+  return await Box.findOne({
+    where: { MacAdress: val },
   });
 }
 
 //Models
 module.exports = {
   list(req, res) {
-    Location.findAll()
-      .then((location) => res.status(200).send(location))
+    Box.findAll()
+      .then((box) => res.status(200).send(box))
       .catch((error) => {
         res.status(400).send(error);
       });
   },
 
   getById(req, res) {
-    Location.findByPk(req.params.id)
+    Box.findByPk(req.params.id)
       .then((val) => {
         if (!val) {
           return res.status(404).send({
-            message: "Location Not Found",
+            message: "Box Not Found",
           });
         }
         return res.status(200).send(val);
@@ -49,53 +49,61 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+
+  //Create box functie
   async add(req, res) {
     //validation
-    let validationMessages = locationValidate(req, res);
+    let validationMessages = boxValidate(req, res);
 
     if (validationMessages.length != 0) {
       return res.status(400).send({ messages: validationMessages });
     }
 
+    //already exist
+    if ((await boxExist(req.body.MacAdress)) != null) {
+      return res.status(400).send({ message: "Box already exists!" });
+    }
+
     //create
-    Location.create({
-      BoxUserID: req.body.BoxUserID,
-      Latitude: req.body.Latitude,
-      Longitude: req.body.Longitude,
-      StartDate: new Date().toISOString(),
+    SensorType.create({
+      MacAdress: req.body.MacAdress,
+      Name: req.body.Name,
+      Comment: req.body.Comment,
+      ConfiguratieString: req.body.ConfiguratieString,
+      Active: req.body.Active,
     })
-      .then((location) => res.status(201).send(location))
+      .then((val) => res.status(201).send(val))
       .catch((error) => res.status(400).send(error));
   },
 
   async update(req, res) {
     //validation
-    let validationMessages = locationValidate(req, res);
+    let validationMessages = this.boxValidate(req, res);
 
     if (validationMessages.length != 0) {
       return res.status(400).send({ messages: validationMessages });
     }
 
     //find
-    let location = await Location.findByPk(req.body.LocationID);
-    if (location == null) {
-      return res.status(400).send({ message: "LocationID not found" });
+    let box = await Box.findByPk(req.body.BoxID);
+    if (box == null) {
+      return res.status(400).send({ message: "Box not found" });
     }
 
-    //update location
-    location
+    //update user
+    box
       .update(req.body)
       .then((val) => res.status(200).send(val))
       .catch((error) => res.status(400).send(error));
   },
 
-  //Delecte location
+  //Delete Box Functie
   delete(req, res) {
-    Location.findByPk(req.params.id)
+    Box.findByPk(req.params.id)
       .then((val) => {
         if (!val) {
           return res.status(400).send({
-            message: "LocationID Not Found",
+            message: "Box Not Found",
           });
         }
         return val
@@ -105,4 +113,5 @@ module.exports = {
       })
       .catch((error) => res.status(400).send(error));
   },
+
 };

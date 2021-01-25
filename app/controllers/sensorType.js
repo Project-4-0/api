@@ -9,7 +9,7 @@ sensorTypevalidate = (req, res) => {
   }
 
   if (!req.body.Unit) {
-    validationMessages.push("Unite is required.");
+    validationMessages.push("Unit is required.");
   }
 
   return validationMessages;

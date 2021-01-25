@@ -58,7 +58,7 @@ module.exports = {
       return res.status(400).send({ message: "Name already exist!" });
     }
 
-    //create
+    //create sensor
     Sensor.create({
       Name: req.body.Name,
       SensorTypeID: req.body.SensorTypeID,
@@ -88,6 +88,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //delete sensor
   delete(req, res) {
     Sensor.findByPk(req.params.id)
       .then((val) => {
@@ -98,7 +99,7 @@ module.exports = {
         }
         return val
           .destroy()
-          .then(() => res.status(204).send())
+          .then(() => res.status(204).send({ message: "The sensor has succesfully been deleted" }))
           .catch((error) => res.status(400).send(error));
       })
       .catch((error) => res.status(400).send(error));
