@@ -53,6 +53,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Create
   async add(req, res) {
     //validation
     let validationMessages = measurementValidate(req, res);
@@ -61,8 +62,12 @@ module.exports = {
       return res.status(400).send({ messages: validationMessages });
     }
 
+<<<<<<< Updated upstream
     //if exist
 
+=======
+    //already exist
+>>>>>>> Stashed changes
     //TODO BOX
 
     //TODO SensorID
@@ -77,4 +82,25 @@ module.exports = {
       .then((userType) => res.status(201).send(userType))
       .catch((error) => res.status(400).send(error));
   },
+
+  //TODO Update functie
+
+  //Delete functie
+  delete(req, res) {
+    Measurement.findByPk(req.params.id)
+      .then((val) => {
+        if (!val) {
+          return res.status(400).send({
+            message: "MeasurementID Not Found",
+          });
+        }
+        return val
+          .destroy()
+          .then(() => res.status(204).send({ message: "The measurement has succesfully been deleted" }))
+          .catch((error) => res.status(400).send(error));
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
+
 };

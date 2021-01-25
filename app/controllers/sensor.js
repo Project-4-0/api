@@ -45,6 +45,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Create functie
   async add(req, res) {
     //validation
     let validationMessages = sensorValidate(req, res);
@@ -57,7 +58,7 @@ module.exports = {
     if ((await sensorExist(req.body.Name)) != null) {
       return res.status(400).send({ message: "Name already exist!" });
     }
-
+  
     //create sensor
     Sensor.create({
       Name: req.body.Name,
@@ -66,7 +67,8 @@ module.exports = {
       .then((sensor) => res.status(201).send(sensor))
       .catch((error) => res.status(400).send(error));
   },
-
+ 
+  //Update functie
   async update(req, res) {
     //validation
     let validationMessages = sensorValidate(req, res);

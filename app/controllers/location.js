@@ -49,6 +49,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Create Location functie
   async add(req, res) {
     //validation
     let validationMessages = locationValidate(req, res);
@@ -68,6 +69,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Update Location functie
   async update(req, res) {
     //validation
     let validationMessages = locationValidate(req, res);
@@ -89,7 +91,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-  //Delecte location
+  //Delecte location functie
   delete(req, res) {
     Location.findByPk(req.params.id)
       .then((val) => {
