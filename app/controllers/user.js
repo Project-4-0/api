@@ -155,8 +155,9 @@ module.exports = {
       return res.status(400).send({ message: "Email not found" });
     }
 
+    passwordIsValid = false;
     //TODO PASSWORD DESCREPT
-    if (req.body.Password == user.Password) {
+    if (req.body.Password === user.Password) {
       passwordIsValid = true;
     }
 
