@@ -4,12 +4,20 @@ const Measurement = require("../models").Measurement;
 measurementValidate = (req, res) => {
   let validationMessages = [];
 
-  if (!req.body.Name) {
-    validationMessages.push("Name is required.");
+  if (!req.body.BoxId) {
+    validationMessages.push("BoxId is required.");
   }
 
-  if (!req.body.Unit) {
-    validationMessages.push("Unite is required.");
+  if (!req.body.SensorID) {
+    validationMessages.push("SensorID is required.");
+  }
+
+  if (!req.body.Value) {
+    validationMessages.push("Value is required.");
+  }
+
+  if (!req.body.TimeStamp) {
+    validationMessages.push("TimeStamp is required.");
   }
 
   return validationMessages;

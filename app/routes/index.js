@@ -5,16 +5,32 @@ var router = express.Router();
 const { authJwt } = require("../middlewares");
 
 /*Controllers*/
+const boxController = require("../controllers").box;
 const userTypeController = require("../controllers").userType;
 const userController = require("../controllers").user;
 const sensorTypeController = require("../controllers").sensorType;
 const sensorController = require("../controllers").sensor;
 const locatoinController = require("../controllers").location;
+const measurementController = require("../controllers").measurement;
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
+
+/* TO DO Measurement Router */
+router.get("/measurements", measurementsController.list);
+router.get("/measurements/:id", measurementsController.getById);
+router.post("/measurements", measurementsController.add);
+router.put("measurements/:id", measurementsController.update);
+router.delete("measurements/:id", measurementsController.delete);
+
+/* TO DO Box Router */
+router.get("/boxes", boxController.list);
+router.get("/boxes/:id", boxController.getById);
+router.post("/boxes", boxController.add);
+router.put("boxes/:id", boxController.update);
+router.delete("boxes/:id", boxController.delete);
 
 /* UserType Router */
 router.get("/userTypes", userTypeController.list);
@@ -31,11 +47,11 @@ router.post("/sensorTypes", sensorTypeController.add);
 // router.delete("userTypes/:id", userTypeController.delete);
 
 /* Sensor Router */
-router.get("/sensor", sensorController.list);
-router.get("/sensor/:id", sensorController.getById);
-router.post("/sensor", sensorController.add);
-router.put("/sensor", sensorController.update);
-router.delete("/sensor/:id", sensorController.delete);
+router.get("/sensors", sensorController.list);
+router.get("/sensors/:id", sensorController.getById);
+router.post("/sensors", sensorController.add);
+router.put("/sensors", sensorController.update);
+router.delete("/sensors/:id", sensorController.delete);
 
 /* Locations Router */
 router.get("/locations", locatoinController.list);
