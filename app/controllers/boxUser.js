@@ -92,13 +92,13 @@ module.exports = {
     }
 
     //find
-    let userBox = await UserBox.findByPk(req.body.UserBoxID);
-    if (userBox == null) {
+    let boxUser = await BoxUser.findByPk(req.body.UserBoxID);
+    if (boxUser == null) {
       return res.status(400).send({ message: "UserBoxID not found" });
     }
 
     //update sensor
-    userBox
+    boxUser
       .update(req.body)
       .then((val) => res.status(200).send(val))
       .catch((error) => res.status(400).send(error));
@@ -106,11 +106,11 @@ module.exports = {
 
   //Delete BoxUser functie
   delete(req, res) {
-    UserBox.findByPk(req.params.id)
+    BoxUser.findByPk(req.params.id)
       .then((val) => {
         if (!val) {
           return res.status(400).send({
-            message: "UserBox Not Found",
+            message: "BoxUser Not Found",
           });
         }
         return val
