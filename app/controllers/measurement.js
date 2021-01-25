@@ -19,6 +19,7 @@ measurementValidate = (req, res) => {
 
   if (!req.body.Value) {
     validationMessages.push("Unite is required.");
+
   }
 
   return validationMessages;
@@ -54,6 +55,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Create
   async add(req, res) {
     //validation
     let validationMessages = measurementValidate(req, res);
@@ -62,7 +64,6 @@ module.exports = {
       return res.status(400).send({ messages: validationMessages });
     }
 
-    //if exist
 
     //TODO BOX
 
@@ -101,4 +102,27 @@ module.exports = {
       .then((measurement) => res.status(201).send(measurement))
       .catch((error) => res.status(400).send(error));
   },
+
+  //TODO Update functie
+
+  
+
+  //Delete functie
+  delete(req, res) {
+    Measurement.findByPk(req.params.id)
+      .then((val) => {
+        if (!val) {
+          return res.status(400).send({
+            message: "MeasurementID Not Found",
+          });
+        }
+        return val
+          .destroy()
+          .then(() => res.status(204).send({ message: "The measurement has succesfully been deleted" }))
+          .catch((error) => res.status(400).send(error));
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
+
 };

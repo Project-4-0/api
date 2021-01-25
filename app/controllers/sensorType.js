@@ -9,7 +9,7 @@ sensorTypevalidate = (req, res) => {
   }
 
   if (!req.body.Unit) {
-    validationMessages.push("Unite is required.");
+    validationMessages.push("Unit is required.");
   }
 
   return validationMessages;
@@ -66,4 +66,7 @@ module.exports = {
       .then((userType) => res.status(201).send(userType))
       .catch((error) => res.status(400).send(error));
   },
+
+
+  
 };

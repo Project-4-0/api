@@ -1,43 +1,47 @@
-const Sensor = require("../models").Sensor;
+const Box = require("../models").Box;
 
-//Validation Sensor
-sensorValidate = (req, res) => {
+//Validation Box
+boxValidate = (req, res) => {
   let validationMessages = [];
+
+  if (!req.body.MacAdress) {
+    validationMessages.push("MacAdress is required.");
+  }
 
   if (!req.body.Name) {
     validationMessages.push("Name is required.");
   }
 
-  if (!req.body.SensorTypeID) {
-    validationMessages.push("SensorTypeID is required.");
+  if (!req.body.Active) {
+    validationMessages.push("Active is required.");
   }
 
   return validationMessages;
 };
 
 //Check if exist
-async function sensorExist(val) {
-  return await Sensor.findOne({
-    where: { Name: val },
+async function boxExist(val) {
+  return await Box.findOne({
+    where: { MacAdress: val },
   });
 }
 
 //Models
 module.exports = {
   list(req, res) {
-    Sensor.findAll()
-      .then((sensor) => res.status(200).send(sensor))
+    Box.findAll()
+      .then((box) => res.status(200).send(box))
       .catch((error) => {
         res.status(400).send(error);
       });
   },
 
   getById(req, res) {
-    Sensor.findByPk(req.params.id)
+    Box.findByPk(req.params.id)
       .then((val) => {
         if (!val) {
           return res.status(404).send({
-            message: "Sensor Not Found",
+            message: "Box Not Found",
           });
         }
         return res.status(200).send(val);
@@ -45,65 +49,69 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-  //Create functie
+
+  //Create box functie
   async add(req, res) {
     //validation
-    let validationMessages = sensorValidate(req, res);
+    let validationMessages = boxValidate(req, res);
 
     if (validationMessages.length != 0) {
       return res.status(400).send({ messages: validationMessages });
     }
 
     //already exist
-    if ((await sensorExist(req.body.Name)) != null) {
-      return res.status(400).send({ message: "Name already exist!" });
+    if ((await boxExist(req.body.MacAdress)) != null) {
+      return res.status(400).send({ message: "Box already exists!" });
     }
-  
-    //create sensor
-    Sensor.create({
+
+    //create
+    SensorType.create({
+      MacAdress: req.body.MacAdress,
       Name: req.body.Name,
-      SensorTypeID: req.body.SensorTypeID,
+      Comment: req.body.Comment,
+      ConfiguratieString: req.body.ConfiguratieString,
+      Active: req.body.Active,
     })
-      .then((sensor) => res.status(201).send(sensor))
+      .then((val) => res.status(201).send(val))
       .catch((error) => res.status(400).send(error));
   },
- 
-  //Update functie
+
   async update(req, res) {
     //validation
-    let validationMessages = sensorValidate(req, res);
+    let validationMessages = this.boxValidate(req, res);
 
     if (validationMessages.length != 0) {
       return res.status(400).send({ messages: validationMessages });
     }
 
     //find
-    let sensor = await Sensor.findByPk(req.body.SensorID);
-    if (sensor == null) {
-      return res.status(400).send({ message: "SensorID not found" });
+    let box = await Box.findByPk(req.body.BoxID);
+    if (box == null) {
+      return res.status(400).send({ message: "Box not found" });
     }
 
-    //update sensor
-    sensor
+    //update user
+    box
       .update(req.body)
       .then((val) => res.status(200).send(val))
       .catch((error) => res.status(400).send(error));
   },
 
-  //delete sensor
+  //Delete Box Functie
   delete(req, res) {
-    Sensor.findByPk(req.params.id)
+    Box.findByPk(req.params.id)
       .then((val) => {
         if (!val) {
           return res.status(400).send({
-            message: "SensorID Not Found",
+            message: "Box Not Found",
           });
         }
         return val
           .destroy()
-          .then(() => res.status(204).send({ message: "The sensor has succesfully been deleted" }))
+          .then(() => res.status(204).send())
           .catch((error) => res.status(400).send(error));
       })
       .catch((error) => res.status(400).send(error));
   },
+
 };
