@@ -60,18 +60,7 @@ router.post("/sensors", sensorController.add);
 router.put("/sensors", sensorController.update);
 router.delete("/sensors/:id", sensorController.delete);
 
-<<<<<<< Updated upstream
-/* Locations Router */
-router.get("/locations", locatoinController.list);
-router.get("/locations/:id", locatoinController.getById);
-router.post("/locations", locatoinController.add);
-router.put("/locations", locatoinController.update);
-router.delete("/locations/:id", locatoinController.delete);
-
-/* users Router */
-=======
 /* users Router WORKS*/
->>>>>>> Stashed changes
 router.get(
   "/users",
   [authJwt.verifyToken, authJwt.hasPermisionAdmin],
