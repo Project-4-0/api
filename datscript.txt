@@ -64,7 +64,7 @@ CREATE TABLE public."BoxUser"
     "BoxID" INT NOT NULL,
     "UserID" INT NOT NULL,
     "StartDate" timestamp NOT NULL,
-    "EndDate" timestamp NOT NULL,
+    "EndDate" timestamp,
     CONSTRAINT fk_box
     FOREIGN KEY("BoxID")
     REFERENCES "Box"("BoxID"),
@@ -105,7 +105,7 @@ CREATE TABLE public."Location"
     "Longtitude" float8 NOT NULL,
     "Latitude" float8 NOT NULL,
     "StartDate" timestamp NOT NULL,
-    "EndDate" timestamp NOT NULL,
+    "EndDate" timestamp,
     CONSTRAINT fk_boxuser
     FOREIGN KEY("BoxUserID")
     REFERENCES "BoxUser"("BoxUserID")
@@ -174,7 +174,7 @@ INSERT INTO "Box"("BoxID", "MacAdress", "Name", "Comment", "Active") OVERRIDING 
     (4, '00:0a:95:9d:68:11', 'Box 4', 'Batterij aan vervanging toe!', true)
 RETURNING *;
 
-INSERT INTO "BoxUser"("BoxUser", "BoxID", "UserID", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
+INSERT INTO "BoxUser"("BoxUserID", "BoxID", "UserID", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
     (1, 1, 5, '2021-01-18 19:10:25-07', NULL),
     (2, 2, 10, '2021-01-18 19:10:25-07', '2021-01-24 20:30:25-07'),
     (3, 3, 13, '2021-01-18 19:10:25-07', NULL),
@@ -186,8 +186,8 @@ INSERT INTO "SensorType"("SensorTypeID", "Name", "Unit") OVERRIDING SYSTEM VALUE
     (1, 'Licht', '%'),
     (2, 'Geleidbaarheid', '%'),
     (3, 'Vochtigheid', '%'),
-    (4, 'Temperatuur', '°C');
-SELECT * FROM SensorType;
+    (4, 'Temperatuur', '°C')
+RETURNING *;
 
 INSERT INTO "Sensor"("SensorID", "Name", "SensorTypeID") OVERRIDING SYSTEM VALUE VALUES 
     (1, 'Luna Optoelectronics, Through Hole LDR', 1),
@@ -229,7 +229,7 @@ RETURNING *;
 
 INSERT INTO "Location"("LocationID", "BoxUserID", "Longtitude", "Latitude", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
     (1, 1, 4.8323, 51.0348, '2021-01-18 19:10:25-07', NULL),
-    (2, 2, 4.8363, 51.0328, , '2021-01-18 19:10:25-07', '2021-01-24 20:30:25-07'),
+    (2, 2, 4.8363, 51.0328, '2021-01-18 19:10:25-07', '2021-01-24 20:30:25-07'),
     (3, 3, 4.96148, 51.16099, '2021-01-18 19:10:25-07', NULL),
     (4, 4, 4.4415, 51.1214, '2021-01-18 19:10:25-07', '2021-01-25 06:00:25-07'),
     (5, 5, 4.8323, 51.0348, '2021-01-25 07:00:25-07', NULL)
@@ -356,7 +356,7 @@ INSERT INTO "Measurement"("BoxID", "SensorID", "Value", "TimeStamp") OVERRIDING 
     (2, 8,  10.70, '2021-01-23 19:15:25-07'),
     (2, 8,  11.65, '2021-01-24 07:15:25-07'),
     (2, 8,  11,65, '2021-01-24 19:15:25-07'),
-    
+
     (3, 9, 50.52, '2021-01-18 19:15:25-07'),
     (3, 9, 85.25, '2021-01-19 07:15:25-07'),
     (3, 9, 30.13, '2021-01-19 19:15:25-07'),
@@ -478,7 +478,6 @@ INSERT INTO "Measurement"("BoxID", "SensorID", "Value", "TimeStamp") OVERRIDING 
     (4, 16, 15,65, '2021-01-24 19:15:25-07'),
     (4, 16, 16.52, '2021-01-25 07:15:25-07'),
     (4, 16, 20.05, '2021-01-25 19:15:25-07'),
-
     (4, 16, 25.41, '2021-01-26 19:15:25-07'),
     (4, 16, 24.85, '2021-01-26 19:15:25-07'),
     (4, 16, 26.52, '2021-01-27 19:15:25-07'),
