@@ -1,4 +1,7 @@
 const BoxUser = require("../models").BoxUser;
+const User = require("../models").User;
+const Location = require("../models").Location;
+const Box = require("../models").Box;
 
 //Validation BoxUser
 boxUserValidate = (req, res) => {
@@ -41,7 +44,22 @@ module.exports = {
   },
 
   getById(req, res) {
-    BoxUser.findByPk(req.params.id)
+    BoxUser.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: "User",
+        },
+        {
+          model: Box,
+          as: "Box",
+        },
+        {
+          model: Location,
+          as: "Location",
+        },
+      ],
+    })
       .then((val) => {
         if (!val) {
           return res.status(404).send({
@@ -53,6 +71,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Create BoxUser functie
   async add(req, res) {
     //validation
     let validationMessages = BoxUserValidate(req, res);
@@ -61,7 +80,6 @@ module.exports = {
       return res.status(400).send({ messages: validationMessages });
     }
 
-
     //create
     BoxUser.create({
       BoxID: req.body.BoxID,
@@ -69,10 +87,11 @@ module.exports = {
       StartDate: req.body.StartDate,
       EndDate: req.body.EndDate,
     })
-      .then((userBox) => res.status(201).send(userBox))
+      .then((val) => res.status(201).send(val))
       .catch((error) => res.status(400).send(error));
   },
 
+  //Update BoxUser functie
   async update(req, res) {
     //validation
     let validationMessages = userBoxValidate(req, res);
@@ -94,6 +113,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Delete BoxUser functie
   delete(req, res) {
     UserBox.findByPk(req.params.id)
       .then((val) => {

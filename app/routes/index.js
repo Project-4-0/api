@@ -14,6 +14,7 @@ const sensorTypeController = require("../controllers").sensorType;
 const sensorController = require("../controllers").sensor;
 const locationController = require("../controllers").location;
 const measurementController = require("../controllers").measurement;
+const monitoringController = require("../controllers").monitoring;
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -24,14 +25,14 @@ router.get("/", function (req, res, next) {
 router.get("/boxes", boxController.list);
 router.get("/boxes/:id", boxController.getById);
 router.post("/boxes", boxController.add);
-router.put("boxes/:id", boxController.update);
+router.put("boxes", boxController.update);
 router.delete("boxes/:id", boxController.delete);
 
 /* TO DO Measurement Router */
 router.get("/measurements", measurementController.list);
 router.get("/measurements/:id", measurementController.getById);
 router.post("/measurements", measurementController.add);
-//router.put("measurements/:id", measurementController.update);
+router.put("/measurements", measurementController.update);
 router.delete("measurements/:id", measurementController.delete);
 
 /* Locations Router */
@@ -47,6 +48,11 @@ router.get("/boxUsers/:id", boxUserController.getById);
 router.post("/boxUsers", boxUserController.add);
 router.put("/boxUsers", boxUserController.update);
 router.delete("/boxUsers/:id", boxUserController.delete);
+
+/* Monitoring Router */
+router.get("/monitoring", monitoringController.list);
+router.get("/monitoring/:id", monitoringController.getById);
+router.post("/monitoring", monitoringController.add);
 
 /* UserType Router Works*/
 router.get("/userTypes", userTypeController.list);

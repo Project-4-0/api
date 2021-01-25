@@ -55,7 +55,7 @@ async function userExist(val) {
 module.exports = {
   list(req, res) {
     User.findAll()
-      .then((userTypes) => res.status(200).send(userTypes))
+      .then((user) => res.status(200).send(user))
       .catch((error) => {
         res.status(400).send(error);
       });
