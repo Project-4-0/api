@@ -3,7 +3,7 @@ node_modules/
 .npm
 package-lock.json
 
-./vs
+.vs/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
