@@ -5,7 +5,9 @@ var router = express.Router();
 const { authJwt } = require("../middlewares");
 
 /*Controllers*/
+
 const boxController = require("../controllers").box;
+const boxUserController = require('../controllers').boxUser;
 const userTypeController = require("../controllers").userType;
 const userController = require("../controllers").user;
 const sensorTypeController = require("../controllers").sensorType;
@@ -39,7 +41,14 @@ router.post("/locations", locationController.add);
 router.put("/locations", locationController.update);
 router.delete("/locations/:id", locationController.delete);
 
-/* UserType Router WORKS */
+/* BoxUser Router */
+router.get("/boxUsers", boxUserController.list);
+router.get("/boxUsers/:id", boxUserController.getById);
+router.post("/boxUsers", boxUserController.add);
+router.put("/boxUsers", boxUserController.update);
+router.delete("/boxUsers/:id", boxUserController.delete);
+
+/* UserType Router Works*/
 router.get("/userTypes", userTypeController.list);
 router.get("/userTypes/:id", userTypeController.getById);
 router.post("/userTypes", userTypeController.add);

@@ -5,6 +5,7 @@ const measurement = require("./measurement");
 const sensor = require("./sensor");
 const location = require("./location");
 const box = require("./box");
+const boxUser = require("./boxUser");
 
 module.exports = {
   user,
@@ -14,4 +15,5 @@ module.exports = {
   sensor,
   location,
   box,
+  boxUser,
 };
