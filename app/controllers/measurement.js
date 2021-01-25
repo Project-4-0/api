@@ -23,11 +23,7 @@ measurementValidate = (req, res) => {
 };
 
 //Check if exist
-async function measurementExist(val) {
-  return await Measurement.findOne({
-    where: { SensorID: val },
-  });
-}
+
 
 //Models
 module.exports = {

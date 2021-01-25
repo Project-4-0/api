@@ -1,6 +1,5 @@
 const BoxUser = require("../models").BoxUser;
 const User = require("../models").User;
-const Location = require("../models").Location;
 const Box = require("../models").Box;
 
 //Validation BoxUser
@@ -27,11 +26,7 @@ boxUserValidate = (req, res) => {
 };
 
 //Check if exist
-async function boxUserExist(val) {
-  return await BoxUser.findOne({
-    where: { BoxID: val },
-  });
-}
+
 
 //Models
 module.exports = {
@@ -54,10 +49,6 @@ module.exports = {
           model: Box,
           as: "Box",
         },
-        {
-          model: Location,
-          as: "Location",
-        },
       ],
     })
       .then((val) => {
@@ -74,7 +65,7 @@ module.exports = {
   //Create BoxUser functie
   async add(req, res) {
     //validation
-    let validationMessages = BoxUserValidate(req, res);
+    let validationMessages = boxUserValidate(req, res);
 
     if (validationMessages.length != 0) {
       return res.status(400).send({ messages: validationMessages });
@@ -84,7 +75,7 @@ module.exports = {
     BoxUser.create({
       BoxID: req.body.BoxID,
       UserID: req.body.UserID,
-      StartDate: req.body.StartDate,
+      StartDate: new Date().toISOString(),
       EndDate: req.body.EndDate,
     })
       .then((val) => res.status(201).send(val))
@@ -94,7 +85,7 @@ module.exports = {
   //Update BoxUser functie
   async update(req, res) {
     //validation
-    let validationMessages = userBoxValidate(req, res);
+    let validationMessages = boxUserValidate(req, res);
 
     if (validationMessages.length != 0) {
       return res.status(400).send({ messages: validationMessages });

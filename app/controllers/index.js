@@ -17,5 +17,5 @@ module.exports = {
   location,
   box,
   boxUser,
-  monitoring
+  monitoring,
 };

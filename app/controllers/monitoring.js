@@ -25,11 +25,7 @@ monitoringValidate = (req, res) => {
 };
 
 //Check if exist
-async function sensorTypeExist(val) {
-  return await Monitoring.findOne({
-    where: { MonitoringID: val },
-  });
-}
+
 
 //Models
 module.exports = {
