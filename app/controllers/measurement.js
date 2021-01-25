@@ -62,12 +62,7 @@ module.exports = {
       return res.status(400).send({ messages: validationMessages });
     }
 
-<<<<<<< Updated upstream
-    //if exist
-
-=======
     //already exist
->>>>>>> Stashed changes
     //TODO BOX
 
     //TODO SensorID
@@ -84,6 +79,8 @@ module.exports = {
   },
 
   //TODO Update functie
+
+  
 
   //Delete functie
   delete(req, res) {
