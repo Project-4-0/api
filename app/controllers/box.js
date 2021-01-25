@@ -17,10 +17,6 @@ boxValidate = (req, res) => {
     validationMessages.push("Comment is required.");
   }
 
-  if (!req.body.ConfiguratieString) {
-    validationMessages.push("ConfiguratieString is required.");
-  }
-
   if (!req.body.Active) {
     validationMessages.push("Active is required.");
   }
@@ -78,7 +74,6 @@ module.exports = {
       MacAdress: req.body.MacAdress,
       Name: req.body.Name,
       Comment: req.body.Comment,
-      ConfiguratieString: req.body.ConfiguratieString,
       Active: req.body.Active,
     })
       .then((val) => res.status(201).send(val))
