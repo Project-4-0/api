@@ -13,11 +13,11 @@ measurementValidate = (req, res) => {
   }
 
   if (!req.body.SensorID) {
-    validationMessages.push("Unite is required.");
+    validationMessages.push("SensorID is required.");
   }
 
   if (!req.body.Value) {
-    validationMessages.push("Unite is required.");
+    validationMessages.push("Value is required.");
 
   }
 
