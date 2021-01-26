@@ -39,19 +39,6 @@ module.exports = {
   },
 
   getById(req, res) {
-    Measurement.findByPk(req.params.id)
-      .then((val) => {
-        if (!val) {
-          return res.status(404).send({
-            message: "Measurement Not Found",
-          });
-        }
-        return res.status(200).send(val);
-      })
-      .catch((error) => res.status(400).send(error));
-  },
-
-  getById(req, res) {
     Measurement.findByPk(req.params.id, {
       include: [
         {
@@ -94,7 +81,7 @@ module.exports = {
       BoxID: req.body.BoxID,
       SensorID: req.body.SensorID,
       Value: req.body.Value,
-      TimeStamp: req.body.TimeStamp,
+      TimeStamp: new Date().toISOString(),
     })
       .then((val) => res.status(201).send(val))
       .catch((error) => res.status(400).send(error));
