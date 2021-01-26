@@ -2,6 +2,8 @@ const Measurement = require("../models").Measurement;
 const Sensor = require("../models").Sensor;
 const Box = require("../models").Box;
 
+const sequelize = require("../models/index").sequelize;
+
 //Validation Measurement
 measurementValidate = (req, res) => {
   let validationMessages = [];
