@@ -19,9 +19,10 @@ CREATE TABLE public."Box"
 (
     "BoxID" INT GENERATED ALWAYS AS IDENTITY,
     PRIMARY KEY("BoxID"),
-    "MacAdress" VARCHAR(300) NOT NULL,
+    "MacAddress" VARCHAR(300) NOT NULL,    
     "Name" VARCHAR(300) NOT NULL,
     "Comment" VARCHAR(500),
+    "ConfiguratieString" VARCHAR(300),
     "Active" boolean
 );
 
@@ -167,11 +168,11 @@ INSERT INTO "User"("UserID", "LastName", "FirstName", "Email", "Password", "Addr
     (1, 'Admin', 'Admin', 'admin@example.com', 'Admin', 'Adminweg 654', '8000', 'Brugge', 1)
 RETURNING *;
 
-INSERT INTO "Box"("BoxID", "MacAdress", "Name", "Comment", "Active") OVERRIDING SYSTEM VALUE VALUES 
-    (1, '00:0a:95:9d:68:16', 'Box 1 - B One', 'Beschadigingen aan buitenkant van de box vastgesteld.', true),
-    (2, '00:0a:95:9d:68:15', 'Box 2', NULL, false),
-    (3, '00:0a:95:9d:68:13', 'Box 3', NULL, true),
-    (4, '00:0a:95:9d:68:11', 'Box 4', 'Batterij aan vervanging toe!', true)
+INSERT INTO "Box"("BoxID", "MacAddress", "Name", "Comment", "ConfiguratieString", "Active") OVERRIDING SYSTEM VALUE VALUES 
+    (1, '00:0a:95:9d:68:16', 'Box 1 - B One', 'Beschadigingen aan buitenkant van de box vastgesteld.', NULL, true),
+    (2, '00:0a:95:9d:68:15', 'Box 2', NULL, NULL, false),
+    (3, '00:0a:95:9d:68:13', 'Box 3', NULL, NULL, true),
+    (4, '00:0a:95:9d:68:11', 'Box 4', 'Batterij aan vervanging toe!', NULL, true)
 RETURNING *;
 
 INSERT INTO "BoxUser"("BoxUserID", "BoxID", "UserID", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
