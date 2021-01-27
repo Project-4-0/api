@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     {},
     {
       sequelize,
-      modelName: "SensorBox33",
+      modelName: "SensorBox",
       freezeTableName: true,
       timestamps: false,
     }
