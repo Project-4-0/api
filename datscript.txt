@@ -1,0 +1,483 @@
+  
+DROP TABLE IF EXISTS public."Location" CASCADE;
+DROP TABLE IF EXISTS public."User" CASCADE;
+DROP TABLE IF EXISTS public."UserType" CASCADE;
+DROP TABLE IF EXISTS public."Monitoring" CASCADE;
+DROP TABLE IF EXISTS public."Measurement" CASCADE;
+DROP TABLE IF EXISTS public."SensorType" CASCADE;
+DROP TABLE IF EXISTS public."Sensor" CASCADE;
+DROP TABLE IF EXISTS public."Box" CASCADE;
+DROP TABLE IF EXISTS public."SensorBox" CASCADE;
+DROP TABLE IF EXISTS public."BoxUser" CASCADE;
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
+
+CREATE TABLE public."Box" 
+(    
+  "BoxID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("BoxID"),
+  "MacAddress" VARCHAR(300) NOT NULL,
+  "ConfiguratieString" VARCHAR(300),
+  "Name" VARCHAR(300) NOT NULL,  
+  "Comment" VARCHAR(500),
+  "Active" BOOLEAN
+);   
+
+
+CREATE TABLE public."UserType" 
+(    
+  "UserTypeID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("UserTypeID"),
+  "UserTypeName" VARCHAR(50) NOT NULL
+);  
+
+
+CREATE TABLE public."SensorType" 
+(    
+  "SensorTypeID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("SensorTypeID"),
+  "Name" VARCHAR(50) NOT NULL,
+  "Unit" VARCHAR(50) NOT NULL
+);  
+CREATE TABLE public."User"    
+(    
+  "UserID" INT GENERATED ALWAYS AS IDENTITY,
+   PRIMARY KEY("UserID"),
+  "LastName" VARCHAR(60) NOT NULL,  
+  "FirstName" VARCHAR(60) NOT NULL,  
+  "Email" VARCHAR(200) NOT NULL,
+  "Password" VARCHAR(200) NOT NULL,
+  "Address" VARCHAR(200) ,
+  "PostalCode" VARCHAR(10),
+  "City" VARCHAR(100),
+  "UserTypeID" INT NOT NULL,
+   CONSTRAINT fk_usertype
+    FOREIGN KEY("UserTypeID")
+    REFERENCES "UserType"("UserTypeID")
+);
+CREATE TABLE public."BoxUser" 
+(    
+  "BoxUserID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("BoxUserID"),
+  "BoxID" INT NOT NULL,
+  "UserID" INT NOT NULL,
+  "StartDate" timestamp,  
+  "EndDate" timestamp,
+   CONSTRAINT fk_box
+        FOREIGN KEY("BoxID")
+            REFERENCES "Box"("BoxID"),
+   CONSTRAINT fk_user
+        FOREIGN KEY("UserID")
+            REFERENCES "User"("UserID")
+);
+CREATE TABLE public."Sensor" 
+(    
+  "SensorID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("SensorID"),
+  "Name" VARCHAR(300) NOT NULL,  
+  "SensorTypeID" INT NOT NULL,
+   CONSTRAINT fk_sensortype
+    FOREIGN KEY("SensorTypeID")
+    REFERENCES "SensorType"("SensorTypeID")
+);  
+CREATE TABLE public."SensorBox" 
+(    
+  "BoxID" INT NOT NULL,
+  "SensorID" INT NOT NULL,
+  PRIMARY KEY("BoxID","SensorID"),
+   CONSTRAINT fk_box
+        FOREIGN KEY("BoxID")
+            REFERENCES "Box"("BoxID"),
+   CONSTRAINT fk_sensor
+        FOREIGN KEY("SensorID")
+            REFERENCES "Sensor"("SensorID")
+); 
+CREATE TABLE public."Location" 
+(    
+  "LocationID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("LocationID"),
+  "BoxUserID" INT NOT NULL,
+  "Longtitude" float8 NOT NULL,
+  "Latitude" float8 NOT NULL, 
+  "StartDate" TIMESTAMP ,
+  "EndDate" TIMESTAMP ,
+   CONSTRAINT fk_boxuser
+        FOREIGN KEY("BoxUserID")
+            REFERENCES "BoxUser"("BoxUserID")
+); 
+CREATE TABLE public."Monitoring" 
+(    
+  "MonitoringID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("MonitoringID"),
+  "BoxID" INT NOT NULL,
+  "TimeStamp" TIMESTAMP NOT NULL,
+  "BatteryStatus" bool,
+  "SdCapacity" Varchar(50),
+  "BatteryPercentage" Varchar(10),
+   CONSTRAINT fk_box
+        FOREIGN KEY("BoxID")
+            REFERENCES "Box"("BoxID")
+); 
+CREATE TABLE public."Measurement" 
+(    
+  "MeasurementID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("MeasurementID"),
+  "BoxID" INT NOT NULL,
+  "SensorID" INT NOT NULL,
+  "Value" Varchar(50),
+  "TimeStamp" TIMESTAMP NOT NULL,
+    CONSTRAINT fk_sensorbox
+        FOREIGN KEY("BoxID","SensorID")
+            REFERENCES "SensorBox"("BoxID","SensorID")
+  /* CONSTRAINT fk_sensorbox
+        FOREIGN KEY("BoxID")
+            REFERENCES "SensorBox"("BoxID"),
+   CONSTRAINT fk_sensorbox
+        FOREIGN KEY("SensorID")
+            REFERENCES "SensorBox"("SensorID")*/
+); 
+
+
+
+
+INSERT INTO "UserType"("UserTypeID", "UserTypeName") OVERRIDING SYSTEM VALUE VALUES 
+    (1, 'Admin'),
+    (2, 'Monteur'),
+    (3, 'Boer')
+RETURNING *;
+
+INSERT INTO "User"("UserID", "LastName", "FirstName", "Email", "Password", "Address", "PostalCode", "City", "UserTypeID") OVERRIDING SYSTEM VALUE VALUES 
+    (13, 'Boer', 'Boer', 'boer@example.com', 'Boer', 'Boereweg 651', '8000', 'Brugge', 3),
+    (12, 'Monteur', 'Monteur', 'monteur@example.com', 'Monteur', 'Monteurweg 324', '8000', 'Brugge', 2),
+    (11, 'Van Laer', 'Youri', 'r0694461@student.thomasmore.be', 'Test', 'Harmoniestraat 44', '2230', 'Ramsel', 3),
+    (10, 'Blaga', 'Robert', 'r0660626@student.thomasmore.be', 'Test', 'Harmoniestraat 44', '2230', 'Ramsel', 3),
+    (9, 'Luyten', 'Ruben', 'r0705488@student.thomasmore.be', 'Test', 'Harmoniestraat 44', '2230', 'Ramsel', 3),
+    (8, 'Neyens', 'Jari', 'r0730265@student.thomasmore.be', 'Test', 'Harmoniestraat 44', '2230', 'Ramsel', 3),
+    (7, 'Vanpelt', 'Senne', 'r0656157@student.thomasmore.be', 'Test', 'Harmoniestraat 44', '2230', 'Ramsel', 3),
+    (6, 'Vangoetsenhoven', 'Arno', 'r0741327@student.thomasmore.be', 'Test', 'Harmoniestraat 44', '2230', 'Ramsel', 3),
+    (5, 'Doe', 'Jane', 'janedoe@example.com', 'Test', 'Stationstraat 24', '2260', 'Westerlo', 3),
+    (4, 'Tibant', 'Jos', 'jostibant@hotmail.com', 'Test', 'Hemelseweg 56', '2230', 'Ramsel', 2),
+    (3, 'Cade', 'Barry', 'barrycade@hotmail.com', 'Test', 'Steeneinde 5', '2550', 'Kontich', 3),
+    (2, 'ter Ham', 'Beau', 'beauterham@hotmail.com', 'Test', 'Route du choco 102', '6660', 'Houffalize', 1),
+    (1, 'Admin', 'Admin', 'admin@example.com', 'Admin', 'Adminweg 654', '8000', 'Brugge', 1)
+RETURNING *;
+
+INSERT INTO "Box"("BoxID", "MacAddress", "Name", "Comment", "ConfiguratieString", "Active") OVERRIDING SYSTEM VALUE VALUES 
+    (1, '00:0a:95:9d:68:16', 'Box 1 - B One', 'Beschadigingen aan buitenkant van de box vastgesteld.', NULL, true),
+    (2, '00:0a:95:9d:68:15', 'Box 2', NULL, NULL, false),
+    (3, '00:0a:95:9d:68:13', 'Box 3', NULL, NULL, true),
+    (4, '00:0a:95:9d:68:11', 'Box 4', 'Batterij aan vervanging toe!', NULL, true)
+RETURNING *;
+
+INSERT INTO "BoxUser"("BoxUserID", "BoxID", "UserID", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
+    (1, 1, 5, '2021-01-18 19:10:25-07', NULL),
+    (2, 2, 10, '2021-01-18 19:10:25-07', '2021-01-24 20:30:25-07'),
+    (3, 3, 13, '2021-01-18 19:10:25-07', NULL),
+    (4, 4, 3, '2021-01-18 19:10:25-07', '2021-01-25 06:00:25-07'),
+    (5, 4, 6, '2021-01-25 07:00:25-07', NULL)
+RETURNING *;
+
+INSERT INTO "SensorType"("SensorTypeID", "Name", "Unit") OVERRIDING SYSTEM VALUE VALUES 
+    (1, 'Licht', '%'),
+    (2, 'Geleidbaarheid', '%'),
+    (3, 'Vochtigheid', '%'),
+    (4, 'Temperatuur', '°C')
+RETURNING *;
+
+INSERT INTO "Sensor"("SensorID", "Name", "SensorTypeID") OVERRIDING SYSTEM VALUE VALUES 
+    (1, 'Luna Optoelectronics, Through Hole LDR', 1),
+    (2, 'Tester Bodem Vocht Sensor Vochtigheid Temperatuur Elektrische Geleidbaarheid Tester', 2),
+    (3, 'Iduino ME110 Soil moisture sensor', 3),
+    (4, 'Waterdichte DS18B20 Temperatuursensor', 4),
+    (5, 'B2 - Luna Optoelectronics, Through Hole LDR', 1),
+    (6, 'B2 - Tester Bodem Vocht Sensor Vochtigheid Temperatuur Elektrische Geleidbaarheid Tester', 2),
+    (7, 'B2 - Iduino ME110 Soil moisture sensor', 3),
+    (8, 'B2 - Waterdichte DS18B20 Temperatuursensor', 4),
+    (9, 'B3 - Luna Optoelectronics, Through Hole LDR', 1),
+    (10, 'B3 - Tester Bodem Vocht Sensor Vochtigheid Temperatuur Elektrische Geleidbaarheid Tester', 2),
+    (11, 'B3 - Iduino ME110 Soil moisture sensor', 3),
+    (12, 'B3 - Waterdichte DS18B20 Temperatuursensor', 4),
+    (13, 'B4 - Luna Optoelectronics, Through Hole LDR', 1),
+    (14, 'B4 - Tester Bodem Vocht Sensor Vochtigheid Temperatuur Elektrische Geleidbaarheid Tester', 2),
+    (15, 'B4 - Iduino ME110 Soil moisture sensor', 3),
+    (16, 'B4 - Waterdichte DS18B20 Temperatuursensor', 4)
+RETURNING *;
+
+INSERT INTO "SensorBox"("BoxID", "SensorID") OVERRIDING SYSTEM VALUE VALUES 
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (2, 5),
+    (2, 6),
+    (2, 7),
+    (2, 8),
+    (3, 9),
+    (3, 10),
+    (3, 11),
+    (3, 12),
+    (4, 13),
+    (4, 14),
+    (4, 15),
+    (4, 16)
+RETURNING *;
+
+INSERT INTO "Location"("LocationID", "BoxUserID", "Longtitude", "Latitude", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
+    (1, 1, 4.8323, 51.0348, '2021-01-18 19:10:25-07', NULL),
+    (2, 2, 4.8363, 51.0328, '2021-01-18 19:10:25-07', '2021-01-24 20:30:25-07'),
+    (3, 3, 4.96148, 51.16099, '2021-01-18 19:10:25-07', NULL),
+    (4, 4, 4.4415, 51.1214, '2021-01-18 19:10:25-07', '2021-01-25 06:00:25-07'),
+    (5, 5, 4.8323, 51.0348, '2021-01-25 07:00:25-07', NULL)
+RETURNING *;
+
+INSERT INTO "Monitoring"("MonitoringID", "BoxID", "TimeStamp", "BatteryStatus", "SdCapacity", "BatteryPercentage") OVERRIDING SYSTEM VALUE VALUES 
+    (1, 1, '2021-01-25 11:00:25-07', true, '50%', 50.5),
+    (2, 2, '2021-01-25 11:00:25-07', false, '25%', 0.0),
+    (3, 3, '2021-01-25 11:00:25-07', true, '15%', 50.5),
+    (4, 4, '2021-01-25 11:00:25-07', true, '70%', 5.2)
+RETURNING *;
+
+INSERT INTO "Measurement"("BoxID", "SensorID", "Value", "TimeStamp") OVERRIDING SYSTEM VALUE VALUES 
+    (1, 1, 50.52, '2021-01-18 19:15:25-07'),
+    (1, 1, 85.25, '2021-01-19 07:15:25-07'),
+    (1, 1, 30.13, '2021-01-19 19:15:25-07'),
+    (1, 1, 80.74, '2021-01-20 07:15:25-07'),
+    (1, 1, 40.45, '2021-01-20 19:15:25-07'),
+    (1, 1, 85.85, '2021-01-21 07:15:25-07'),
+    (1, 1, 45.64, '2021-01-21 19:15:25-07'),
+    (1, 1, 88.85, '2021-01-22 07:15:25-07'),
+    (1, 1, 32.45, '2021-01-22 19:15:25-07'),
+    (1, 1, 78.64, '2021-01-23 07:15:25-07'),
+    (1, 1, 35.4, '2021-01-23 19:15:25-07'),
+    (1, 1, 77.5, '2021-01-24 07:15:25-07'),
+    (1, 1, 41.52, '2021-01-24 19:15:25-07'),
+    (1, 1, 79.88, '2021-01-25 07:15:25-07'),
+    (1, 1, 39.2, '2021-01-25 19:15:25-07'),
+    (1, 2, 82.52, '2021-01-18 19:15:25-07'),
+    (1, 2, 85.25, '2021-01-19 07:15:25-07'),
+    (1, 2, 83.13, '2021-01-19 19:15:25-07'),
+    (1, 2, 80.74, '2021-01-20 07:15:25-07'),
+    (1, 2, 89.45, '2021-01-20 19:15:25-07'),
+    (1, 2, 85.85, '2021-01-21 07:15:25-07'),
+    (1, 2, 84.64, '2021-01-21 19:15:25-07'),
+    (1, 2, 88.85, '2021-01-22 07:15:25-07'),
+    (1, 2, 79.45, '2021-01-22 19:15:25-07'),
+    (1, 2, 78.64, '2021-01-23 07:15:25-07'),
+    (1, 2, 85.4, '2021-01-23 19:15:25-07'),
+    (1, 2, 77.5, '2021-01-24 07:15:25-07'),
+    (1, 2, 82.52, '2021-01-24 19:15:25-07'),
+    (1, 2, 75.88, '2021-01-25 07:15:25-07'),
+    (1, 2, 69.2, '2021-01-25 19:15:25-07'),
+    (1, 3, 82.52, '2021-01-18 19:15:25-07'),
+    (1, 3, 85.25, '2021-01-19 07:15:25-07'),
+    (1, 3, 83.13, '2021-01-19 19:15:25-07'),
+    (1, 3, 80.74, '2021-01-20 07:15:25-07'),
+    (1, 3, 89.45, '2021-01-20 19:15:25-07'),
+    (1, 3, 85.85, '2021-01-21 07:15:25-07'),
+    (1, 3, 84.64, '2021-01-21 19:15:25-07'),
+    (1, 3, 88.85, '2021-01-22 07:15:25-07'),
+    (1, 3, 79.45, '2021-01-22 19:15:25-07'),
+    (1, 3, 78.64, '2021-01-23 07:15:25-07'),
+    (1, 3, 85.4, '2021-01-23 19:15:25-07'),
+    (1, 3, 77.5, '2021-01-24 07:15:25-07'),
+    (1, 3, 82.52, '2021-01-24 19:15:25-07'),
+    (1, 3, 75.88, '2021-01-25 07:15:25-07'),
+    (1, 3, 69.2, '2021-01-25 19:15:25-07'),
+    (1, 4, 5.25, '2021-01-18 19:15:25-07'),
+    (1, 4, -0.25, '2021-01-19 07:15:25-07'),
+    (1, 4, 10.52, '2021-01-19 19:15:25-07'),
+    (1, 4, 2.58, '2021-01-20 07:15:25-07'),
+    (1, 4, 12.32, '2021-01-20 19:15:25-07'),
+    (1, 4, -5.52, '2021-01-21 07:15:25-07'),
+    (1, 4, 2.65, '2021-01-21 19:15:25-07'),
+    (1, 4, -7.54, '2021-01-22 07:15:25-07'),
+    (1, 4, 5.65, '2021-01-22 19:15:25-07'),
+    (1, 4, 4.52, '2021-01-23 07:15:25-07'),
+    (1, 4, 10.70, '2021-01-23 19:15:25-07'),
+    (1, 4, 11.65, '2021-01-24 07:15:25-07'),
+    (1, 4, 15,65, '2021-01-24 19:15:25-07'),
+    (1, 4, 16.52, '2021-01-25 07:15:25-07'),
+    (1, 4, 20.05, '2021-01-25 19:15:25-07'),
+
+    (2, 5, 45.52, '2021-01-18 19:15:25-07'),
+    (2, 5,  85.25, '2021-01-19 07:15:25-07'),
+    (2, 5,  32.13, '2021-01-19 19:15:25-07'),
+    (2, 5,  80.74, '2021-01-20 07:15:25-07'),
+    (2, 5,  54.45, '2021-01-20 19:15:25-07'),
+    (2, 5,  85.85, '2021-01-21 07:15:25-07'),
+    (2, 5,  45.64, '2021-01-21 19:15:25-07'),
+    (2, 5,  88.85, '2021-01-22 07:15:25-07'),
+    (2, 5,  20.45, '2021-01-22 19:15:25-07'),
+    (2, 5,  78.64, '2021-01-23 07:15:25-07'),
+    (2, 5,  15.4, '2021-01-23 19:15:25-07'),
+    (2, 5,  60.5, '2021-01-24 07:15:25-07'),
+    (2, 5,  41.52, '2021-01-24 19:15:25-07'),
+    (2, 6,  88.52, '2021-01-18 19:15:25-07'),
+    (2, 6,  85.25, '2021-01-19 07:15:25-07'),
+    (2, 6,  83.13, '2021-01-19 19:15:25-07'),
+    (2, 6,  80.74, '2021-01-20 07:15:25-07'),
+    (2, 6,  89.45, '2021-01-20 19:15:25-07'),
+    (2, 6,  85.85, '2021-01-21 07:15:25-07'),
+    (2, 6,  84.64, '2021-01-21 19:15:25-07'),
+    (2, 6,  88.85, '2021-01-22 07:15:25-07'),
+    (2, 6,  79.45, '2021-01-22 19:15:25-07'),
+    (2, 6,  78.64, '2021-01-23 07:15:25-07'),
+    (2, 6,  85.4, '2021-01-23 19:15:25-07'),
+    (2, 6,  77.5, '2021-01-24 07:15:25-07'),
+    (2, 6,  82.52, '2021-01-24 19:15:25-07'),
+    (2, 7,  82.52, '2021-01-18 19:15:25-07'),
+    (2, 7,  85.25, '2021-01-19 07:15:25-07'),
+    (2, 7,  83.13, '2021-01-19 19:15:25-07'),
+    (2, 7,  80.74, '2021-01-20 07:15:25-07'),
+    (2, 7,  89.45, '2021-01-20 19:15:25-07'),
+    (2, 7,  85.85, '2021-01-21 07:15:25-07'),
+    (2, 7,  84.64, '2021-01-21 19:15:25-07'),
+    (2, 7,  88.85, '2021-01-22 07:15:25-07'),
+    (2, 7,  79.45, '2021-01-22 19:15:25-07'),
+    (2, 7,  78.64, '2021-01-23 07:15:25-07'),
+    (2, 7,  75.4, '2021-01-23 19:15:25-07'),
+    (2, 7,  70.5, '2021-01-24 07:15:25-07'),
+    (2, 7,  65.52, '2021-01-24 19:15:25-07'),
+    (2, 8,  15.25, '2021-01-18 19:15:25-07'),
+    (2, 8,  -5.25, '2021-01-19 07:15:25-07'),
+    (2, 8,  15.52, '2021-01-19 19:15:25-07'),
+    (2, 8,  2.58, '2021-01-20 07:15:25-07'),
+    (2, 8,  10.32, '2021-01-20 19:15:25-07'),
+    (2, 8,  -5.52, '2021-01-21 07:15:25-07'),
+    (2, 8,  2.65, '2021-01-21 19:15:25-07'),
+    (2, 8,  -7.54, '2021-01-22 07:15:25-07'),
+    (2, 8,  5.65, '2021-01-22 19:15:25-07'),
+    (2, 8,  4.52, '2021-01-23 07:15:25-07'),
+    (2, 8,  10.70, '2021-01-23 19:15:25-07'),
+    (2, 8,  11.65, '2021-01-24 07:15:25-07'),
+    (2, 8,  11,65, '2021-01-24 19:15:25-07'),
+
+    (3, 9, 50.52, '2021-01-18 19:15:25-07'),
+    (3, 9, 85.25, '2021-01-19 07:15:25-07'),
+    (3, 9, 30.13, '2021-01-19 19:15:25-07'),
+    (3, 9, 80.74, '2021-01-20 07:15:25-07'),
+    (3, 9, 40.45, '2021-01-20 19:15:25-07'),
+    (3, 9, 85.85, '2021-01-21 07:15:25-07'),
+    (3, 9, 45.64, '2021-01-21 19:15:25-07'),
+    (3, 9, 88.85, '2021-01-22 07:15:25-07'),
+    (3, 9, 32.45, '2021-01-22 19:15:25-07'),
+    (3, 9, 78.64, '2021-01-23 07:15:25-07'),
+    (3, 9, 35.4, '2021-01-23 19:15:25-07'),
+    (3, 9, 77.5, '2021-01-24 07:15:25-07'),
+    (3, 9, 41.52, '2021-01-24 19:15:25-07'),
+    (3, 9, 79.88, '2021-01-25 07:15:25-07'),
+    (3, 9, 39.2, '2021-01-25 19:15:25-07'),
+    (3, 10, 82.52, '2021-01-18 19:15:25-07'),
+    (3, 10, 85.25, '2021-01-19 07:15:25-07'),
+    (3, 10, 83.13, '2021-01-19 19:15:25-07'),
+    (3, 10, 80.74, '2021-01-20 07:15:25-07'),
+    (3, 10, 89.45, '2021-01-20 19:15:25-07'),
+    (3, 10, 85.85, '2021-01-21 07:15:25-07'),
+    (3, 10, 84.64, '2021-01-21 19:15:25-07'),
+    (3, 10, 88.85, '2021-01-22 07:15:25-07'),
+    (3, 10, 79.45, '2021-01-22 19:15:25-07'),
+    (3, 10, 78.64, '2021-01-23 07:15:25-07'),
+    (3, 10, 85.4, '2021-01-23 19:15:25-07'),
+    (3, 10, 77.5, '2021-01-24 07:15:25-07'),
+    (3, 10, 82.52, '2021-01-24 19:15:25-07'),
+    (3, 10, 75.88, '2021-01-25 07:15:25-07'),
+    (3, 10, 69.2, '2021-01-25 19:15:25-07'),
+    (3, 11, 82.52, '2021-01-18 19:15:25-07'),
+    (3, 11, 85.25, '2021-01-19 07:15:25-07'),
+    (3, 11, 83.13, '2021-01-19 19:15:25-07'),
+    (3, 11, 80.74, '2021-01-20 07:15:25-07'),
+    (3, 11, 89.45, '2021-01-20 19:15:25-07'),
+    (3, 11, 85.85, '2021-01-21 07:15:25-07'),
+    (3, 11, 84.64, '2021-01-21 19:15:25-07'),
+    (3, 11, 88.85, '2021-01-22 07:15:25-07'),
+    (3, 11, 79.45, '2021-01-22 19:15:25-07'),
+    (3, 11, 78.64, '2021-01-23 07:15:25-07'),
+    (3, 11, 85.4, '2021-01-23 19:15:25-07'),
+    (3, 11, 77.5, '2021-01-24 07:15:25-07'),
+    (3, 11, 82.52, '2021-01-24 19:15:25-07'),
+    (3, 11, 75.88, '2021-01-25 07:15:25-07'),
+    (3, 11, 69.2, '2021-01-25 19:15:25-07'),
+    (3, 12, 5.25, '2021-01-18 19:15:25-07'),
+    (3, 12, -0.25, '2021-01-19 07:15:25-07'),
+    (3, 12, 10.52, '2021-01-19 19:15:25-07'),
+    (3, 12, 2.58, '2021-01-20 07:15:25-07'),
+    (3, 12, 12.32, '2021-01-20 19:15:25-07'),
+    (3, 12, 5.52, '2021-01-21 07:15:25-07'),
+    (3, 12, 2.65, '2021-01-21 19:15:25-07'),
+    (3, 12, 7.54, '2021-01-22 07:15:25-07'),
+    (3, 12, 10.65, '2021-01-22 19:15:25-07'),
+    (3, 12, 12.52, '2021-01-23 07:15:25-07'),
+    (3, 12, 15.70, '2021-01-23 19:15:25-07'),
+    (3, 12, 17.65, '2021-01-24 07:15:25-07'),
+    (3, 12, 18,65, '2021-01-24 19:15:25-07'),
+    (3, 12, 22.52, '2021-01-25 07:15:25-07'),
+    (3, 12, 29.05, '2021-01-25 19:15:25-07'),
+
+    (4, 13, 50.52, '2021-01-18 19:15:25-07'),
+    (4, 13, 85.25, '2021-01-19 07:15:25-07'),
+    (4, 13, 30.13, '2021-01-19 19:15:25-07'),
+    (4, 13, 80.74, '2021-01-20 07:15:25-07'),
+    (4, 13, 40.45, '2021-01-20 19:15:25-07'),
+    (4, 13, 85.85, '2021-01-21 07:15:25-07'),
+    (4, 13, 45.64, '2021-01-21 19:15:25-07'),
+    (4, 13, 88.85, '2021-01-22 07:15:25-07'),
+    (4, 13, 32.45, '2021-01-22 19:15:25-07'),
+    (4, 13, 78.64, '2021-01-23 07:15:25-07'),
+    (4, 13, 35.4, '2021-01-23 19:15:25-07'),
+    (4, 13, 77.5, '2021-01-24 07:15:25-07'),
+    (4, 13, 41.52, '2021-01-24 19:15:25-07'),
+    (4, 13, 79.88, '2021-01-25 07:15:25-07'),
+    (4, 13, 39.2, '2021-01-25 19:15:25-07'),
+    (4, 14, 82.52, '2021-01-18 19:15:25-07'),
+    (4, 14, 85.25, '2021-01-19 07:15:25-07'),
+    (4, 14, 83.13, '2021-01-19 19:15:25-07'),
+    (4, 14, 80.74, '2021-01-20 07:15:25-07'),
+    (4, 14, 89.45, '2021-01-20 19:15:25-07'),
+    (4, 14, 85.85, '2021-01-21 07:15:25-07'),
+    (4, 14, 84.64, '2021-01-21 19:15:25-07'),
+    (4, 14, 88.85, '2021-01-22 07:15:25-07'),
+    (4, 14, 79.45, '2021-01-22 19:15:25-07'),
+    (4, 14, 78.64, '2021-01-23 07:15:25-07'),
+    (4, 14, 85.4, '2021-01-23 19:15:25-07'),
+    (4, 14, 77.5, '2021-01-24 07:15:25-07'),
+    (4, 14, 82.52, '2021-01-24 19:15:25-07'),
+    (4, 14, 75.88, '2021-01-25 07:15:25-07'),
+    (4, 14, 69.2, '2021-01-25 19:15:25-07'),
+    (4, 15, 82.52, '2021-01-18 19:15:25-07'),
+    (4, 15, 85.25, '2021-01-19 07:15:25-07'),
+    (4, 15, 83.13, '2021-01-19 19:15:25-07'),
+    (4, 15, 80.74, '2021-01-20 07:15:25-07'),
+    (4, 15, 89.45, '2021-01-20 19:15:25-07'),
+    (4, 15, 85.85, '2021-01-21 07:15:25-07'),
+    (4, 15, 84.64, '2021-01-21 19:15:25-07'),
+    (4, 15, 88.85, '2021-01-22 07:15:25-07'),
+    (4, 15, 79.45, '2021-01-22 19:15:25-07'),
+    (4, 15, 78.64, '2021-01-23 07:15:25-07'),
+    (4, 15, 85.4, '2021-01-23 19:15:25-07'),
+    (4, 15, 77.5, '2021-01-24 07:15:25-07'),
+    (4, 15, 82.52, '2021-01-24 19:15:25-07'),
+    (4, 15, 75.88, '2021-01-25 07:15:25-07'),
+    (4, 15, 69.2, '2021-01-25 19:15:25-07'),
+    (4, 16, 5.25, '2021-01-18 19:15:25-07'),
+    (4, 16, -0.25, '2021-01-19 07:15:25-07'),
+    (4, 16, 10.52, '2021-01-19 19:15:25-07'),
+    (4, 16, 2.58, '2021-01-20 07:15:25-07'),
+    (4, 16, 12.32, '2021-01-20 19:15:25-07'),
+    (4, 16, -5.52, '2021-01-21 07:15:25-07'),
+    (4, 16, 2.65, '2021-01-21 19:15:25-07'),
+    (4, 16, -7.54, '2021-01-22 07:15:25-07'),
+    (4, 16, 5.65, '2021-01-22 19:15:25-07'),
+    (4, 16, 4.52, '2021-01-23 07:15:25-07'),
+    (4, 16, 10.70, '2021-01-23 19:15:25-07'),
+    (4, 16, 11.65, '2021-01-24 07:15:25-07'),
+    (4, 16, 15,65, '2021-01-24 19:15:25-07'),
+    (4, 16, 16.52, '2021-01-25 07:15:25-07'),
+    (4, 16, 20.05, '2021-01-25 19:15:25-07'),
+    (4, 16, 25.41, '2021-01-26 19:15:25-07'),
+    (4, 16, 24.85, '2021-01-26 19:15:25-07'),
+    (4, 16, 26.52, '2021-01-27 19:15:25-07'),
+    (4, 16, 23.05, '2021-01-27 19:15:25-07'),
+    (4, 16, 28.05, '2021-01-28 19:15:25-07'),
+    (4, 16, 27.52, '2021-01-28 19:15:25-07')
+RETURNING *;

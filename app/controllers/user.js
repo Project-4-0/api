@@ -1,5 +1,6 @@
 const User = require("../models").User;
 const UserType = require("../models").UserType;
+const Box = require("../models").Box;
 
 //library
 var jwt = require("jsonwebtoken");
@@ -55,7 +56,7 @@ async function userExist(val) {
 module.exports = {
   list(req, res) {
     User.findAll()
-      .then((userTypes) => res.status(200).send(userTypes))
+      .then((user) => res.status(200).send(user))
       .catch((error) => {
         res.status(400).send(error);
       });
@@ -148,6 +149,39 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //MANY MANY
+  addBox(req, res) {
+    return User.findByPk(req.body.UserID, {
+      include: [
+        {
+          model: Box,
+          as: "boxes",
+        },
+      ],
+    })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).send({
+            message: "User Not Found",
+          });
+        }
+        console.log(user);
+        Box.findByPk(req.body.BoxID).then((box) => {
+          if (!box) {
+            return res.status(404).send({
+              message: "box Not Found",
+            });
+          }
+          console.log(box);
+          //add start date 
+          box.S
+          user.addBox(box);
+          return res.status(200).send(user);
+        });
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
   //EXTRA
   async login(req, res) {
     var user = await User.findOne({ where: { Email: req.body.Email } });
@@ -155,8 +189,9 @@ module.exports = {
       return res.status(400).send({ message: "Email not found" });
     }
 
+    passwordIsValid = false;
     //TODO PASSWORD DESCREPT
-    if (req.body.Password == user.Password) {
+    if (req.body.Password === user.Password) {
       passwordIsValid = true;
     }
 
