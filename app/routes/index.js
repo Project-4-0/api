@@ -28,12 +28,14 @@ router.post("/boxes", boxController.add);
 router.put("/boxes", boxController.update);
 router.delete("/boxes/:id", boxController.delete);
 
+router.post("/boxes/add_sensor", boxController.addSensor);
+
 /* TO DO Measurement Router */
 router.get("/measurements", measurementController.list);
 router.get("/measurements/:id", measurementController.getById);
 router.post("/measurements", measurementController.add);
-router.put("/measurements", measurementController.update);
-router.delete("measurements/:id", measurementController.delete);
+// router.put("/measurements", measurementController.update);
+// router.delete("measurements/:id", measurementController.delete);
 
 /* Locations Router */
 router.get("/locations", locationController.list);
@@ -43,11 +45,11 @@ router.put("/locations", locationController.update);
 router.delete("/locations/:id", locationController.delete);
 
 /* BoxUser Router */
-router.get("/boxUsers", boxUserController.list);
-router.get("/boxUsers/:id", boxUserController.getById);
-router.post("/boxUsers", boxUserController.add);
-router.put("/boxUsers", boxUserController.update);
-router.delete("/boxUsers/:id", boxUserController.delete);
+// router.get("/boxUsers", boxUserController.list);
+// router.get("/boxUsers/:id", boxUserController.getById);
+// router.post("/boxUsers", boxUserController.add);
+// router.put("/boxUsers", boxUserController.update);
+// router.delete("/boxUsers/:id", boxUserController.delete);
 
 /* Monitoring Router */
 router.get("/monitoring", monitoringController.list);

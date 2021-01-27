@@ -18,14 +18,12 @@ measurementValidate = (req, res) => {
 
   if (!req.body.Value) {
     validationMessages.push("Value is required.");
-
   }
 
   return validationMessages;
 };
 
 //Check if exist
-
 
 //Models
 module.exports = {
@@ -70,7 +68,6 @@ module.exports = {
       return res.status(400).send({ messages: validationMessages });
     }
 
-
     //TODO BOX
 
     //TODO SensorID
@@ -110,27 +107,26 @@ module.exports = {
   },
 
   //TODO Update functie
-  async update(req, res) {
-    //validation
-    let validationMessages = this.measurementValidate(req, res);
+  // async update(req, res) {
+  //   //validation
+  //   let validationMessages = this.measurementValidate(req, res);
 
-    if (validationMessages.length != 0) {
-      return res.status(400).send({ messages: validationMessages });
-    }
+  //   if (validationMessages.length != 0) {
+  //     return res.status(400).send({ messages: validationMessages });
+  //   }
 
-    //find
-    let measurement = await Measurement.findByPk(req.body.MeasurementID);
-    if (user == null) {
-      return res.status(400).send({ message: "MeasurementID not found" });
-    }
+  //   //find
+  //   let measurement = await Measurement.findByPk(req.body.MeasurementID);
+  //   if (user == null) {
+  //     return res.status(400).send({ message: "MeasurementID not found" });
+  //   }
 
-    //update user
-    measurement
-      .update(req.body)
-      .then((val) => res.status(200).send(val))
-      .catch((error) => res.status(400).send(error));
-  },
-  
+  //   //update user
+  //   measurement
+  //     .update(req.body)
+  //     .then((val) => res.status(200).send(val))
+  //     .catch((error) => res.status(400).send(error));
+  // },
 
   //Delete functie
   delete(req, res) {
@@ -143,11 +139,13 @@ module.exports = {
         }
         return val
           .destroy()
-          .then(() => res.status(204).send({ message: "The measurement has succesfully been deleted" }))
+          .then(() =>
+            res
+              .status(204)
+              .send({ message: "The measurement has succesfully been deleted" })
+          )
           .catch((error) => res.status(400).send(error));
       })
       .catch((error) => res.status(400).send(error));
   },
-
-
 };
