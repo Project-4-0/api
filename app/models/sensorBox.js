@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class SensorBox33 extends Model {
+  class SensorBox extends Model {
     static associate(models) {
       // SensorBox33.belongsTo(models.Box, {
       //   foreignKey: 'boxID',
@@ -19,11 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       //   });
     }
   }
-  SensorBox33.init(
-    {
-      BoxID: DataTypes.INTEGER,
-      SensorID: DataTypes.INTEGER,
-    },
+  SensorBox.init(
+    {},
     {
       sequelize,
       modelName: "SensorBox33",
@@ -31,5 +28,5 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  return SensorBox33;
+  return SensorBox;
 };
