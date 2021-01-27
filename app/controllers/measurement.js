@@ -1,7 +1,10 @@
 const Measurement = require("../models").Measurement;
 const Sensor = require("../models").Sensor;
 const Box = require("../models").Box;
-const sequelize = require("../models/index").sequelize;
+const SensorType = require("../models").SensorType;
+const BoxUser = require("../models").BoxUser;
+// const sequelize = require("../models/index").sequelize;
+const User = require("../models").User;
 
 //Validation Measurement
 measurementValidate = (req, res) => {
@@ -146,5 +149,83 @@ module.exports = {
           .catch((error) => res.status(400).send(error));
       })
       .catch((error) => res.status(400).send(error));
+  },
+
+  //Extra Grafiek
+  async getAllGraphics(req, res) {
+    //check value exist
+    let validationMessages = [];
+    if (req.body.UserID === Object) {
+      validationMessages.push("UserID is required.");
+    }
+
+    if (req.body.SensorTypeName === Object) {
+      validationMessages.push("SensorTypeName is required.");
+    }
+
+    if (validationMessages.length != 0) {
+      return res.status(400).send({ messages: validationMessages });
+    }
+
+    let user;
+    let measurement;
+    try {
+      // get all Sensortypes with different boxes
+      user = await User.findByPk(req.body.UserID, {
+        include: [
+          {
+            model: Box,
+            as: "boxes",
+            include: [
+              {
+                model: Sensor,
+                as: "sensors",
+                include: [
+                  {
+                    model: SensorType,
+                    as: "SensorType",
+                    where: { Name: req.body.SensorTypeName },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+
+      //get boxen and sensors
+      let boxes = [];
+      let sensors = [];
+
+      user.boxes.forEach((box) => {
+        //add box id
+        boxes.push(box.BoxID);
+
+        box.sensors.forEach((sensor) => {
+          sensors.push(sensor.SensorID);
+        });
+      });
+
+      measurement = await Measurement.findAll({
+        where: { BoxID: boxes, SensorID: sensors },
+        include: [
+          {
+            model: Sensor,
+            as: "Sensor",
+            include: [
+              {
+                model: SensorType,
+                as: "SensorType",
+                where: { Name: "Licht" },
+              },
+            ],
+          },
+        ],
+      });
+
+      return res.status(200).send(measurement);
+    } catch (e) {
+      return res.status(400).send(error);
+    }
   },
 };

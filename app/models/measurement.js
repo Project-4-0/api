@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "BoxID",
         as: "Box",
       });
-      Measurement.belongsTo(models.Sensor, {
+      Measurement.hasOne(models.Sensor, {
         foreignKey: "SensorID",
         as: "Sensor",
       });
