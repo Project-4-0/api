@@ -176,19 +176,19 @@ module.exports = {
           {
             model: Box,
             as: "boxes",
-            // include: [
-            //   {
-            //     model: Sensor,
-            //     as: "sensors",
-            //     include: [
-            //       {
-            //         model: SensorType,
-            //         as: "SensorType",
-            //         where: { Name: req.body.SensorTypeName },
-            //       },
-            //     ],
-            //   },
-            // ],
+            include: [
+              {
+                model: Sensor,
+                as: "sensors",
+                // include: [
+                //   {
+                //     model: SensorType,
+                //     as: "SensorType",
+                //     where: { Name: req.body.SensorTypeName },
+                //   },
+                // ],
+              },
+            ],
           },
         ],
       });
