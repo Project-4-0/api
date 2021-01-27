@@ -183,12 +183,14 @@ module.exports = {
       });
 
       //get boxen and sensors
+      let boxesID = [];
       let boxes = [];
       let sensors = [];
 
       user.boxes.forEach((box) => {
         //add box id
-        boxes.push(box.BoxID);
+        boxesID.push(box.BoxID);
+        boxes.push(box);
 
         box.sensors.forEach((sensor) => {
           sensors.push(sensor.SensorID);
@@ -196,7 +198,7 @@ module.exports = {
       });
 
       measurement = await Measurement.findAll({
-        where: { BoxID: boxes, SensorID: sensors },
+        where: { BoxID: boxesID, SensorID: sensors },
         // include: [
         //   {
         //     model: Sensor,
@@ -212,7 +214,7 @@ module.exports = {
         // ],
       });
 
-      return res.status(200).send({ Measurement: measurement, Boxes: boxes });
+      return res.status(200).send({ Measurements: measurement, Boxes: boxes });
     } catch (e) {
       return res.status(400).send(e);
     }
