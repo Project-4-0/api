@@ -37,6 +37,8 @@ router.post("/measurements", measurementController.add);
 // router.put("/measurements", measurementController.update);
 // router.delete("measurements/:id", measurementController.delete);
 
+router.post("/measurements/graphics", measurementController.getAllGraphics);
+
 /* Locations Router */
 router.get("/locations", locationController.list);
 router.get("/locations/:id", locationController.getById);
