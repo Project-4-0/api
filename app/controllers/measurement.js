@@ -1,22 +1,21 @@
 const Measurement = require("../models").Measurement;
 const Sensor = require("../models").Sensor;
 const Box = require("../models").Box;
-
 const sequelize = require("../models/index").sequelize;
 
 //Validation Measurement
 measurementValidate = (req, res) => {
   let validationMessages = [];
 
-  if (!req.body.BoxID) {
+  if (req.body.BoxID === Object) {
     validationMessages.push("BoxID is required.");
   }
 
-  if (!req.body.SensorID) {
+  if (req.body.SensorID === Object) {
     validationMessages.push("SensorID is required.");
   }
 
-  if (!req.body.Value) {
+  if (req.body.Value === Object) {
     validationMessages.push("Value is required.");
   }
 
