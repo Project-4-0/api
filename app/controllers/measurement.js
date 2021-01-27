@@ -212,7 +212,7 @@ module.exports = {
         // ],
       });
 
-      return res.status(200).send(measurement);
+      return res.status(200).send({ Measurement: measurement, Boxes: boxes });
     } catch (e) {
       return res.status(400).send(e);
     }
