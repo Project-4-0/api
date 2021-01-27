@@ -1,148 +1,144 @@
+  
 DROP TABLE IF EXISTS public."Location" CASCADE;
 DROP TABLE IF EXISTS public."User" CASCADE;
 DROP TABLE IF EXISTS public."UserType" CASCADE;
 DROP TABLE IF EXISTS public."Monitoring" CASCADE;
 DROP TABLE IF EXISTS public."Measurement" CASCADE;
-
 DROP TABLE IF EXISTS public."SensorType" CASCADE;
 DROP TABLE IF EXISTS public."Sensor" CASCADE;
 DROP TABLE IF EXISTS public."Box" CASCADE;
 DROP TABLE IF EXISTS public."SensorBox" CASCADE;
 DROP TABLE IF EXISTS public."BoxUser" CASCADE;
-
-
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
 
-CREATE TABLE public."Box"
-(
-    "BoxID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("BoxID"),
-    "MacAdress" VARCHAR(300) NOT NULL,
-    "Name" VARCHAR(300) NOT NULL,
-    "Comment" VARCHAR(500),
-    "Active" boolean
-);
+CREATE TABLE public."Box" 
+(    
+  "BoxID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("BoxID"),
+  "MacAddress" VARCHAR(300) NOT NULL,
+  "ConfiguratieString" VARCHAR(300),
+  "Name" VARCHAR(300) NOT NULL,  
+  "Comment" VARCHAR(500),
+  "Active" BOOLEAN
+);   
 
-CREATE TABLE public."UserType"
-(
-    "UserTypeID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("UserTypeID"),
-    "UserTypeName" VARCHAR(50) NOT NULL
-);
 
-CREATE TABLE public."SensorType"
-(
-    "SensorTypeID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("SensorTypeID"),
-    "Name" VARCHAR(50) NOT NULL,
-    "Unit" VARCHAR(50) NOT NULL
-);
+CREATE TABLE public."UserType" 
+(    
+  "UserTypeID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("UserTypeID"),
+  "UserTypeName" VARCHAR(50) NOT NULL
+);  
 
-CREATE TABLE public."User"
-(
-    "UserID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("UserID"),
-    "LastName" VARCHAR(60) NOT NULL,
-    "FirstName" VARCHAR(60) NOT NULL,
-    "Email" VARCHAR(200) NOT NULL,
-    "Password" VARCHAR(200) NOT NULL,
-    "Address" VARCHAR(200) ,
-    "PostalCode" VARCHAR(10),
-    "City" VARCHAR(100),
-    "UserTypeID" INT NOT NULL,
-    CONSTRAINT fk_usertype
+
+CREATE TABLE public."SensorType" 
+(    
+  "SensorTypeID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("SensorTypeID"),
+  "Name" VARCHAR(50) NOT NULL,
+  "Unit" VARCHAR(50) NOT NULL
+);  
+CREATE TABLE public."User"    
+(    
+  "UserID" INT GENERATED ALWAYS AS IDENTITY,
+   PRIMARY KEY("UserID"),
+  "LastName" VARCHAR(60) NOT NULL,  
+  "FirstName" VARCHAR(60) NOT NULL,  
+  "Email" VARCHAR(200) NOT NULL,
+  "Password" VARCHAR(200) NOT NULL,
+  "Address" VARCHAR(200) ,
+  "PostalCode" VARCHAR(10),
+  "City" VARCHAR(100),
+  "UserTypeID" INT NOT NULL,
+   CONSTRAINT fk_usertype
     FOREIGN KEY("UserTypeID")
     REFERENCES "UserType"("UserTypeID")
 );
-
-CREATE TABLE public."BoxUser"
-(
-    "BoxUserID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("BoxUserID"),
-    "BoxID" INT NOT NULL,
-    "UserID" INT NOT NULL,
-    "StartDate" timestamp NOT NULL,
-    "EndDate" timestamp,
-    CONSTRAINT fk_box
-    FOREIGN KEY("BoxID")
-    REFERENCES "Box"("BoxID"),
-    CONSTRAINT fk_user
-    FOREIGN KEY("UserID")
-    REFERENCES "User"("UserID")
+CREATE TABLE public."BoxUser" 
+(    
+  "BoxUserID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("BoxUserID"),
+  "BoxID" INT NOT NULL,
+  "UserID" INT NOT NULL,
+  "StartDate" timestamp,  
+  "EndDate" timestamp,
+   CONSTRAINT fk_box
+        FOREIGN KEY("BoxID")
+            REFERENCES "Box"("BoxID"),
+   CONSTRAINT fk_user
+        FOREIGN KEY("UserID")
+            REFERENCES "User"("UserID")
 );
-
-CREATE TABLE public."Sensor"
-(
-    "SensorID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("SensorID"),
-    "Name" VARCHAR(300) NOT NULL,
-    "SensorTypeID" INT NOT NULL,
-    CONSTRAINT fk_sensortype
+CREATE TABLE public."Sensor" 
+(    
+  "SensorID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("SensorID"),
+  "Name" VARCHAR(300) NOT NULL,  
+  "SensorTypeID" INT NOT NULL,
+   CONSTRAINT fk_sensortype
     FOREIGN KEY("SensorTypeID")
     REFERENCES "SensorType"("SensorTypeID")
-);
-
-CREATE TABLE public."SensorBox"
-(
-    "BoxID" INT NOT NULL,
-    "SensorID" INT NOT NULL,
-    PRIMARY KEY("BoxID","SensorID"),
-    CONSTRAINT fk_box
-    FOREIGN KEY("BoxID")
-    REFERENCES "Box"("BoxID"),
-    CONSTRAINT fk_sensor
-    FOREIGN KEY("SensorID")
-    REFERENCES "Sensor"("SensorID")
-);
-
-CREATE TABLE public."Location"
-(
-    "LocationID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("LocationID"),
-    "BoxUserID" INT NOT NULL,
-    "Longtitude" float8 NOT NULL,
-    "Latitude" float8 NOT NULL,
-    "StartDate" timestamp NOT NULL,
-    "EndDate" timestamp,
-    CONSTRAINT fk_boxuser
-    FOREIGN KEY("BoxUserID")
-    REFERENCES "BoxUser"("BoxUserID")
-);
-
-CREATE TABLE public."Monitoring"
-(
-    "MonitoringID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("MonitoringID"),
-    "BoxID" INT NOT NULL,
-    "TimeStamp" timestamp NOT NULL,
-    "BatteryStatus" bool,
-    "SdCapacity" Varchar(50),
-    "BatteryPercentage" Varchar(10),
-    CONSTRAINT fk_box
-    FOREIGN KEY("BoxID")
-    REFERENCES "Box"("BoxID")
-);
-
-CREATE TABLE public."Measurement"
-(
-    "MeasurementID" INT GENERATED ALWAYS AS IDENTITY,
-    PRIMARY KEY("MeasurementID"),
-    "BoxID" INT NOT NULL,
-    "SensorID" INT NOT NULL,
-    "Value" Varchar(50),
-    "TimeStamp" timestamp NOT NULL,
+);  
+CREATE TABLE public."SensorBox" 
+(    
+  "BoxID" INT NOT NULL,
+  "SensorID" INT NOT NULL,
+  PRIMARY KEY("BoxID","SensorID"),
+   CONSTRAINT fk_box
+        FOREIGN KEY("BoxID")
+            REFERENCES "Box"("BoxID"),
+   CONSTRAINT fk_sensor
+        FOREIGN KEY("SensorID")
+            REFERENCES "Sensor"("SensorID")
+); 
+CREATE TABLE public."Location" 
+(    
+  "LocationID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("LocationID"),
+  "BoxUserID" INT NOT NULL,
+  "Longtitude" float8 NOT NULL,
+  "Latitude" float8 NOT NULL, 
+  "StartDate" TIMESTAMP ,
+  "EndDate" TIMESTAMP ,
+   CONSTRAINT fk_boxuser
+        FOREIGN KEY("BoxUserID")
+            REFERENCES "BoxUser"("BoxUserID")
+); 
+CREATE TABLE public."Monitoring" 
+(    
+  "MonitoringID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("MonitoringID"),
+  "BoxID" INT NOT NULL,
+  "TimeStamp" TIMESTAMP NOT NULL,
+  "BatteryStatus" bool,
+  "SdCapacity" Varchar(50),
+  "BatteryPercentage" Varchar(10),
+   CONSTRAINT fk_box
+        FOREIGN KEY("BoxID")
+            REFERENCES "Box"("BoxID")
+); 
+CREATE TABLE public."Measurement" 
+(    
+  "MeasurementID" INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY("MeasurementID"),
+  "BoxID" INT NOT NULL,
+  "SensorID" INT NOT NULL,
+  "Value" Varchar(50),
+  "TimeStamp" TIMESTAMP NOT NULL,
     CONSTRAINT fk_sensorbox
-    FOREIGN KEY("BoxID","SensorID")
-    REFERENCES "SensorBox"("BoxID","SensorID")
-    /* CONSTRAINT fk_sensorbox
-    FOREIGN KEY("BoxID")
-    REFERENCES "SensorBox"("BoxID"),
-    CONSTRAINT fk_sensorbox
-    FOREIGN KEY("SensorID")
-    REFERENCES "SensorBox"("SensorID")*/
-);
+        FOREIGN KEY("BoxID","SensorID")
+            REFERENCES "SensorBox"("BoxID","SensorID")
+  /* CONSTRAINT fk_sensorbox
+        FOREIGN KEY("BoxID")
+            REFERENCES "SensorBox"("BoxID"),
+   CONSTRAINT fk_sensorbox
+        FOREIGN KEY("SensorID")
+            REFERENCES "SensorBox"("SensorID")*/
+); 
+
+
 
 
 INSERT INTO "UserType"("UserTypeID", "UserTypeName") OVERRIDING SYSTEM VALUE VALUES 
@@ -167,11 +163,11 @@ INSERT INTO "User"("UserID", "LastName", "FirstName", "Email", "Password", "Addr
     (1, 'Admin', 'Admin', 'admin@example.com', 'Admin', 'Adminweg 654', '8000', 'Brugge', 1)
 RETURNING *;
 
-INSERT INTO "Box"("BoxID", "MacAdress", "Name", "Comment", "Active") OVERRIDING SYSTEM VALUE VALUES 
-    (1, '00:0a:95:9d:68:16', 'Box 1 - B One', 'Beschadigingen aan buitenkant van de box vastgesteld.', true),
-    (2, '00:0a:95:9d:68:15', 'Box 2', NULL, false),
-    (3, '00:0a:95:9d:68:13', 'Box 3', NULL, true),
-    (4, '00:0a:95:9d:68:11', 'Box 4', 'Batterij aan vervanging toe!', true)
+INSERT INTO "Box"("BoxID", "MacAddress", "Name", "Comment", "ConfiguratieString", "Active") OVERRIDING SYSTEM VALUE VALUES 
+    (1, '00:0a:95:9d:68:16', 'Box 1 - B One', 'Beschadigingen aan buitenkant van de box vastgesteld.', NULL, true),
+    (2, '00:0a:95:9d:68:15', 'Box 2', NULL, NULL, false),
+    (3, '00:0a:95:9d:68:13', 'Box 3', NULL, NULL, true),
+    (4, '00:0a:95:9d:68:11', 'Box 4', 'Batterij aan vervanging toe!', NULL, true)
 RETURNING *;
 
 INSERT INTO "BoxUser"("BoxUserID", "BoxID", "UserID", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
