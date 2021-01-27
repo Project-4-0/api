@@ -199,20 +199,12 @@ module.exports = {
 
       measurement = await Measurement.findAll({
         where: { BoxID: boxesID, SensorID: sensors },
-        // include: [
-        //   {
-        //     model: Sensor,
-        //     as: "Sensor",
-        //     include: [
-        //       {
-        //         model: SensorType,
-        //         as: "SensorType",
-        //         where: { Name: req.body.SensorTypeName },
-        //       },
-        //     ],
-        //   },
-        // ],
+        order: [["TimeStamp", "DESC"]],
+        limit: 20,
       });
+
+      //sort from timestamp small to big
+      measurement = measurement.sort((a, b) => a.TimeStamp - b.TimeStamp);
 
       return res.status(200).send({ Measurements: measurement, Boxes: boxes });
     } catch (e) {
