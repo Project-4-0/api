@@ -21,15 +21,14 @@ locationValidate = (req, res) => {
     validationMessages.push("StartDate is required.");
   }
 
-  if (!req.body.EndDate) {
-    validationMessages.push("EndDate is required.");
-  }
+  // if (!req.body.EndDate) {
+  //   validationMessages.push("EndDate is required.");
+  // }
 
   return validationMessages;
 };
 
 //Check if exist
-
 
 //Models
 module.exports = {
@@ -42,14 +41,7 @@ module.exports = {
   },
 
   getById(req, res) {
-    Location.findByPk(req.params.id, {
-      include: [
-        {
-          model: BoxUser,
-          as: "BoxUser",
-        },
-      ],
-    })
+    Location.findByPk(req.params.id)
       .then((val) => {
         if (!val) {
           return res.status(404).send({
@@ -76,7 +68,6 @@ module.exports = {
       Latitude: req.body.Latitude,
       Longitude: req.body.Longitude,
       StartDate: new Date().toISOString(),
-      EndDate: req.body.Longitude,
     })
       .then((location) => res.status(201).send(location))
       .catch((error) => res.status(400).send(error));

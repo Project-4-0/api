@@ -25,8 +25,8 @@ router.get("/", function (req, res, next) {
 router.get("/boxes", boxController.list);
 router.get("/boxes/:id", boxController.getById);
 router.post("/boxes", boxController.add);
-router.put("boxes", boxController.update);
-router.delete("boxes/:id", boxController.delete);
+router.put("/boxes", boxController.update);
+router.delete("/boxes/:id", boxController.delete);
 
 /* TO DO Measurement Router */
 router.get("/measurements", measurementController.list);

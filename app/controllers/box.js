@@ -60,7 +60,9 @@ module.exports = {
 
     //already exist
     if ((await boxExist(req.body.MacAddress)) != null) {
-      return res.status(400).send({ message: "Box already exists!" });
+      return res
+        .status(400)
+        .send({ message: "Box with this mac address already exists!" });
     }
 
     //create
