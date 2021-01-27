@@ -87,7 +87,11 @@ router.get("/users/:id", userController.getById);
 router.post("/users", userController.add);
 router.put("/users", userController.update);
 router.delete("/users/:id", userController.delete);
+
+//Extra
 router.post("/users/add_box", userController.addBox);
+router.get("/users/:id/with_boxes", userController.with_boxes);
+
 //LOGIN
 router.post("/login", userController.login);
 
