@@ -1,4 +1,5 @@
 const Location = require("../models").Location;
+const BoxUser = require("../models").BoxUser;
 
 //Validation Location
 locationValidate = (req, res) => {
@@ -16,15 +17,19 @@ locationValidate = (req, res) => {
     validationMessages.push("Longitude is required.");
   }
 
+  if (!req.body.StartDate) {
+    validationMessages.push("StartDate is required.");
+  }
+
+  if (!req.body.EndDate) {
+    validationMessages.push("EndDate is required.");
+  }
+
   return validationMessages;
 };
 
 //Check if exist
-async function locationExist(val) {
-  return await Location.findOne({
-    where: { Name: val },
-  });
-}
+
 
 //Models
 module.exports = {
@@ -37,7 +42,14 @@ module.exports = {
   },
 
   getById(req, res) {
-    Location.findByPk(req.params.id)
+    Location.findByPk(req.params.id, {
+      include: [
+        {
+          model: BoxUser,
+          as: "BoxUser",
+        },
+      ],
+    })
       .then((val) => {
         if (!val) {
           return res.status(404).send({
@@ -49,6 +61,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Create Location functie
   async add(req, res) {
     //validation
     let validationMessages = locationValidate(req, res);
@@ -63,11 +76,13 @@ module.exports = {
       Latitude: req.body.Latitude,
       Longitude: req.body.Longitude,
       StartDate: new Date().toISOString(),
+      EndDate: req.body.Longitude,
     })
       .then((location) => res.status(201).send(location))
       .catch((error) => res.status(400).send(error));
   },
 
+  //Update Location functie
   async update(req, res) {
     //validation
     let validationMessages = locationValidate(req, res);
@@ -89,7 +104,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-  //Delecte location
+  //Delecte location functie
   delete(req, res) {
     Location.findByPk(req.params.id)
       .then((val) => {

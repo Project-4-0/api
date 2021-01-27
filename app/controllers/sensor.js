@@ -1,4 +1,5 @@
 const Sensor = require("../models").Sensor;
+const SensorType = require("../models").SensorType;
 
 //Validation Sensor
 sensorValidate = (req, res) => {
@@ -26,7 +27,7 @@ async function sensorExist(val) {
 module.exports = {
   list(req, res) {
     Sensor.findAll()
-      .then((sensor) => res.status(200).send(sensor))
+      .then((sensorType) => res.status(200).send(sensorType))
       .catch((error) => {
         res.status(400).send(error);
       });
@@ -45,6 +46,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //Create functie
   async add(req, res) {
     //validation
     let validationMessages = sensorValidate(req, res);
@@ -57,16 +59,17 @@ module.exports = {
     if ((await sensorExist(req.body.Name)) != null) {
       return res.status(400).send({ message: "Name already exist!" });
     }
-
+  
     //create sensor
     Sensor.create({
       Name: req.body.Name,
       SensorTypeID: req.body.SensorTypeID,
     })
-      .then((sensor) => res.status(201).send(sensor))
+      .then((sensorType) => res.status(201).send(sensorType))
       .catch((error) => res.status(400).send(error));
   },
-
+ 
+  //Update functie
   async update(req, res) {
     //validation
     let validationMessages = sensorValidate(req, res);

@@ -21,9 +21,12 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      BoxID: DataTypes.INTEGER,
-      UserID: DataTypes.INTEGER,
-      StartDate: DataTypes.DATE,
+      // BoxID: DataTypes.INTEGER,
+      // UserID: DataTypes.INTEGER,
+      StartDate: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
+      },
       EndDate: DataTypes.DATE,
     },
     {

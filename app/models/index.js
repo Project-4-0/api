@@ -8,6 +8,8 @@ const env = process.env.NODE_ENV || "development";
 const config = require("../../config/config.js")[env];
 const db = {};
 
+const { QueryTypes } = require("sequelize");
+
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);

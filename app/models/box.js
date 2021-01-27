@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
         as: "sensors",
         foreignKey: "BoxID",
       });
+      Box.belongsToMany(models.User, {
+        through: "BoxUser",
+        as: "users",
+        foreignKey: "BoxID",
+      });
     }
   }
   Box.init(
@@ -19,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      MacAdress: DataTypes.STRING,
+      ConfiguratieString: DataTypes.STRING,
+      MacAddress: DataTypes.STRING,
       Name: DataTypes.STRING,
       Comment: DataTypes.STRING,
       Active: DataTypes.BOOLEAN,
