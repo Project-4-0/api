@@ -28,6 +28,8 @@ router.post("/boxes", boxController.add);
 router.put("/boxes", boxController.update);
 router.delete("/boxes/:id", boxController.delete);
 
+router.post("/boxes/add_sensor", boxController.addSensor);
+
 /* TO DO Measurement Router */
 router.get("/measurements", measurementController.list);
 router.get("/measurements/:id", measurementController.getById);
