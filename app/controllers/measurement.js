@@ -70,37 +70,25 @@ module.exports = {
       return res.status(400).send({ messages: validationMessages });
     }
 
-    //TODO BOX
+    // BOX
 
-    //TODO SensorID
-    // var sensor = await Sensor.findByPk(1);
+    let box = await Box.findByPk(req.body.BoxID);
+    if (box == null) {
+      return res.status(400).send({ message: "BoxID not found" });
+    }
 
-    // let sensor = await Sensor.findByPk(req.body.SensorID);
-    // if (sensor == null) {
-    //   return res.status(400).send({ message: "SensorID not found" });
-    // }
-    // console.log(sensor);
-
-    // const users = await sequelize.query("SELECT * FROM User", {
-    //   type: QueryTypes.SELECT,
-    // });
-    // console.log("user", users);
-
-    // console.log(await sequelize.query("SELECT * FROM box"));
-
-    //Test
-    // const users = sequelize
-    //   .query('SELECT * FROM "Box"', {
-    //     type: sequelize.QueryTypes.SELECT,
-    //   })
-    //   .then((val) => console.log(val));
-
-    // console.log(req.body.Value);
+    // SensorID
+    let sensor = await Sensor.findByPk(req.body.SensorID);
+    if (sensor == null) {
+      return res.status(400).send({ message: "Sensor not found" });
+    }
 
     //create
     Measurement.create({
-      BoxID: req.body.BoxID,
-      SensorID: req.body.SensorID,
+      BoxID: box.BoxID,
+      SensorID: sensor.SensorID,
+      Sensor: sensor,
+      Box: box,
       Value: req.body.Value,
       TimeStamp: new Date().toISOString(),
     })
@@ -217,7 +205,7 @@ module.exports = {
               {
                 model: SensorType,
                 as: "SensorType",
-                where: { Name: "Licht" },
+                where: { Name: req.body.SensorTypeName },
               },
             ],
           },
