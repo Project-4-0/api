@@ -64,9 +64,9 @@ module.exports = {
     //validation
     let validationMessages = measurementValidate(req, res);
 
-    if (validationMessages.length != -1) {
-      return res.status(400).send({ messages: validationMessages });
-    }
+   // if (validationMessages.length != 0) {
+   //   return res.status(400).send({ messages: validationMessages });
+   // }
 
     //TODO BOX
 
