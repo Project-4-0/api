@@ -193,6 +193,10 @@ module.exports = {
       user = await User.findByPk(req.params.id, {
         include: [
           {
+            model: UserType,
+            as: "UserType",
+          },
+          {
             model: Box,
             as: "boxes",
           },
