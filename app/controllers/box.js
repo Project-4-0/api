@@ -1,12 +1,11 @@
 const Box = require("../models").Box;
 
-
 //Validation Box
 boxValidate = (req, res) => {
   let validationMessages = [];
 
-  if (!req.body.MacAdress) {
-    validationMessages.push("MacAdress is required.");
+  if (!req.body.MacAddress) {
+    validationMessages.push("MacAddress is required.");
   }
 
   if (!req.body.Name) {
@@ -23,7 +22,7 @@ boxValidate = (req, res) => {
 //Check if exist
 async function boxExist(val) {
   return await Box.findOne({
-    where: { MacAdress: val },
+    where: { MacAddress: val },
   });
 }
 
@@ -50,7 +49,6 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-
   //Create box functie
   async add(req, res) {
     //validation
@@ -61,13 +59,13 @@ module.exports = {
     }
 
     //already exist
-    if ((await boxExist(req.body.MacAdress)) != null) {
+    if ((await boxExist(req.body.MacAddress)) != null) {
       return res.status(400).send({ message: "Box already exists!" });
     }
 
     //create
-    SensorType.create({
-      MacAdress: req.body.MacAdress,
+    Box.create({
+      MacAddress: req.body.MacAddress,
       Name: req.body.Name,
       Comment: req.body.Comment,
       Active: req.body.Active,
@@ -113,5 +111,4 @@ module.exports = {
       })
       .catch((error) => res.status(400).send(error));
   },
-
 };
