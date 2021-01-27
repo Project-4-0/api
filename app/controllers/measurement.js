@@ -197,19 +197,19 @@ module.exports = {
 
       measurement = await Measurement.findAll({
         where: { BoxID: boxes, SensorID: sensors },
-        include: [
-          {
-            model: Sensor,
-            as: "Sensor",
-            include: [
-              {
-                model: SensorType,
-                as: "SensorType",
-                where: { Name: req.body.SensorTypeName },
-              },
-            ],
-          },
-        ],
+        // include: [
+        //   {
+        //     model: Sensor,
+        //     as: "Sensor",
+        //     include: [
+        //       {
+        //         model: SensorType,
+        //         as: "SensorType",
+        //         where: { Name: req.body.SensorTypeName },
+        //       },
+        //     ],
+        //   },
+        // ],
       });
 
       return res.status(200).send(measurement);
