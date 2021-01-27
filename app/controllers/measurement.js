@@ -171,31 +171,28 @@ module.exports = {
     let measurement;
     try {
       // get all Sensortypes with different boxes
-      try {
-        user = await User.findByPk(req.body.UserID, {
-          include: [
-            {
-              model: Box,
-              as: "boxes",
-              include: [
-                {
-                  model: Sensor,
-                  as: "sensors",
-                  // include: [
-                  //   {
-                  //     model: SensorType,
-                  //     as: "SensorType",
-                  //     where: { Name: req.body.SensorTypeName },
-                  //   },
-                  // ],
-                },
-              ],
-            },
-          ],
-        });
-      } catch (e) {
-        return res.status(400).send(e);
-      }
+
+      user = await User.findByPk(req.body.UserID, {
+        include: [
+          {
+            model: Box,
+            as: "boxes",
+            include: [
+              {
+                model: Sensor,
+                as: "sensors",
+                // include: [
+                //   {
+                //     model: SensorType,
+                //     as: "SensorType",
+                //     where: { Name: req.body.SensorTypeName },
+                //   },
+                // ],
+              },
+            ],
+          },
+        ],
+      });
 
       // //get boxen and sensors
       // let boxes = [];
