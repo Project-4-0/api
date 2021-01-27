@@ -95,6 +95,8 @@ module.exports = {
       return res.status(400).send({ message: "Email already exist!" });
     }
 
+    //TODO check if UserTypeID exist
+
     //TODO PASSWORD DESCREPT
 
     //create
@@ -173,8 +175,8 @@ module.exports = {
             });
           }
           console.log(box);
-          //add start date 
-          box.S
+          //add start date
+          box.S;
           user.addBox(box);
           return res.status(200).send(user);
         });
