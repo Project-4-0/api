@@ -172,58 +172,58 @@ module.exports = {
     try {
       // get all Sensortypes with different boxes
       user = await User.findByPk(req.body.UserID, {
-        include: [
-          {
-            model: Box,
-            as: "boxes",
-            include: [
-              {
-                model: Sensor,
-                as: "sensors",
-                include: [
-                  {
-                    model: SensorType,
-                    as: "SensorType",
-                    where: { Name: req.body.SensorTypeName },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+        // include: [
+        //   {
+        //     model: Box,
+        //     as: "boxes",
+        //     include: [
+        //       {
+        //         model: Sensor,
+        //         as: "sensors",
+        //         include: [
+        //           {
+        //             model: SensorType,
+        //             as: "SensorType",
+        //             where: { Name: req.body.SensorTypeName },
+        //           },
+        //         ],
+        //       },
+        //     ],
+        //   },
+        // ],
       });
 
-      //get boxen and sensors
-      let boxes = [];
-      let sensors = [];
+      // //get boxen and sensors
+      // let boxes = [];
+      // let sensors = [];
 
-      user.boxes.forEach((box) => {
-        //add box id
-        boxes.push(box.BoxID);
+      // user.boxes.forEach((box) => {
+      //   //add box id
+      //   boxes.push(box.BoxID);
 
-        box.sensors.forEach((sensor) => {
-          sensors.push(sensor.SensorID);
-        });
-      });
+      //   box.sensors.forEach((sensor) => {
+      //     sensors.push(sensor.SensorID);
+      //   });
+      // });
 
-      measurement = await Measurement.findAll({
-        where: { BoxID: boxes, SensorID: sensors },
-        include: [
-          {
-            model: Sensor,
-            as: "Sensor",
-            include: [
-              {
-                model: SensorType,
-                as: "SensorType",
-                where: { Name: "Licht" },
-              },
-            ],
-          },
-        ],
-      });
+      // measurement = await Measurement.findAll({
+      //   where: { BoxID: boxes, SensorID: sensors },
+      //   include: [
+      //     {
+      //       model: Sensor,
+      //       as: "Sensor",
+      //       include: [
+      //         {
+      //           model: SensorType,
+      //           as: "SensorType",
+      //           where: { Name: "Licht" },
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // });
 
-      return res.status(200).send(measurement);
+      return res.status(200).send(user);
     } catch (e) {
       return res.status(400).send(error);
     }
