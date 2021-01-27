@@ -194,7 +194,7 @@ module.exports = {
           ],
         });
       } catch (e) {
-        console.log("ok");
+        return res.status(400).send(e);
       }
 
       // //get boxen and sensors
@@ -229,7 +229,7 @@ module.exports = {
 
       return res.status(200).send(user);
     } catch (e) {
-      return res.status(400).send(error);
+      return res.status(400).send(e);
     }
   },
 };
