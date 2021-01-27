@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Box.belongsToMany(models.Sensor, {
         through: "SensorBox",
-        as: "sensors",
+        as: "Sensors",
         foreignKey: "BoxID",
       });
       Box.belongsToMany(models.User, {

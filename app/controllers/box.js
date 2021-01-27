@@ -1,5 +1,5 @@
 const Box = require("../models").Box;
-
+const Sensor = require("../models").Sensor;
 //Validation Box
 boxValidate = (req, res) => {
   let validationMessages = [];
@@ -60,7 +60,9 @@ module.exports = {
 
     //already exist
     if ((await boxExist(req.body.MacAddress)) != null) {
-      return res.status(400).send({ message: "Box already exists!" });
+      return res
+        .status(400)
+        .send({ message: "Box with this mac address already exists!" });
     }
 
     //create
@@ -88,7 +90,7 @@ module.exports = {
       return res.status(400).send({ message: "Box not found" });
     }
 
-    //update user
+    //update box
     box
       .update(req.body)
       .then((val) => res.status(200).send(val))
@@ -108,6 +110,36 @@ module.exports = {
           .destroy()
           .then(() => res.status(204).send())
           .catch((error) => res.status(400).send(error));
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
+  //MANY MANY
+  addSensor(req, res) {
+    return Box.findByPk(req.body.BoxID, {
+      include: [
+        {
+          model: Sensor,
+          as: "Sensors",
+        },
+      ],
+    })
+      .then((box) => {
+        if (!box) {
+          return res.status(404).send({
+            message: "box Not Found",
+          });
+        }
+        Sensor.findByPk(req.body.SensorID).then((sensor) => {
+          if (!sensor) {
+            return res.status(404).send({
+              message: "Sensor Not Found",
+            });
+          }
+
+          box.addSensor(sensor);
+          return res.status(200).send(box);
+        });
       })
       .catch((error) => res.status(400).send(error));
   },

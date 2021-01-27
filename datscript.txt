@@ -98,7 +98,7 @@ CREATE TABLE public."Location"
   "LocationID" INT GENERATED ALWAYS AS IDENTITY,
   PRIMARY KEY("LocationID"),
   "BoxUserID" INT NOT NULL,
-  "Longtitude" float8 NOT NULL,
+  "Longitude" float8 NOT NULL,
   "Latitude" float8 NOT NULL, 
   "StartDate" TIMESTAMP ,
   "EndDate" TIMESTAMP ,
@@ -223,7 +223,7 @@ INSERT INTO "SensorBox"("BoxID", "SensorID") OVERRIDING SYSTEM VALUE VALUES
     (4, 16)
 RETURNING *;
 
-INSERT INTO "Location"("LocationID", "BoxUserID", "Longtitude", "Latitude", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
+INSERT INTO "Location"("LocationID", "BoxUserID", "Longitude", "Latitude", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
     (1, 1, 4.8323, 51.0348, '2021-01-18 19:10:25-07', NULL),
     (2, 2, 4.8363, 51.0328, '2021-01-18 19:10:25-07', '2021-01-24 20:30:25-07'),
     (3, 3, 4.96148, 51.16099, '2021-01-18 19:10:25-07', NULL),
