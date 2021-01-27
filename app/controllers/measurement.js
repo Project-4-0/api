@@ -224,7 +224,7 @@ module.exports = {
         ],
       });
 
-      return res.status(200).send(user);
+      return res.status(200).send(measurement);
     } catch (e) {
       return res.status(400).send(e);
     }
