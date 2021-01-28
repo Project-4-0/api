@@ -17,10 +17,14 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      BoxID: DataTypes.STRING,
-      SDCapacity: DataTypes.STRING,
+      BoxID: DataTypes.INTEGER,
+      SdCapacity: DataTypes.STRING,
       BatteryStatus: DataTypes.BOOLEAN,
       BatteryPercentage: DataTypes.DOUBLE,
+      TimeStamp: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
+      },
     },
     {
       sequelize,

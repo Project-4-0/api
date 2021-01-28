@@ -1,12 +1,11 @@
 const Box = require("../models").Box;
-
-
+const Sensor = require("../models").Sensor;
 //Validation Box
 boxValidate = (req, res) => {
   let validationMessages = [];
 
-  if (!req.body.MacAdress) {
-    validationMessages.push("MacAdress is required.");
+  if (!req.body.MacAddress) {
+    validationMessages.push("MacAddress is required.");
   }
 
   if (!req.body.Name) {
@@ -23,7 +22,7 @@ boxValidate = (req, res) => {
 //Check if exist
 async function boxExist(val) {
   return await Box.findOne({
-    where: { MacAdress: val },
+    where: { MacAddress: val },
   });
 }
 
@@ -50,7 +49,6 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-
   //Create box functie
   async add(req, res) {
     //validation
@@ -61,13 +59,15 @@ module.exports = {
     }
 
     //already exist
-    if ((await boxExist(req.body.MacAdress)) != null) {
-      return res.status(400).send({ message: "Box already exists!" });
+    if ((await boxExist(req.body.MacAddress)) != null) {
+      return res
+        .status(400)
+        .send({ message: "Box with this mac address already exists!" });
     }
 
     //create
-    SensorType.create({
-      MacAdress: req.body.MacAdress,
+    Box.create({
+      MacAddress: req.body.MacAddress,
       Name: req.body.Name,
       Comment: req.body.Comment,
       Active: req.body.Active,
@@ -90,7 +90,7 @@ module.exports = {
       return res.status(400).send({ message: "Box not found" });
     }
 
-    //update user
+    //update box
     box
       .update(req.body)
       .then((val) => res.status(200).send(val))
@@ -114,4 +114,33 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  //MANY MANY
+  addSensor(req, res) {
+    return Box.findByPk(req.body.BoxID, {
+      include: [
+        {
+          model: Sensor,
+          as: "Sensors",
+        },
+      ],
+    })
+      .then((box) => {
+        if (!box) {
+          return res.status(404).send({
+            message: "box Not Found",
+          });
+        }
+        Sensor.findByPk(req.body.SensorID).then((sensor) => {
+          if (!sensor) {
+            return res.status(404).send({
+              message: "Sensor Not Found",
+            });
+          }
+
+          box.addSensor(sensor);
+          return res.status(200).send(box);
+        });
+      })
+      .catch((error) => res.status(400).send(error));
+  },
 };

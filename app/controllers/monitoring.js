@@ -1,7 +1,7 @@
 const Monitoring = require("../models").Monitoring;
 const Box = require("../models").Box;
 
-//Validation SensorType
+//Validation Monitoring
 monitoringValidate = (req, res) => {
   let validationMessages = [];
 
@@ -9,8 +9,8 @@ monitoringValidate = (req, res) => {
     validationMessages.push("BoxID is required.");
   }
 
-  if (!req.body.SDCapacity) {
-    validationMessages.push("SDCapacity is required.");
+  if (!req.body.SdCapacity) {
+    validationMessages.push("SdCapacity is required.");
   }
 
   if (!req.body.BatteryStatus) {
@@ -26,11 +26,10 @@ monitoringValidate = (req, res) => {
 
 //Check if exist
 
-
 //Models
 module.exports = {
   list(req, res) {
-    SensorType.findAll()
+    Monitoring.findAll()
       .then((monitoring) => res.status(200).send(monitoring))
       .catch((error) => {
         res.status(400).send(error);
@@ -38,7 +37,7 @@ module.exports = {
   },
 
   getById(req, res) {
-    SensorType.findByPk(req.params.id, {
+    Monitoring.findByPk(req.params.id, {
       include: [
         {
           model: Box,
@@ -66,14 +65,13 @@ module.exports = {
     }
 
     //create
-    SensorType.create({
+    Monitoring.create({
       BoxID: req.body.BoxID,
-      SDCapacity: req.body.SDCapacity,
+      SdCapacity: req.body.SdCapacity,
       BatteryStatus: req.body.BatteryStatus,
       BatteryPercentage: req.body.BatteryPercentage,
     })
       .then((monitoring) => res.status(201).send(monitoring))
       .catch((error) => res.status(400).send(error));
   },
-
 };

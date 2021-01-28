@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "UserID",
         as: "User",
       });
+      BoxUser.hasMany(models.Location, {
+        foreignKey: "LocationID",
+        as: "locations",
+      });
     }
   }
   BoxUser.init(

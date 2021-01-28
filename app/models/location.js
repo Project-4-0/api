@@ -3,15 +3,10 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Location extends Model {
     static associate(models) {
-      //   Location.belongsTo(models.Classroom, {
-      //     foreignKey: 'classroom_id',
-      //     as: 'classroom'
-      //   });
-      //   Location.belongsToMany(models.Course, {
-      //     through: 'UserCourse',
-      //     as: 'courses',
-      //     foreignKey: 'User_id'
-      //   });
+      Location.hasOne(models.BoxUser, {
+        foreignKey: "BoxUserID",
+        as: "BoxUser",
+      });
     }
   }
   Location.init(
@@ -32,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Location",
       freezeTableName: true,
+      timestamps: false,
     }
   );
   return Location;
