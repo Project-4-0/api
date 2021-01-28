@@ -162,27 +162,53 @@ module.exports = {
     try {
       // get all Sensortypes with different boxes
 
-      user = await User.findByPk(req.body.UserID, {
-        include: [
-          {
-            model: Box,
-            as: "boxes",
-            include: [
-              {
-                model: Sensor,
-                as: "sensors",
-                include: [
-                  {
-                    model: SensorType,
-                    as: "SensorType",
-                    where: { Name: req.body.SensorTypeName },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
+      //check if boxId exist
+      if (req.body.BoxID) {
+        user = await User.findByPk(req.body.UserID, {
+          include: [
+            {
+              model: Box,
+              as: "boxes",
+              where: { BoxID: req.body.BoxID },
+              include: [
+                {
+                  model: Sensor,
+                  as: "sensors",
+                  include: [
+                    {
+                      model: SensorType,
+                      as: "SensorType",
+                      where: { Name: req.body.SensorTypeName },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        });
+      } else {
+        user = await User.findByPk(req.body.UserID, {
+          include: [
+            {
+              model: Box,
+              as: "boxes",
+              include: [
+                {
+                  model: Sensor,
+                  as: "sensors",
+                  include: [
+                    {
+                      model: SensorType,
+                      as: "SensorType",
+                      where: { Name: req.body.SensorTypeName },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        });
+      }
 
       //get boxen and sensors
       let boxesID = [];
@@ -199,29 +225,27 @@ module.exports = {
         });
       });
 
-      const startedDate = new Date("2019-12-12 00:00:00");
-      const endDate = new Date("2022-12-26 00:00:00");
-
       // "2021-01-28T05:16:21.000Z"
       // "2021-01-29T10:16:21.000Z"
-
-      // if (req.body.StartDate && req.body.EndDate) {
-      //   console.log("ok");
-      //   measurement = await Measurement.findAll({
-      //     where: {
-      //       TimeStamp: {
-      //         [Op.between]: [req.body.StartDate, req.body.EndDate],
-      //       },
-      //     },
-      //   });
-      // }
-
-      //Zonder datum
-      // measurement = await Measurement.findAll({
-      //   where: { BoxID: boxesID, SensorID: sensors },
-      //   order: [["TimeStamp", "DESC"]],
-      //   limit: 20,
-      // });
+      if (req.body.StartDate && req.body.EndDate) {
+        measurement = await Measurement.findAll({
+          where: {
+            BoxID: boxesID,
+            SensorID: sensors,
+            TimeStamp: {
+              [Op.between]: [req.body.StartDate, req.body.EndDate],
+            },
+          },
+          order: [["TimeStamp", "DESC"]],
+        });
+      } else {
+        //Zonder datum
+        measurement = await Measurement.findAll({
+          where: { BoxID: boxesID, SensorID: sensors },
+          order: [["TimeStamp", "DESC"]],
+          limit: 20,
+        });
+      }
 
       //sort from timestamp small to big
       measurement = measurement.sort((a, b) => a.TimeStamp - b.TimeStamp);
