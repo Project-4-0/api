@@ -33,6 +33,8 @@ router.delete("/boxes/:id", boxController.delete);
 router.post("/boxes/add_sensor", boxController.addSensor);
 router.get("/boxes/:id/all", boxController.getByIdAll);
 
+router.post("/boxes/macAddress", boxController.getByMacAdress);
+
 /* TO DO Measurement Router */
 router.get("/measurements", measurementController.list);
 router.get("/measurements/:id", measurementController.getById);
