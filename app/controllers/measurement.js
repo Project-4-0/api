@@ -3,7 +3,7 @@ const Sensor = require("../models").Sensor;
 const Box = require("../models").Box;
 const SensorType = require("../models").SensorType;
 const BoxUser = require("../models").BoxUser;
-// const sequelize = require("../models/index").sequelize;
+const Sequelize = require("../models/index").Sequelize;
 const User = require("../models").User;
 
 //Validation Measurement
@@ -197,11 +197,26 @@ module.exports = {
         });
       });
 
+      const startedDate = new Date("2019-12-12 00:00:00");
+      const endDate = new Date("2022-12-26 00:00:00");
+
       measurement = await Measurement.findAll({
-        where: { BoxID: boxesID, SensorID: sensors },
-        order: [["TimeStamp", "DESC"]],
-        limit: 20,
+        where: {
+          TimeStamp: {
+            [Sequelize.Op.between]: [
+              "2017-10-06T05:16:21.000Z",
+              "2023-10-06T10:16:21.000Z",
+            ],
+          },
+        },
       });
+
+      //Zonder datum
+      // measurement = await Measurement.findAll({
+      //   where: { BoxID: boxesID, SensorID: sensors},
+      //   order: [["TimeStamp", "DESC"]],
+      //   limit: 20,
+      // });
 
       //sort from timestamp small to big
       measurement = measurement.sort((a, b) => a.TimeStamp - b.TimeStamp);

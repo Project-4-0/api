@@ -66,6 +66,8 @@ router.post("/userTypes", userTypeController.add);
 // router.put("userTypes/:id", userTypeController.update);
 // router.delete("userTypes/:id", userTypeController.delete);
 
+router.post("/userTypes/name", userTypeController.getByName);
+
 /* SensorType Router WORKS */
 router.get("/sensorTypes", sensorTypeController.list);
 router.get("/sensorTypes/:id", sensorTypeController.getById);
