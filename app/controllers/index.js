@@ -7,7 +7,7 @@ const location = require("./location");
 const box = require("./box");
 const boxUser = require("./boxUser");
 const monitoring = require("./monitoring");
-
+const test = require("./test");
 module.exports = {
   user,
   userType,
@@ -18,4 +18,5 @@ module.exports = {
   box,
   boxUser,
   monitoring,
+  test,
 };

@@ -130,12 +130,12 @@ CREATE TABLE public."Measurement"
     CONSTRAINT fk_sensorbox
         FOREIGN KEY("BoxID","SensorID")
             REFERENCES "SensorBox"("BoxID","SensorID")
-  /* CONSTRAINT fk_sensorbox
+   /*CONSTRAINT fk_box
         FOREIGN KEY("BoxID")
-            REFERENCES "SensorBox"("BoxID"),
-   CONSTRAINT fk_sensorbox
+            REFERENCES "Box"("BoxID"),
+   CONSTRAINT fb_sensor
         FOREIGN KEY("SensorID")
-            REFERENCES "SensorBox"("SensorID")*/
+            REFERENCES "Sensor"("SensorID")*/
 ); 
 
 

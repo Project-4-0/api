@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Location extends Model {
     static associate(models) {
-      Location.belongsTo(models.BoxUser, {
+      Location.hasOne(models.BoxUser, {
         foreignKey: "BoxUserID",
         as: "BoxUser",
       });

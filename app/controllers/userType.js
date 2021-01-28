@@ -41,6 +41,21 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  async getByName(req, res) {
+    UserType.findOne({
+      where: { UserTypeName: req.body.UserTypeName },
+    })
+      .then((val) => {
+        if (!val) {
+          return res.status(404).send({
+            message: "UserType Not Found",
+          });
+        }
+        return res.status(200).send(val);
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
   async add(req, res) {
     //validation
     let validationMessages = userTypevalidate(req, res);

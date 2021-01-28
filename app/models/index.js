@@ -8,7 +8,7 @@ const env = process.env.NODE_ENV || "development";
 const config = require("../../config/config.js")[env];
 const db = {};
 
-const { QueryTypes } = require("sequelize");
+// const { QueryTypes } = require("sequelize");
 
 let sequelize;
 if (config.use_env_variable) {
@@ -45,3 +45,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 
 module.exports = db;
+// module.exports = { db, Sequelize };

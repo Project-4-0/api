@@ -16,6 +16,8 @@ const locationController = require("../controllers").location;
 const measurementController = require("../controllers").measurement;
 const monitoringController = require("../controllers").monitoring;
 
+const testController = require("../controllers").test;
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
@@ -29,6 +31,7 @@ router.put("/boxes", boxController.update);
 router.delete("/boxes/:id", boxController.delete);
 
 router.post("/boxes/add_sensor", boxController.addSensor);
+router.get("/boxes/:id/all", boxController.getByIdAll);
 
 /* TO DO Measurement Router */
 router.get("/measurements", measurementController.list);
@@ -36,6 +39,8 @@ router.get("/measurements/:id", measurementController.getById);
 router.post("/measurements", measurementController.add);
 // router.put("/measurements", measurementController.update);
 // router.delete("measurements/:id", measurementController.delete);
+
+router.post("/measurements/graphics", measurementController.getAllGraphics);
 
 /* Locations Router */
 router.get("/locations", locationController.list);
@@ -63,6 +68,8 @@ router.post("/userTypes", userTypeController.add);
 // router.put("userTypes/:id", userTypeController.update);
 // router.delete("userTypes/:id", userTypeController.delete);
 
+router.post("/userTypes/name", userTypeController.getByName);
+
 /* SensorType Router WORKS */
 router.get("/sensorTypes", sensorTypeController.list);
 router.get("/sensorTypes/:id", sensorTypeController.getById);
@@ -87,8 +94,16 @@ router.get("/users/:id", userController.getById);
 router.post("/users", userController.add);
 router.put("/users", userController.update);
 router.delete("/users/:id", userController.delete);
+
+//Extra
 router.post("/users/add_box", userController.addBox);
+router.get("/users/:id/with_boxes", userController.with_boxes);
+
 //LOGIN
 router.post("/login", userController.login);
+
+//TEST MICRO
+router.get("/test", testController.list);
+router.post("/test", testController.add);
 
 module.exports = router;

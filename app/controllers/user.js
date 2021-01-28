@@ -1,6 +1,8 @@
 const User = require("../models").User;
 const UserType = require("../models").UserType;
 const Box = require("../models").Box;
+const BoxUser = require("../models").BoxUser;
+const Location = require("../models").Location;
 
 //library
 var jwt = require("jsonwebtoken");
@@ -182,6 +184,50 @@ module.exports = {
         });
       })
       .catch((error) => res.status(400).send(error));
+  },
+
+  async with_boxes(req, res) {
+    let user;
+    // get user
+    try {
+      user = await User.findByPk(req.params.id, {
+        include: [
+          {
+            model: UserType,
+            as: "UserType",
+          },
+          {
+            model: Box,
+            as: "boxes",
+          },
+        ],
+      });
+    } catch (e) {
+      res.status(400).send(e);
+    }
+
+    //check if user exist
+    if (!user) {
+      return res.status(404).send({
+        message: "User Not Found",
+      });
+    }
+    return res.status(200).send(user);
+
+    // let loca;
+    // loca = await BoxUser.findAll({
+    //   where: { BoxID: 4 },
+    //   include: [
+    //     {
+    //       model: Location,
+    //       as: "locations",
+    //       where: {
+    //         EndDate: null,
+    //       },
+    //     },
+    //   ],
+    //   // order: [["StartDate", "DESC"]],
+    // });
   },
 
   //EXTRA
