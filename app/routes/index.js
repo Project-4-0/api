@@ -104,5 +104,6 @@ router.post("/login", userController.login);
 
 //TEST MICRO
 router.get("/test", testController.list);
+router.post("/test", testController.add);
 
 module.exports = router;
