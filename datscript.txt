@@ -160,20 +160,20 @@ INSERT INTO "Box"("BoxID", "MacAddress", "Name", "Comment", "ConfiguratieString"
     (1, '00:0a:95:9d:68:16', 'Box 1 - B One', 'Beschadigingen aan buitenkant van de box vastgesteld.', NULL, true),
     (2, '00:0a:95:9d:68:15', 'Box 2', NULL, NULL, false),
     (3, '00:0a:95:9d:68:13', 'Box 3', NULL, NULL, true),
-    (4, '00:0a:95:9d:68:18', 'Box - Arno Geel', NULL', NULL, true),
-    (5, '00:0a:95:9d:68:20', 'Box - Robert', NULL', NULL, true),
+    (4, '00:0a:95:9d:68:18', 'Box - Arno Geel', NULL, NULL, true),
+    (5, '00:0a:95:9d:68:20', 'Box - Robert', NULL, NULL, true),
     (6, '00:0a:95:9d:68:21', 'Box - Senne', NULL, NULL, true),
-    (7, '00:0a:95:9d:68:22', 'Box - Ruben', NULL', NULL, true),
-    (8, '00:0a:95:9d:68:23', 'Box - Jari', NULL', NULL, true),
-    (9, '00:0a:95:9d:68:24', 'Box - Youri Geel', NULL', NULL, true),
-    (10, '00:0a:95:9d:68:25', 'Box - Arno', NULL', NULL, true),
+    (7, '00:0a:95:9d:68:22', 'Box - Ruben', NULL, NULL, true),
+    (8, '00:0a:95:9d:68:23', 'Box - Jari', NULL, NULL, true),
+    (9, '00:0a:95:9d:68:24', 'Box - Youri Geel', NULL, NULL, true),
+    (10, '00:0a:95:9d:68:25', 'Box - Arno', NULL, NULL, true),
     (11, '00:0a:95:9d:68:26', 'Box - Youri Mechelen', NULL', NULL, true),
     (12, '00:0a:95:9d:68:27', 'Box - Senne', NULL, NULL, true),
-    (13, '00:0a:95:9d:68:28', 'Box - Ruben', NULL', NULL, true),
-    (14, '00:0a:95:9d:68:29', 'Box - Jari', NULL', NULL, true),
-    (15, '00:0a:95:9d:68:30', 'Box - Youri Brugge', NULL', NULL, true),
-    (16, '00:0a:95:9d:68:31', 'Box - Youri Gent', NULL', NULL, true),
-    (17, '00:0a:95:9d:68:32', 'Box - Arno Antwerpen', NULL', NULL, true)
+    (13, '00:0a:95:9d:68:28', 'Box - Ruben', NULL, NULL, true),
+    (14, '00:0a:95:9d:68:29', 'Box - Jari', NULL, NULL, true),
+    (15, '00:0a:95:9d:68:30', 'Box - Youri Brugge', NULL, NULL, true),
+    (16, '00:0a:95:9d:68:31', 'Box - Youri Gent', NULL, NULL, true),
+    (17, '00:0a:95:9d:68:32', 'Box - Arno Antwerpen', NULL, NULL, true)
 RETURNING *;
 
 INSERT INTO "BoxUser"("BoxUserID", "BoxID", "UserID", "StartDate", "EndDate") OVERRIDING SYSTEM VALUE VALUES 
