@@ -233,13 +233,19 @@ module.exports = {
 
       // "2021-01-28T05:16:21.000Z"
       // "2021-01-29T10:16:21.000Z"
+      console.log(new Date("2021-01-30 00:00:00.000"));
+
       if (req.body.StartDate && req.body.EndDate) {
+        console.log("ok", boxesID, sensors);
         measurement = await Measurement.findAll({
           where: {
             BoxID: boxesID,
             SensorID: sensors,
             TimeStamp: {
-              [Op.between]: [req.body.StartDate, req.body.EndDate],
+              [Op.between]: [
+                new Date(req.body.StartDate),
+                new Date(req.body.EndDate),
+              ],
             },
           },
           order: [["TimeStamp", "DESC"]],
@@ -255,7 +261,6 @@ module.exports = {
 
       //sort from timestamp small to big
       measurement = measurement.sort((a, b) => a.TimeStamp - b.TimeStamp);
-      console.log(measurement);
 
       //test
       // user = await User.findByPk(req.body.UserID, {
