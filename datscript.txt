@@ -167,7 +167,7 @@ INSERT INTO "Box"("BoxID", "MacAddress", "Name", "Comment", "ConfiguratieString"
     (8, '00:0a:95:9d:68:23', 'Box - Jari', NULL, NULL, true),
     (9, '00:0a:95:9d:68:24', 'Box - Youri Geel', NULL, NULL, true),
     (10, '00:0a:95:9d:68:25', 'Box - Arno', NULL, NULL, true),
-    (11, '00:0a:95:9d:68:26', 'Box - Youri Mechelen', NULL', NULL, true),
+    (11, '00:0a:95:9d:68:26', 'Box - Youri Mechelen', NULL, NULL, true),
     (12, '00:0a:95:9d:68:27', 'Box - Senne', NULL, NULL, true),
     (13, '00:0a:95:9d:68:28', 'Box - Ruben', NULL, NULL, true),
     (14, '00:0a:95:9d:68:29', 'Box - Jari', NULL, NULL, true),
