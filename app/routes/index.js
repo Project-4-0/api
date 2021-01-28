@@ -61,7 +61,6 @@ router.post("/monitoring", monitoringController.add);
 /* UserType Router Works*/
 router.get("/userTypes", userTypeController.list);
 router.get("/userTypes/:id", userTypeController.getById);
-router.get("/userTypes/name/:name", userTypeController.getByName);
 router.post("/userTypes", userTypeController.add);
 // router.put("userTypes/:id", userTypeController.update);
 // router.delete("userTypes/:id", userTypeController.delete);
