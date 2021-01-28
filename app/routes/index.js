@@ -16,6 +16,8 @@ const locationController = require("../controllers").location;
 const measurementController = require("../controllers").measurement;
 const monitoringController = require("../controllers").monitoring;
 
+const testController = require("../controllers").test;
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
@@ -99,5 +101,8 @@ router.get("/users/:id/with_boxes", userController.with_boxes);
 
 //LOGIN
 router.post("/login", userController.login);
+
+//TEST MICRO
+router.get("/test", testController.list);
 
 module.exports = router;

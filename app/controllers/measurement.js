@@ -3,8 +3,10 @@ const Sensor = require("../models").Sensor;
 const Box = require("../models").Box;
 const SensorType = require("../models").SensorType;
 const BoxUser = require("../models").BoxUser;
-const Sequelize = require("../models/index").Sequelize;
+// const Sequelize = require("../models/index").Sequelize;
 const User = require("../models").User;
+
+const { Op } = require("sequelize");
 
 //Validation Measurement
 measurementValidate = (req, res) => {
@@ -200,20 +202,23 @@ module.exports = {
       const startedDate = new Date("2019-12-12 00:00:00");
       const endDate = new Date("2022-12-26 00:00:00");
 
-      measurement = await Measurement.findAll({
-        where: {
-          TimeStamp: {
-            [Sequelize.Op.between]: [
-              "2017-10-06T05:16:21.000Z",
-              "2023-10-06T10:16:21.000Z",
-            ],
-          },
-        },
-      });
+      // "2021-01-28T05:16:21.000Z"
+      // "2021-01-29T10:16:21.000Z"
+
+      // if (req.body.StartDate && req.body.EndDate) {
+      //   console.log("ok");
+      //   measurement = await Measurement.findAll({
+      //     where: {
+      //       TimeStamp: {
+      //         [Op.between]: [req.body.StartDate, req.body.EndDate],
+      //       },
+      //     },
+      //   });
+      // }
 
       //Zonder datum
       // measurement = await Measurement.findAll({
-      //   where: { BoxID: boxesID, SensorID: sensors},
+      //   where: { BoxID: boxesID, SensorID: sensors },
       //   order: [["TimeStamp", "DESC"]],
       //   limit: 20,
       // });
