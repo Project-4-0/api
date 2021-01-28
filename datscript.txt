@@ -24,14 +24,12 @@ CREATE TABLE public."Box"
   "Active" BOOLEAN
 );   
 
-
 CREATE TABLE public."UserType" 
 (    
   "UserTypeID" INT GENERATED ALWAYS AS IDENTITY,
   PRIMARY KEY("UserTypeID"),
   "UserTypeName" VARCHAR(50) NOT NULL
 );  
-
 
 CREATE TABLE public."SensorType" 
 (    
@@ -56,6 +54,7 @@ CREATE TABLE public."User"
     FOREIGN KEY("UserTypeID")
     REFERENCES "UserType"("UserTypeID")
 );
+
 CREATE TABLE public."BoxUser" 
 (    
   "BoxUserID" INT GENERATED ALWAYS AS IDENTITY,
@@ -130,12 +129,6 @@ CREATE TABLE public."Measurement"
     CONSTRAINT fk_sensorbox
         FOREIGN KEY("BoxID","SensorID")
             REFERENCES "SensorBox"("BoxID","SensorID")
-  /* CONSTRAINT fk_sensorbox
-        FOREIGN KEY("BoxID")
-            REFERENCES "SensorBox"("BoxID"),
-   CONSTRAINT fk_sensorbox
-        FOREIGN KEY("SensorID")
-            REFERENCES "SensorBox"("SensorID")*/
 ); 
 
 
