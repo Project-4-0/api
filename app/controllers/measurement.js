@@ -167,15 +167,18 @@ module.exports = {
         user = await User.findByPk(req.body.UserID, {
           include: [
             {
+              paranoid: true,
               model: Box,
               as: "boxes",
               where: { BoxID: req.body.BoxID },
               include: [
                 {
+                  paranoid: true,
                   model: Sensor,
                   as: "sensors",
                   include: [
                     {
+                      paranoid: true,
                       model: SensorType,
                       as: "SensorType",
                       where: { Name: req.body.SensorTypeName },
@@ -190,14 +193,17 @@ module.exports = {
         user = await User.findByPk(req.body.UserID, {
           include: [
             {
+              paranoid: true,
               model: Box,
               as: "boxes",
               include: [
                 {
+                  paranoid: true,
                   model: Sensor,
                   as: "sensors",
                   include: [
                     {
+                      paranoid: true,
                       model: SensorType,
                       as: "SensorType",
                       where: { Name: req.body.SensorTypeName },
@@ -249,7 +255,35 @@ module.exports = {
 
       //sort from timestamp small to big
       measurement = measurement.sort((a, b) => a.TimeStamp - b.TimeStamp);
+      console.log(measurement);
 
+      //test
+      // user = await User.findByPk(req.body.UserID, {
+      //   include: [
+      //     {
+      //       model: Box,
+      //       as: "boxes",
+      //       include: [
+      //         {
+      //           model: Sensor,
+      //           as: "sensors",
+      //           // all: true,
+      //           include: [
+      //             {
+      //               paranoid: true,
+      //               model: SensorType,
+      //               as: "SensorType",
+      //               // all: true,
+      //               where: { Name: req.body.SensorTypeName },
+      //             },
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // });
+
+      // return res.status(200).send(user);
       return res.status(200).send({ Measurements: measurement, Boxes: boxes });
     } catch (e) {
       return res.status(400).send(e);
