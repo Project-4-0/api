@@ -15,6 +15,7 @@ const sensorController = require("../controllers").sensor;
 const locationController = require("../controllers").location;
 const measurementController = require("../controllers").measurement;
 const monitoringController = require("../controllers").monitoring;
+const terrascopeController = require("../controllers").terrascope;
 
 const testController = require("../controllers").test;
 
@@ -103,6 +104,9 @@ router.get("/users/:id/with_boxes", userController.with_boxes);
 
 //LOGIN
 router.post("/login", userController.login);
+
+/*terrascope */
+router.get("/terrascope/box/:id", terrascopeController.getUrlByBoxID);
 
 //TEST MICRO
 router.get("/test", testController.list);
