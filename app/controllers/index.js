@@ -8,6 +8,7 @@ const box = require("./box");
 const boxUser = require("./boxUser");
 const monitoring = require("./monitoring");
 const terrascope = require("./terrascope");
+const predict = require("./predict");
 
 const test = require("./test");
 module.exports = {
@@ -21,5 +22,6 @@ module.exports = {
   boxUser,
   monitoring,
   terrascope,
+  predict,
   test,
 };
