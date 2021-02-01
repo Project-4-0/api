@@ -6,7 +6,7 @@ const Sensor = require("../models").Sensor;
 
 var dateFormat = require("dateformat");
 
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 //Models
 module.exports = {
@@ -23,21 +23,39 @@ module.exports = {
       });
 
       let result = [];
+      //make dictionary for speed
+      let sensorDic = {};
+      let locationDic = {};
 
       for (let i = 0; i < measurements.length; i++) {
-        let sensor = await Sensor.findByPk(measurements[i].SensorID, {
-          include: { paranoid: true, model: SensorType, as: "SensorType" },
-        });
+        let sensor;
+        //check sensor
+        if (sensorDic[measurements[i].SensorID]) {
+          sensor = sensorDic[measurements[i].SensorID];
+        } else {
+          sensor = await Sensor.findByPk(measurements[i].SensorID, {
+            include: { paranoid: true, model: SensorType, as: "SensorType" },
+          });
+          sensorDic[measurements[i].SensorID] = sensor;
+        }
 
-        var location = await Location.findOne({
-          where: { EndDate: null },
-          include: [
-            {
-              all: true,
-              where: { BoxID: measurements[i].BoxID, EndDate: null },
-            },
-          ],
-        });
+        //location
+        let location;
+        //check sensor
+        if (locationDic[measurements[i].BoxID]) {
+          location = locationDic[measurements[i].BoxID];
+        } else {
+          location = await Location.findOne({
+            where: { EndDate: null },
+            include: [
+              {
+                all: true,
+                where: { BoxID: measurements[i].BoxID, EndDate: null },
+              },
+            ],
+          });
+          locationDic[measurements[i].BoxID] = location;
+        }
 
         result.push({
           datum: dateFormat(measurements[i].TimeStamp, "yyyy-mm-dd"),
