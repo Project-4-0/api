@@ -12,11 +12,21 @@ module.exports = (sequelize, DataTypes) => {
       //     as: "Box",
       //     foreignKey: "BoxID",
       //   });
-      //   SensorBox33.belongsToMany(models.Sensor, {
+      // SensorBox.belongsToMany(models.Sensor, {
       //     through: "SensorBox33",
       //     as: "Sensor",
       //     foreignKey: "SensorID",
       //   });
+      SensorBox.belongsTo(models.Sensor, {
+        through: "SensorBox",
+        as: "Sensor",
+        foreignKey: "SensorID",
+      });
+      SensorBox.belongsTo(models.Box, {
+        through: "SensorBox",
+        as: "Box",
+        foreignKey: "BoxID",
+      });
     }
   }
   SensorBox.init(

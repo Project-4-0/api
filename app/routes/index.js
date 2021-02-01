@@ -15,6 +15,8 @@ const sensorController = require("../controllers").sensor;
 const locationController = require("../controllers").location;
 const measurementController = require("../controllers").measurement;
 const monitoringController = require("../controllers").monitoring;
+const terrascopeController = require("../controllers").terrascope;
+const predictController = require("../controllers").predict;
 
 const testController = require("../controllers").test;
 
@@ -32,6 +34,8 @@ router.delete("/boxes/:id", boxController.delete);
 
 router.post("/boxes/add_sensor", boxController.addSensor);
 router.get("/boxes/:id/all", boxController.getByIdAll);
+
+router.post("/boxes/macAddress", boxController.getByMacAdress);
 
 /* TO DO Measurement Router */
 router.get("/measurements", measurementController.list);
@@ -101,6 +105,12 @@ router.get("/users/:id/with_boxes", userController.with_boxes);
 
 //LOGIN
 router.post("/login", userController.login);
+
+/*terrascope */
+router.get("/terrascope/box/:id", terrascopeController.getUrlByBoxID);
+
+/*Predict */
+router.post("/predict", predictController.getInputData);
 
 //TEST MICRO
 router.get("/test", testController.list);
