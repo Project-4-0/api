@@ -19,8 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       BoxID: DataTypes.INTEGER,
       SdCapacity: DataTypes.STRING,
-      BatteryStatus: DataTypes.BOOLEAN,
+      AmountSatellite: DataTypes.STRING,
       BatteryPercentage: DataTypes.DOUBLE,
+      Temperature: DataTypes.STRING,
       TimeStamp: {
         type: DataTypes.DATE,
         defaultValue: new Date(),
