@@ -68,12 +68,8 @@ module.exports = {
       }
 
       return res.status(200).send(result);
-
-      //boxUser
     } catch (error) {
       res.status(400).send(error);
     }
   },
 };
-
-// 51.157096880208634, 5.033412036915008
