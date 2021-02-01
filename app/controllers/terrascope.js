@@ -3,8 +3,12 @@ const BoxUser = require("../models").BoxUser;
 const Location = require("../models").Location;
 
 var proj4 = require("proj4");
-const { create, all } = require("mathjs");
+const { create, all, prod } = require("mathjs");
 const math = create(all);
+
+//request
+const axios = require("axios");
+var dateFormat = require("dateformat");
 
 //transform
 // const transformation = require("transform-coordinates");
@@ -76,7 +80,6 @@ module.exports = {
       var secondProjection =
         "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs";
       //I'm not going to redefine those two in latter examples.
-
       var coo1 = proj4(firstProjection, secondProjection, [lon2, lat2]);
       var coo2 = proj4(firstProjection, secondProjection, [lon3, lat3]);
 
@@ -93,8 +96,65 @@ module.exports = {
         scale
       ).toFixed(0);
 
+      //get Call Data ok;
+      var product = "S2_FAPAR";
+      var d = new Date();
+      //20 DAGEN CHECK
+      var startDate = dateFormat(d.setDate(d.getDate() - 20), "yyyy-mm-dd");
+      var endDate = dateFormat(new Date(), "yyyy-mm-dd");
+      var crs = "epsg:4326";
+      var source = "probav-mep";
+
+      var postUrl =
+        "https://cropsar.vito.be/api/v1.0/cropsar-analysis/?product=" +
+        product +
+        "&start=" +
+        startDate +
+        "&end=" +
+        endDate +
+        "&crs=" +
+        crs +
+        "&source=" +
+        source;
+
+      //make a post requist
+      var responseServer = await axios.post(postUrl, {
+        type: "Polygon",
+        coordinates: [
+          [
+            [lon3, lat2],
+            [lon3, lat3],
+            [lon2, lat3],
+            [lon2, lat2],
+          ],
+        ],
+      });
+
+      //get data
+      var data = responseServer.data.clean["s2-data"];
+
+      //convert to list
+      let dataPr = [];
+      for (ss in data) {
+        if (data[ss].data != "NaN") {
+          dataPr.push({ datum: ss, data: data[ss].data });
+        }
+      }
+
+      //Selected date
+      var selectFrame = null;
+
+      dataPr.forEach((element) => {
+        if (element.data > 0.62) {
+          selectFrame = element;
+        }
+      });
+
+      // get image
       var imgurl1 =
-        "https://services.terrascope.be/wms/v2?service=WMS&version=1.3.0&request=GetMap&layers=CGS_S2_FAPAR&format=image/png&time=2020-06-01&width=" +
+        "https://services.terrascope.be/wms/v2?service=WMS&version=1.3.0&request=GetMap&layers=CGS_S2_FAPAR&format=image/png&time=" +
+        selectFrame.datum +
+        "&width=" +
         width.toString() +
         "&height=" +
         height.toString() +
