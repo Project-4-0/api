@@ -145,10 +145,16 @@ module.exports = {
       var selectFrame = null;
 
       dataPr.forEach((element) => {
+        console.log(element);
         if (element.data > 0.62) {
           selectFrame = element;
         }
       });
+
+      //check if found
+      if (selectFrame == null) {
+        return res.status(400).send({ error: "Geen satellietbeeld gevonden!" });
+      }
 
       // get image
       var imgurl1 =
