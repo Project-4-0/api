@@ -146,7 +146,7 @@ module.exports = {
 
       dataPr.forEach((element) => {
         console.log(element);
-        if (element.data > 0.62) {
+        if (element.data > 0.6) {
           selectFrame = element;
         }
       });

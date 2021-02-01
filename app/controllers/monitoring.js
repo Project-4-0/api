@@ -13,10 +13,6 @@ monitoringValidate = (req, res) => {
     validationMessages.push("SdCapacity is required.");
   }
 
-  if (!req.body.BatteryStatus) {
-    validationMessages.push("BatteryStatus is required.");
-  }
-
   if (!req.body.BatteryPercentage) {
     validationMessages.push("BatteryPercentage is required.");
   }
