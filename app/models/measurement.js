@@ -3,6 +3,10 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Measurement extends Model {
     static associate(models) {
+      // Measurement.belongsTo(models.Box, {
+      //   foreignKey: "BoxID",
+      //   as: "Box",
+      // });
       Measurement.belongsTo(models.Box, {
         foreignKey: "BoxID",
         as: "Box",
