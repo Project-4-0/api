@@ -49,6 +49,36 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  getByIdAll(req, res) {
+    Box.findByPk(req.params.id, {
+      include: [{ all: true }],
+    })
+      .then((val) => {
+        if (!val) {
+          return res.status(404).send({
+            message: "Box Not Found",
+          });
+        }
+        return res.status(200).send(val);
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
+  getByMacAdress(req, res) {
+    Box.findOne({
+      where: { MacAddress: req.body.MacAddress },
+    })
+      .then((val) => {
+        if (!val) {
+          return res.status(404).send({
+            message: "Box Not Found",
+          });
+        }
+        return res.status(200).send(val);
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
   //Create box functie
   async add(req, res) {
     //validation

@@ -15,6 +15,9 @@ const sensorController = require("../controllers").sensor;
 const locationController = require("../controllers").location;
 const measurementController = require("../controllers").measurement;
 const monitoringController = require("../controllers").monitoring;
+const terrascopeController = require("../controllers").terrascope;
+
+const testController = require("../controllers").test;
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -29,6 +32,9 @@ router.put("/boxes", boxController.update);
 router.delete("/boxes/:id", boxController.delete);
 
 router.post("/boxes/add_sensor", boxController.addSensor);
+router.get("/boxes/:id/all", boxController.getByIdAll);
+
+router.post("/boxes/macAddress", boxController.getByMacAdress);
 
 /* TO DO Measurement Router */
 router.get("/measurements", measurementController.list);
@@ -65,6 +71,8 @@ router.post("/userTypes", userTypeController.add);
 // router.put("userTypes/:id", userTypeController.update);
 // router.delete("userTypes/:id", userTypeController.delete);
 
+router.post("/userTypes/name", userTypeController.getByName);
+
 /* SensorType Router WORKS */
 router.get("/sensorTypes", sensorTypeController.list);
 router.get("/sensorTypes/:id", sensorTypeController.getById);
@@ -96,5 +104,12 @@ router.get("/users/:id/with_boxes", userController.with_boxes);
 
 //LOGIN
 router.post("/login", userController.login);
+
+/*terrascope */
+router.get("/terrascope/box/:id", terrascopeController.getUrlByBoxID);
+
+//TEST MICRO
+router.get("/test", testController.list);
+router.post("/test", testController.add);
 
 module.exports = router;
