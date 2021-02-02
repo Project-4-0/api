@@ -55,7 +55,7 @@ module.exports = {
 
     //already exist
     if ((await sensorTypeExist(req.body.Name)) != null) {
-      return res.status(400).send({ message: "Name already exist!" });
+      return res.status(400).send({ message: "SensoryType already exist!" });
     }
 
     //create
@@ -66,7 +66,4 @@ module.exports = {
       .then((userType) => res.status(201).send(userType))
       .catch((error) => res.status(400).send(error));
   },
-
-
-  
 };

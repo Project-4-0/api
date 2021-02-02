@@ -97,15 +97,16 @@ module.exports = {
       return res.status(400).send({ message: "Email already exist!" });
     }
 
-    //TODO check if UserTypeID exist
-
-    //TODO PASSWORD DESCREPT
+    //already exist
+    if ((await SensorType.findByPk(req.body.UserTypeID)) != null) {
+      return res.status(400).send({ message: "SensorType already exist!" });
+    }
 
     //create
     User.create({
       FirstName: req.body.FirstName,
       LastName: req.body.LastName,
-      Password: req.body.Password,
+      Password: bcrypt.hashSync(req.body.password, 8),
       Email: req.body.Email,
       Address: req.body.Address,
       PostalCode: req.body.PostalCode,
@@ -238,10 +239,11 @@ module.exports = {
     }
 
     passwordIsValid = false;
-    //TODO PASSWORD DESCREPT
-    if (req.body.Password === user.Password) {
-      passwordIsValid = true;
-    }
+    var passwordIsValid = bcrypt.compareSync(req.body.Password, user.Password);
+
+    // if (req.body.Password === user.Password) {
+    //   passwordIsValid = true;
+    // }
 
     if (!passwordIsValid) {
       return res.status(400).send({
