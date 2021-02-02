@@ -136,7 +136,16 @@ module.exports = {
 
     //update user
     user
-      .update(req.body)
+      .update({
+        FirstName: req.body.FirstName,
+        LastName: req.body.LastName,
+        Password: bcrypt.hashSync(req.body.Password, 8),
+        Email: req.body.Email,
+        Address: req.body.Address,
+        PostalCode: req.body.PostalCode,
+        City: req.body.City,
+        UserTypeID: req.body.UserTypeID,
+      })
       .then((val) => res.status(200).send(val))
       .catch((error) => res.status(400).send(error));
   },
@@ -159,6 +168,29 @@ module.exports = {
 
   //MANY MANY
   async addBox(req, res) {
+    //check Validation
+    let validationMessages = [];
+
+    if (!req.body.UserID) {
+      validationMessages.push("UserID is required.");
+    }
+
+    if (!req.body.BoxID) {
+      validationMessages.push("BoxID is required.");
+    }
+
+    if (!req.body.Latitude) {
+      validationMessages.push("Latitude is required.");
+    }
+    if (!req.body.Longitude) {
+      validationMessages.push("Longitude is required.");
+    }
+
+    if (validationMessages.length != 0) {
+      return res.status(400).send({ messages: validationMessages });
+    }
+
+    //Get db call
     try {
       //user
       var user = await User.findByPk(req.body.UserID);
@@ -177,7 +209,7 @@ module.exports = {
       }
 
       //add box
-      var t = await user.addBox(box);
+      var s = await user.addBox(box);
 
       var user = await User.findByPk(req.body.UserID, {
         include: [
@@ -189,41 +221,111 @@ module.exports = {
         ],
       });
 
-      return res.status(200).send(user);
+      //get userBox oldlocation
+      let oldlocation = await Location.findOne({
+        // include: [{ all: true, paranoid: true }],
+        where: { EndDate: null },
+        order: [["LocationID", "DESC"]],
+        // include: [
+        //   {
+        //     all: true,
+        //     paranoid: true,
+        //     where: { BoxID: box.BoxID, UserID: user.UserID, EndDate: null },
+        //   },
+        // ],
+      });
+
+      if (oldlocation) {
+        //set endate location
+        oldlocation = await oldlocation.update({
+          EndDate: new Date().toISOString(),
+        });
+      }
+
+      //get boxUserID
+      var userBox = await User.findByPk(req.body.UserID, {
+        include: [
+          {
+            paranoid: true,
+            model: Box,
+            as: "boxes",
+            where: { BoxID: box.BoxID },
+          },
+        ],
+      });
+
+      let boxUser = userBox.boxes[0].BoxUser;
+
+      // new location();
+      let location = await Location.create({
+        BoxUserID: boxUser.BoxUserID,
+        Latitude: req.body.Latitude,
+        Longitude: req.body.Longitude,
+        StartDate: new Date().toISOString(),
+      });
+
+      return res.status(200).send({ message: "Gekoppeld" });
     } catch (error) {
       res.status(400).send(error);
     }
+  },
 
-    // return User.findByPk(req.body.UserID, {
-    //   include: [
-    //     {
-    //       paranoid: true,
-    //       model: Box,
-    //       as: "boxes",
-    //     },
-    //   ],
-    // })
-    //   .then((user) => {
-    //     if (!user) {
-    //       return res.status(404).send({
-    //         message: "User Not Found",
-    //       });
-    //     }
-    //     console.log(user);
-    //     Box.findByPk(req.body.BoxID).then((box) => {
-    //       if (!box) {
-    //         return res.status(404).send({
-    //           message: "box Not Found",
-    //         });
-    //       }
-    //       console.log(box);
-    //       //add start date
-    //       box.S;
-    //       // var s = await user.addBox(box);
-    //       return res.status(200).send(user);
-    //     });
-    //   })
-    //   .catch((error) => res.status(400).send(error));
+  async deleteBox(req, res) {
+    //check Validation
+    let validationMessages = [];
+
+    if (!req.body.UserID) {
+      validationMessages.push("UserID is required.");
+    }
+
+    if (!req.body.BoxID) {
+      validationMessages.push("BoxID is required.");
+    }
+
+    if (validationMessages.length != 0) {
+      return res.status(400).send({ messages: validationMessages });
+    }
+
+    //Get db call
+    try {
+      //user
+      var user = await User.findByPk(req.body.UserID);
+      if (!user) {
+        return res.status(404).send({
+          message: "User Not Found",
+        });
+      }
+
+      //box
+      var box = await Box.findByPk(req.body.BoxID);
+      if (!box) {
+        return res.status(404).send({
+          message: "box Not Found",
+        });
+      }
+
+      //get boxUserID
+      var userBox = await User.findByPk(req.body.UserID, {
+        include: [
+          {
+            paranoid: true,
+            model: Box,
+            as: "boxes",
+            where: { BoxID: box.BoxID },
+          },
+        ],
+      });
+
+      let boxUser = userBox.boxes[0].BoxUser;
+
+      let w = await boxUser.update({
+        EndDate: new Date().toISOString(),
+      });
+
+      return res.status(200).send({ message: "Ontkoppeld" });
+    } catch (error) {
+      res.status(400).send(error);
+    }
   },
 
   async with_boxes(req, res) {
@@ -239,35 +341,21 @@ module.exports = {
           {
             model: Box,
             as: "boxes",
+            through: { where: { EndDate: null } },
           },
         ],
       });
+
+      //check if user exist
+      if (!user) {
+        return res.status(404).send({
+          message: "User Not Found",
+        });
+      }
+      return res.status(200).send({ user: user });
     } catch (e) {
-      res.status(400).send(e);
+      return res.status(400).send(e);
     }
-
-    //check if user exist
-    if (!user) {
-      return res.status(404).send({
-        message: "User Not Found",
-      });
-    }
-    return res.status(200).send(user);
-
-    // let loca;
-    // loca = await BoxUser.findAll({
-    //   where: { BoxID: 4 },
-    //   include: [
-    //     {
-    //       model: Location,
-    //       as: "locations",
-    //       where: {
-    //         EndDate: null,
-    //       },
-    //     },
-    //   ],
-    //   // order: [["StartDate", "DESC"]],
-    // });
   },
 
   //EXTRA

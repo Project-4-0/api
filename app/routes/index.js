@@ -17,6 +17,7 @@ const measurementController = require("../controllers").measurement;
 const monitoringController = require("../controllers").monitoring;
 const terrascopeController = require("../controllers").terrascope;
 const predictController = require("../controllers").predict;
+const kpisController = require("../controllers").kpis;
 
 const testController = require("../controllers").test;
 
@@ -104,6 +105,7 @@ router.delete("/users/:id", userController.delete);
 
 //Extra
 router.post("/users/add_box", userController.addBox);
+router.post("/users/delete_box", userController.deleteBox);
 router.get("/users/:id/with_boxes", userController.with_boxes);
 
 //LOGIN
@@ -114,6 +116,9 @@ router.get("/terrascope/box/:id", terrascopeController.getUrlByBoxID);
 
 /*Predict */
 router.post("/predict", predictController.getInputData);
+
+/*KPIS*/
+router.get("/kpi/adminDashboard", kpisController.getAdminDashboardKPI);
 
 //TEST MICRO
 router.get("/test", testController.list);
