@@ -148,7 +148,7 @@ INSERT INTO "UserType"("UserTypeID", "UserTypeName") OVERRIDING SYSTEM VALUE VAL
 RETURNING *;
 
 INSERT INTO "User"("UserID", "LastName", "FirstName", "Email", "Password", "Address", "PostalCode", "City", "UserTypeID") OVERRIDING SYSTEM VALUE VALUES 
-    (13, 'Boer', 'Boer', 'boer@example.com', 'Boer', 'Boereweg 651', '8000', 'Brugge', 3),
+    (13, 'Boer', 'Boer', 'boer@example.com', '$2y$08$3fpms5JL8FXv2NbDhaI/ZePIiOgLKeAnXYwxH3tchbXdOukYVk2sG', 'Boereweg 651', '8000', 'Brugge', 3),
     (12, 'Monteur', 'Monteur', 'monteur@example.com', 'Monteur', 'Monteurweg 324', '8000', 'Brugge', 2),
     (11, 'Van Laer', 'Youri', 'r0694461@student.thomasmore.be', 'Test', 'Harmoniestraat 44', '2230', 'Ramsel', 3),
     (10, 'Blaga', 'Robert', 'r0660626@student.thomasmore.be', 'Test', 'Harmoniestraat 44', '2230', 'Ramsel', 3),
