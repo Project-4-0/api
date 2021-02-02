@@ -20,10 +20,8 @@ module.exports = {
 
       return res.status(200).send({
         userCount: userCount,
-        boxCount: {
-          active: boxCountActive,
-          noneActive: boxCountNoneActive,
-        },
+        boxCountActive: boxCountActive,
+        boxCountNoneActive: boxCountNoneActive,
       });
     } catch (error) {
       return res.status(400).send(error);
