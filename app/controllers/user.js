@@ -3,10 +3,11 @@ const UserType = require("../models").UserType;
 const Box = require("../models").Box;
 const BoxUser = require("../models").BoxUser;
 const Location = require("../models").Location;
+const SensorType = require("../models").SensorType;
 
 //library
 var jwt = require("jsonwebtoken");
-// var bcrypt = require("bcryptjs");
+var bcrypt = require("bcryptjs");
 
 //Validation User
 userValidate = (req, res) => {
@@ -98,15 +99,17 @@ module.exports = {
     }
 
     //already exist
-    if ((await SensorType.findByPk(req.body.UserTypeID)) != null) {
-      return res.status(400).send({ message: "SensorType already exist!" });
+    if ((await SensorType.findByPk(req.body.UserTypeID)) == null) {
+      return res.status(400).send({ message: "SensorType didn't exist!" });
     }
 
-    //create
+    console.log(bcrypt.hashSync(req.body.Password, 8));
+
+    // create
     User.create({
       FirstName: req.body.FirstName,
       LastName: req.body.LastName,
-      Password: bcrypt.hashSync(req.body.password, 8),
+      Password: bcrypt.hashSync(req.body.Password, 8),
       Email: req.body.Email,
       Address: req.body.Address,
       PostalCode: req.body.PostalCode,
