@@ -261,6 +261,64 @@ module.exports = {
     }
   },
 
+  async deleteBox(req, res) {
+    //check Validation
+    let validationMessages = [];
+
+    if (!req.body.UserID) {
+      validationMessages.push("UserID is required.");
+    }
+
+    if (!req.body.BoxID) {
+      validationMessages.push("BoxID is required.");
+    }
+
+    if (validationMessages.length != 0) {
+      return res.status(400).send({ messages: validationMessages });
+    }
+
+    //Get db call
+    try {
+      //user
+      var user = await User.findByPk(req.body.UserID);
+      if (!user) {
+        return res.status(404).send({
+          message: "User Not Found",
+        });
+      }
+
+      //box
+      var box = await Box.findByPk(req.body.BoxID);
+      if (!box) {
+        return res.status(404).send({
+          message: "box Not Found",
+        });
+      }
+
+      //get boxUserID
+      var userBox = await User.findByPk(req.body.UserID, {
+        include: [
+          {
+            paranoid: true,
+            model: Box,
+            as: "boxes",
+            where: { BoxID: box.BoxID },
+          },
+        ],
+      });
+
+      let boxUser = userBox.boxes[0].BoxUser;
+
+      let w = await boxUser.update({
+        EndDate: new Date().toISOString(),
+      });
+
+      return res.status(200).send({ message: "Ontkoppeld" });
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  },
+
   async with_boxes(req, res) {
     let user;
     // get user
@@ -274,35 +332,21 @@ module.exports = {
           {
             model: Box,
             as: "boxes",
+            through: { where: { EndDate: null } },
           },
         ],
       });
+
+      //check if user exist
+      if (!user) {
+        return res.status(404).send({
+          message: "User Not Found",
+        });
+      }
+      return res.status(200).send({ user: user });
     } catch (e) {
-      res.status(400).send(e);
+      return res.status(400).send(e);
     }
-
-    //check if user exist
-    if (!user) {
-      return res.status(404).send({
-        message: "User Not Found",
-      });
-    }
-    return res.status(200).send(user);
-
-    // let loca;
-    // loca = await BoxUser.findAll({
-    //   where: { BoxID: 4 },
-    //   include: [
-    //     {
-    //       model: Location,
-    //       as: "locations",
-    //       where: {
-    //         EndDate: null,
-    //       },
-    //     },
-    //   ],
-    //   // order: [["StartDate", "DESC"]],
-    // });
   },
 
   //EXTRA

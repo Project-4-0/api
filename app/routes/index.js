@@ -104,6 +104,7 @@ router.delete("/users/:id", userController.delete);
 
 //Extra
 router.post("/users/add_box", userController.addBox);
+router.post("/users/delete_box", userController.deleteBox);
 router.get("/users/:id/with_boxes", userController.with_boxes);
 
 //LOGIN
