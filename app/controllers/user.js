@@ -136,7 +136,16 @@ module.exports = {
 
     //update user
     user
-      .update(req.body)
+      .update({
+        FirstName: req.body.FirstName,
+        LastName: req.body.LastName,
+        Password: bcrypt.hashSync(req.body.Password, 8),
+        Email: req.body.Email,
+        Address: req.body.Address,
+        PostalCode: req.body.PostalCode,
+        City: req.body.City,
+        UserTypeID: req.body.UserTypeID,
+      })
       .then((val) => res.status(200).send(val))
       .catch((error) => res.status(400).send(error));
   },
