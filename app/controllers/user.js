@@ -162,6 +162,7 @@ module.exports = {
     return User.findByPk(req.body.UserID, {
       include: [
         {
+          paranoid: true,
           model: Box,
           as: "boxes",
         },

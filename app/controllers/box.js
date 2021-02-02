@@ -149,8 +149,9 @@ module.exports = {
     return Box.findByPk(req.body.BoxID, {
       include: [
         {
+          paranoid: true,
           model: Sensor,
-          as: "Sensors",
+          as: "sensors",
         },
       ],
     })
