@@ -9,6 +9,7 @@ const boxUser = require("./boxUser");
 const monitoring = require("./monitoring");
 const terrascope = require("./terrascope");
 const predict = require("./predict");
+const kpis = require("./kpis");
 
 const test = require("./test");
 module.exports = {
@@ -23,5 +24,6 @@ module.exports = {
   monitoring,
   terrascope,
   predict,
+  kpis,
   test,
 };
