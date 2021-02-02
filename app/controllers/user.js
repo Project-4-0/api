@@ -3,10 +3,11 @@ const UserType = require("../models").UserType;
 const Box = require("../models").Box;
 const BoxUser = require("../models").BoxUser;
 const Location = require("../models").Location;
+const SensorType = require("../models").SensorType;
 
 //library
 var jwt = require("jsonwebtoken");
-// var bcrypt = require("bcryptjs");
+var bcrypt = require("bcryptjs");
 
 //Validation User
 userValidate = (req, res) => {
@@ -97,15 +98,18 @@ module.exports = {
       return res.status(400).send({ message: "Email already exist!" });
     }
 
-    //TODO check if UserTypeID exist
+    //already exist
+    if ((await SensorType.findByPk(req.body.UserTypeID)) == null) {
+      return res.status(400).send({ message: "SensorType didn't exist!" });
+    }
 
-    //TODO PASSWORD DESCREPT
+    console.log(bcrypt.hashSync(req.body.Password, 8));
 
-    //create
+    // create
     User.create({
       FirstName: req.body.FirstName,
       LastName: req.body.LastName,
-      Password: req.body.Password,
+      Password: bcrypt.hashSync(req.body.Password, 8),
       Email: req.body.Email,
       Address: req.body.Address,
       PostalCode: req.body.PostalCode,
@@ -158,6 +162,7 @@ module.exports = {
     return User.findByPk(req.body.UserID, {
       include: [
         {
+          paranoid: true,
           model: Box,
           as: "boxes",
         },
@@ -238,10 +243,11 @@ module.exports = {
     }
 
     passwordIsValid = false;
-    //TODO PASSWORD DESCREPT
-    if (req.body.Password === user.Password) {
-      passwordIsValid = true;
-    }
+    var passwordIsValid = bcrypt.compareSync(req.body.Password, user.Password);
+
+    // if (req.body.Password === user.Password) {
+    //   passwordIsValid = true;
+    // }
 
     if (!passwordIsValid) {
       return res.status(400).send({
