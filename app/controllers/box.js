@@ -145,33 +145,36 @@ module.exports = {
   },
 
   //MANY MANY
-  addSensor(req, res) {
-    return Box.findByPk(req.body.BoxID, {
-      include: [
-        {
-          paranoid: true,
-          model: Sensor,
-          as: "sensors",
-        },
-      ],
-    })
-      .then((box) => {
-        if (!box) {
-          return res.status(404).send({
-            message: "box Not Found",
-          });
-        }
-        Sensor.findByPk(req.body.SensorID).then((sensor) => {
-          if (!sensor) {
-            return res.status(404).send({
-              message: "Sensor Not Found",
-            });
-          }
-
-          box.addSensor(sensor);
-          return res.status(200).send(box);
+  async addSensor(req, res) {
+    try {
+      var box = await Box.findByPk(req.body.BoxID);
+      if (!box) {
+        return res.status(404).send({
+          message: "box Not Found",
         });
-      })
-      .catch((error) => res.status(400).send(error));
+      }
+
+      var sensor = await Sensor.findByPk(req.body.SensorID);
+      if (!sensor) {
+        return res.status(404).send({
+          message: "Sensor Not Found",
+        });
+      }
+      var t = await box.addSensor(sensor);
+
+      var box = await Box.findByPk(req.body.BoxID, {
+        include: [
+          {
+            paranoid: true,
+            model: Sensor,
+            as: "sensors",
+          },
+        ],
+      });
+
+      return res.status(200).send(box);
+    } catch (error) {
+      res.status(400).send(error);
+    }
   },
 };
