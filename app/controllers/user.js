@@ -158,37 +158,72 @@ module.exports = {
   },
 
   //MANY MANY
-  addBox(req, res) {
-    return User.findByPk(req.body.UserID, {
-      include: [
-        {
-          paranoid: true,
-          model: Box,
-          as: "boxes",
-        },
-      ],
-    })
-      .then((user) => {
-        if (!user) {
-          return res.status(404).send({
-            message: "User Not Found",
-          });
-        }
-        console.log(user);
-        Box.findByPk(req.body.BoxID).then((box) => {
-          if (!box) {
-            return res.status(404).send({
-              message: "box Not Found",
-            });
-          }
-          console.log(box);
-          //add start date
-          box.S;
-          user.addBox(box);
-          return res.status(200).send(user);
+  async addBox(req, res) {
+    try {
+      //user
+      var user = await User.findByPk(req.body.UserID);
+      if (!user) {
+        return res.status(404).send({
+          message: "User Not Found",
         });
-      })
-      .catch((error) => res.status(400).send(error));
+      }
+
+      //box
+      var box = await Box.findByPk(req.body.BoxID);
+      if (!box) {
+        return res.status(404).send({
+          message: "box Not Found",
+        });
+      }
+
+      //add box
+      var t = await user.addBox(box);
+
+      var user = await User.findByPk(req.body.UserID, {
+        include: [
+          {
+            paranoid: true,
+            model: Box,
+            as: "boxes",
+          },
+        ],
+      });
+
+      return res.status(200).send(user);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+
+    // return User.findByPk(req.body.UserID, {
+    //   include: [
+    //     {
+    //       paranoid: true,
+    //       model: Box,
+    //       as: "boxes",
+    //     },
+    //   ],
+    // })
+    //   .then((user) => {
+    //     if (!user) {
+    //       return res.status(404).send({
+    //         message: "User Not Found",
+    //       });
+    //     }
+    //     console.log(user);
+    //     Box.findByPk(req.body.BoxID).then((box) => {
+    //       if (!box) {
+    //         return res.status(404).send({
+    //           message: "box Not Found",
+    //         });
+    //       }
+    //       console.log(box);
+    //       //add start date
+    //       box.S;
+    //       // var s = await user.addBox(box);
+    //       return res.status(200).send(user);
+    //     });
+    //   })
+    //   .catch((error) => res.status(400).send(error));
   },
 
   async with_boxes(req, res) {
