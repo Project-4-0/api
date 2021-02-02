@@ -255,6 +255,9 @@ module.exports = {
       });
 
       let boxUser = userBox.boxes[0].BoxUser;
+      let bo = await boxUser.update({
+        EndDate: null,
+      });
 
       // new location();
       let location = await Location.create({
