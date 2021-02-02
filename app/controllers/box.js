@@ -1,5 +1,7 @@
 const Box = require("../models").Box;
 const Sensor = require("../models").Sensor;
+const SensorType = require("../models").SensorType;
+
 //Validation Box
 boxValidate = (req, res) => {
   let validationMessages = [];
@@ -173,6 +175,58 @@ module.exports = {
       });
 
       return res.status(200).send(box);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  },
+
+  async addSensorArduino(req, res) {
+    try {
+      //get box
+      var box = await Box.findByPk(req.body.BoxID);
+      if (!box) {
+        return res.status(404).send({
+          message: "box Not Found",
+        });
+      }
+
+      //check if sensor exist
+      var sensor = await Sensor.findOne({
+        where: { Name: req.body.SensorName },
+      });
+
+      //if sensor didn't exist
+      if (!sensor) {
+        //get sensortype
+        var sensorType = await SensorType.findOne({
+          where: { Name: req.body.SensorTypeName },
+        });
+        if (!sensorType) {
+          return res.status(404).send({
+            message: "SensorType Not Found",
+          });
+        }
+
+        //create sensor
+        var c = await Sensor.create({
+          Name: req.body.SensorName,
+          SensorTypeID: sensorType.SensorTypeID,
+        });
+      }
+
+      var t = await box.addSensor(sensor);
+
+      // var box = await Box.findByPk(req.body.BoxID, {
+      //   include: [
+      //     {
+      //       paranoid: true,
+      //       model: Sensor,
+      //       as: "sensors",
+      //     },
+      //   ],
+      // });
+
+      return res.status(200).send(sensor);
     } catch (error) {
       res.status(400).send(error);
     }

@@ -32,6 +32,9 @@ router.post("/boxes", boxController.add);
 router.put("/boxes", boxController.update);
 router.delete("/boxes/:id", boxController.delete);
 
+//arduino
+router.post("/boxes/add_sensor_arduino", boxController.addSensorArduino);
+
 router.post("/boxes/add_sensor", boxController.addSensor);
 router.get("/boxes/:id/all", boxController.getByIdAll);
 
