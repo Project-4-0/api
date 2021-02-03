@@ -11,6 +11,8 @@ const axios = require("axios");
 module.exports = {
   async getWeather(req, res) {
     try {
+      // get box with lat long
+
       // call weather api
       let api_key = process.env.OPENWEATHER_APIKEY;
       let lat = "51.14612394592471";

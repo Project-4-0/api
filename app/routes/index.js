@@ -123,7 +123,7 @@ router.get("/predict/box/:id", predictController.getOutputData);
 router.get("/kpi/adminDashboard", kpisController.getAdminDashboardKPI);
 
 /*Weather*/
-router.get("/weather", weatherController.getWeather);
+router.get("/weather/box/:id", weatherController.getWeather);
 
 //TEST MICRO
 router.get("/test", testController.list);

@@ -222,16 +222,15 @@ module.exports = {
 
       //get userBox oldlocation
       let oldlocation = await Location.findOne({
-        // include: [{ all: true, paranoid: true }],
         where: { EndDate: null },
         order: [["LocationID", "DESC"]],
-        // include: [
-        //   {
-        //     all: true,
-        //     paranoid: true,
-        //     where: { BoxID: box.BoxID, UserID: user.UserID, EndDate: null },
-        //   },
-        // ],
+        include: [
+          {
+            all: true,
+            paranoid: true,
+            where: { BoxID: box.BoxID, UserID: user.UserID, EndDate: null },
+          },
+        ],
       });
 
       if (oldlocation) {
