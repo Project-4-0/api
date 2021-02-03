@@ -14,9 +14,9 @@ boxValidate = (req, res) => {
     validationMessages.push("Name is required.");
   }
 
-  if (!req.body.Comment) {
-    validationMessages.push("Comment is required.");
-  }
+  // if (!req.body.Comment) {
+  //   validationMessages.push("Comment is required.");
+  // }
 
   return validationMessages;
 };
