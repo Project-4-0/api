@@ -58,6 +58,9 @@ router.post("/locations", locationController.add);
 router.put("/locations", locationController.update);
 router.delete("/locations/:id", locationController.delete);
 
+router.get("/locations/box/:id", locationController.getByBox);
+
+
 /* BoxUser Router */
 // router.get("/boxUsers", boxUserController.list);
 // router.get("/boxUsers/:id", boxUserController.getById);

@@ -2,6 +2,8 @@ const Box = require("../models").Box;
 const Sensor = require("../models").Sensor;
 const SensorType = require("../models").SensorType;
 const Monitoring = require("../models").Monitoring;
+const BoxUser = require("../models").BoxUser;
+const Location = require("../models").Location;
 
 //Validation Box
 boxValidate = (req, res) => {
@@ -64,19 +66,22 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-  getByIdAll(req, res) {
-    Box.findByPk(req.params.id, {
-      include: [{ all: true }],
-    })
-      .then((val) => {
-        if (!val) {
-          return res.status(404).send({
-            message: "Box Not Found",
-          });
-        }
-        return res.status(200).send(val);
-      })
-      .catch((error) => res.status(400).send(error));
+  async getByIdAll(req, res) {
+    try {
+      let box = await Box.findByPk(req.params.id, {
+        include: [{ all: true }],
+      });
+
+      if (!box) {
+        return res.status(404).send({
+          message: "Box Not Found",
+        });
+      }
+
+      return res.status(200).send({ box });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   },
 
   getByMacAdress(req, res) {
