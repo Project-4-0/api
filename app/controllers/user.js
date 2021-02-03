@@ -139,7 +139,6 @@ module.exports = {
       .update({
         FirstName: req.body.FirstName,
         LastName: req.body.LastName,
-        Password: bcrypt.hashSync(req.body.Password, 8),
         Email: req.body.Email,
         Address: req.body.Address,
         PostalCode: req.body.PostalCode,
