@@ -5,6 +5,7 @@ const SensorType = require("../models").SensorType;
 const BoxUser = require("../models").BoxUser;
 // const Sequelize = require("../models/index").Sequelize;
 const User = require("../models").User;
+const UserType = require("../models").UserType;
 
 const { Op } = require("sequelize");
 
@@ -159,81 +160,119 @@ module.exports = {
 
     let user;
     let measurement;
+
+    //get boxen and sensors
+    let boxesID = [];
+    let boxes = [];
+    let sensors = [];
+
     try {
-      // get all Sensortypes with different boxes
-
-      //check if boxId exist
-      if (req.body.BoxID) {
-        user = await User.findByPk(req.body.UserID, {
+      // check if admin of monteur
+      user = await User.findByPk(req.body.UserID, {
+        include: [
+          {
+            paranoid: true,
+            model: UserType,
+            as: "UserType",
+          },
+        ],
+      });
+      // if admin of monteur
+      if (
+        user.UserType.UserTypeName == "Admin" ||
+        user.UserType.UserTypeName == "Monteur"
+      ) {
+        box = await Box.findByPk(req.body.BoxID, {
           include: [
             {
               paranoid: true,
-              model: Box,
-              as: "boxes",
-              where: { BoxID: req.body.BoxID },
+              model: Sensor,
+              as: "sensors",
               include: [
                 {
                   paranoid: true,
-                  model: Sensor,
-                  as: "sensors",
-                  include: [
-                    {
-                      paranoid: true,
-                      model: SensorType,
-                      as: "SensorType",
-                      where: { Name: req.body.SensorTypeName },
-                    },
-                  ],
+                  model: SensorType,
+                  as: "SensorType",
+                  where: { Name: req.body.SensorTypeName },
                 },
               ],
             },
           ],
         });
-      } else {
-        user = await User.findByPk(req.body.UserID, {
-          include: [
-            {
-              paranoid: true,
-              model: Box,
-              as: "boxes",
-              include: [
-                {
-                  paranoid: true,
-                  model: Sensor,
-                  as: "sensors",
-                  include: [
-                    {
-                      paranoid: true,
-                      model: SensorType,
-                      as: "SensorType",
-                      where: { Name: req.body.SensorTypeName },
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        });
-      }
 
-      //get boxen and sensors
-      let boxesID = [];
-      let boxes = [];
-      let sensors = [];
-
-      user.boxes.forEach((box) => {
-        //add box id
+        //get boxen
         boxesID.push(box.BoxID);
         boxes.push(box);
-
         box.sensors.forEach((sensor) => {
           sensors.push(sensor.SensorID);
         });
-      });
+      } else {
+        // get all Sensortypes with different boxes
 
-      // "2021-01-28T05:16:21.000Z"
-      // "2021-01-29T10:16:21.000Z"
-      console.log(new Date("2021-01-30 00:00:00.000"));
+        //check if boxId exist
+        if (req.body.BoxID) {
+          user = await User.findByPk(req.body.UserID, {
+            include: [
+              {
+                paranoid: true,
+                model: Box,
+                as: "boxes",
+                where: { BoxID: req.body.BoxID },
+                include: [
+                  {
+                    paranoid: true,
+                    model: Sensor,
+                    as: "sensors",
+                    include: [
+                      {
+                        paranoid: true,
+                        model: SensorType,
+                        as: "SensorType",
+                        where: { Name: req.body.SensorTypeName },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        } else {
+          user = await User.findByPk(req.body.UserID, {
+            include: [
+              {
+                paranoid: true,
+                model: Box,
+                as: "boxes",
+                include: [
+                  {
+                    paranoid: true,
+                    model: Sensor,
+                    as: "sensors",
+                    include: [
+                      {
+                        paranoid: true,
+                        model: SensorType,
+                        as: "SensorType",
+                        where: { Name: req.body.SensorTypeName },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        }
+
+        user.boxes.forEach((box) => {
+          //add box id
+          boxesID.push(box.BoxID);
+          boxes.push(box);
+
+          box.sensors.forEach((sensor) => {
+            sensors.push(sensor.SensorID);
+          });
+        });
+      }
 
       if (req.body.StartDate && req.body.EndDate) {
         console.log("ok", boxesID, sensors);
@@ -262,33 +301,6 @@ module.exports = {
       //sort from timestamp small to big
       measurement = measurement.sort((a, b) => a.TimeStamp - b.TimeStamp);
 
-      //test
-      // user = await User.findByPk(req.body.UserID, {
-      //   include: [
-      //     {
-      //       model: Box,
-      //       as: "boxes",
-      //       include: [
-      //         {
-      //           model: Sensor,
-      //           as: "sensors",
-      //           // all: true,
-      //           include: [
-      //             {
-      //               paranoid: true,
-      //               model: SensorType,
-      //               as: "SensorType",
-      //               // all: true,
-      //               where: { Name: req.body.SensorTypeName },
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // });
-
-      // return res.status(200).send(user);
       return res.status(200).send({ Measurements: measurement, Boxes: boxes });
     } catch (e) {
       return res.status(400).send(e);
