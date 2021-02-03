@@ -112,7 +112,7 @@ module.exports = {
 
       const rows = await csv().fromFile(__dirname + "/data/output.csv");
 
-      console.log(rows);
+      // console.log(rows);
 
       return res.status(200).send(rows);
     } catch (error) {

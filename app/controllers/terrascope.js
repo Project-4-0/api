@@ -181,7 +181,7 @@ module.exports = {
         imgurl2;
 
       return res.status(200).send({
-        url,
+        url, date : selectFrame.datum
       });
 
       //boxUser
