@@ -1,6 +1,7 @@
 const Box = require("../models").Box;
 const Sensor = require("../models").Sensor;
 const SensorType = require("../models").SensorType;
+const Monitoring = require("../models").Monitoring;
 
 //Validation Box
 boxValidate = (req, res) => {
@@ -30,12 +31,24 @@ async function boxExist(val) {
 
 //Models
 module.exports = {
-  list(req, res) {
-    Box.findAll()
-      .then((box) => res.status(200).send(box))
-      .catch((error) => {
-        res.status(400).send(error);
+  async list(req, res) {
+    try {
+      let box = await Box.findAll({
+        include: [
+          {
+            paranoid: true,
+            limit: 1,
+            model: Monitoring,
+            as: "monitoring",
+            order: [["TimeStamp", "DESC"]],
+          },
+        ],
       });
+
+      return res.status(200).send(box);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   },
 
   getById(req, res) {
