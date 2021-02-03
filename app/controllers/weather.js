@@ -5,6 +5,8 @@ const Box = require("../models").Box;
 const User = require("../models").User;
 const SensorType = require("../models").SensorType;
 
+const Location = require("../models").Location;
+
 const axios = require("axios");
 
 //Models
@@ -12,6 +14,18 @@ module.exports = {
   async getWeather(req, res) {
     try {
       // get box with lat long
+
+      let location = await Location.findAll({
+        where: { EndDate: null },
+        order: [["LocationID", "DESC"]],
+        include: [
+          {
+            all: true,
+            paranoid: true,
+            where: { BoxID: req.params.id, EndDate: null },
+          },
+        ],
+      });
 
       // call weather api
       let api_key = process.env.OPENWEATHER_APIKEY;
@@ -32,7 +46,7 @@ module.exports = {
 
       var responseServer = await axios.get(url);
 
-      return res.status(200).send({ result: responseServer.data });
+      return res.status(200).send({ result: responseServer.data, location });
     } catch (error) {
       return res.status(400).send(error);
     }
