@@ -8,6 +8,9 @@ var dateFormat = require("dateformat");
 
 const { Op } = require("sequelize");
 
+//ssh connection
+const { NodeSSH } = require("node-ssh");
+
 //Models
 module.exports = {
   async getInputData(req, res) {
@@ -71,5 +74,36 @@ module.exports = {
     } catch (error) {
       res.status(400).send(error);
     }
+  },
+
+  async getOutputData(req, res) {
+    const ssh = new NodeSSH();
+
+    // ssh yourivanlaer@uservm.terrascope.be -p 24148
+    // bzpkthAM7BnApC5RnhAQ
+
+    ssh
+      .connect({
+        host: "uservm.terrascope.be",
+        username: "yourivanlaer",
+        port: "24148",
+        password: "bzpkthAM7BnApC5RnhAQ",
+      })
+      .then(function () {
+        ssh
+          .putFile(
+            __dirname + "/data/text.txt",
+            "/home/yourivanlaer/Public/predictions"
+          )
+          .then(
+            function () {
+              console.log("The File thing is done");
+            },
+            function (error) {
+              console.log("Something's wrong");
+              console.log(error);
+            }
+          );
+      });
   },
 };
