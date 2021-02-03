@@ -208,7 +208,7 @@ module.exports = {
         }
 
         //create sensor
-        var c = await Sensor.create({
+        var sensor = await Sensor.create({
           Name: req.body.SensorName,
           SensorTypeID: sensorType.SensorTypeID,
         });
