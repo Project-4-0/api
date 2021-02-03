@@ -10,6 +10,7 @@ const monitoring = require("./monitoring");
 const terrascope = require("./terrascope");
 const predict = require("./predict");
 const kpis = require("./kpis");
+const weather = require("./weather");
 
 const test = require("./test");
 module.exports = {
@@ -25,5 +26,6 @@ module.exports = {
   terrascope,
   predict,
   kpis,
+  weather,
   test,
 };

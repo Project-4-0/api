@@ -100,7 +100,7 @@ module.exports = {
       var product = "S2_FAPAR";
       var d = new Date();
       //20 DAGEN CHECK
-      var startDate = dateFormat(d.setDate(d.getDate() - 20), "yyyy-mm-dd");
+      var startDate = dateFormat(d.setDate(d.getDate() - 50), "yyyy-mm-dd");
       var endDate = dateFormat(new Date(), "yyyy-mm-dd");
       var crs = "epsg:4326";
       var source = "probav-mep";
