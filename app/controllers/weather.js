@@ -56,7 +56,7 @@ module.exports = {
         long +
         "&appid=" +
         api_key +
-        "&units=metric";
+        "&units=metric&lang=nl";
 
       var responseServer = await axios.get(url);
 
