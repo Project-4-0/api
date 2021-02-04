@@ -18,6 +18,7 @@ const monitoringController = require("../controllers").monitoring;
 const terrascopeController = require("../controllers").terrascope;
 const predictController = require("../controllers").predict;
 const kpisController = require("../controllers").kpis;
+const weatherController = require("../controllers").weather;
 
 const testController = require("../controllers").test;
 
@@ -56,6 +57,9 @@ router.get("/locations/:id", locationController.getById);
 router.post("/locations", locationController.add);
 router.put("/locations", locationController.update);
 router.delete("/locations/:id", locationController.delete);
+
+router.get("/locations/box/:id", locationController.getByBox);
+
 
 /* BoxUser Router */
 // router.get("/boxUsers", boxUserController.list);
@@ -118,9 +122,11 @@ router.get("/terrascope/box/:id", terrascopeController.getUrlByBoxID);
 router.post("/predict", predictController.getInputData);
 router.get("/predict/box/:id", predictController.getOutputData);
 
-
 /*KPIS*/
 router.get("/kpi/adminDashboard", kpisController.getAdminDashboardKPI);
+
+/*Weather*/
+router.get("/weather/box/:id", weatherController.getWeather);
 
 //TEST MICRO
 router.get("/test", testController.list);

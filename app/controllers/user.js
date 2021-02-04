@@ -139,7 +139,6 @@ module.exports = {
       .update({
         FirstName: req.body.FirstName,
         LastName: req.body.LastName,
-        Password: bcrypt.hashSync(req.body.Password, 8),
         Email: req.body.Email,
         Address: req.body.Address,
         PostalCode: req.body.PostalCode,
@@ -223,16 +222,15 @@ module.exports = {
 
       //get userBox oldlocation
       let oldlocation = await Location.findOne({
-        // include: [{ all: true, paranoid: true }],
         where: { EndDate: null },
         order: [["LocationID", "DESC"]],
-        // include: [
-        //   {
-        //     all: true,
-        //     paranoid: true,
-        //     where: { BoxID: box.BoxID, UserID: user.UserID, EndDate: null },
-        //   },
-        // ],
+        include: [
+          {
+            all: true,
+            paranoid: true,
+            where: { BoxID: box.BoxID, UserID: user.UserID, EndDate: null },
+          },
+        ],
       });
 
       if (oldlocation) {

@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         as: "users",
         foreignKey: "BoxID",
       });
+      Box.hasMany(models.Monitoring, {
+        as: "monitoring",
+        foreignKey: "BoxID",
+      });
     }
   }
   Box.init(

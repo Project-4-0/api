@@ -10,6 +10,10 @@ const { Op } = require("sequelize");
 
 //ssh connection
 const { NodeSSH } = require("node-ssh");
+//csv
+// const csv = require("csv-parser");
+// const fs = require("fs");
+const csv = require("csvtojson");
 
 //Models
 module.exports = {
@@ -65,14 +69,14 @@ module.exports = {
           boxID: measurements[i].BoxID,
           sensorType: sensor.SensorType.Name,
           value: measurements[i].Value,
-          latitude: location != null ? location.Longitude : null,
-          longitude: location != null ? location.Latitude : null,
+          latitude: location != null ? location.Latitude : null,
+          longitude: location != null ? location.Longitude : null,
         });
       }
 
       return res.status(200).send(result);
     } catch (error) {
-      res.status(400).send(error);
+      return res.status(400).send(error);
     }
   },
 
@@ -82,28 +86,41 @@ module.exports = {
     // ssh yourivanlaer@uservm.terrascope.be -p 24148
     // bzpkthAM7BnApC5RnhAQ
 
-    ssh
-      .connect({
+    try {
+      let c = await ssh.connect({
         host: "uservm.terrascope.be",
         username: "yourivanlaer",
         port: "24148",
         password: "bzpkthAM7BnApC5RnhAQ",
-      })
-      .then(function () {
-        ssh
-          .putFile(
-            __dirname + "/data/text.txt",
-            "/home/yourivanlaer/Public/predictions"
-          )
-          .then(
-            function () {
-              console.log("The File thing is done");
-            },
-            function (error) {
-              console.log("Something's wrong");
-              console.log(error);
-            }
-          );
       });
+
+      let file = await ssh.getFile(
+        __dirname + "/data/output.csv",
+        "/home/yourivanlaer/Public/predictions/output.csv"
+      );
+
+      //get csv object
+      // let row = await fs
+      //   .createReadStream(__dirname + "/data/output.csv")
+      //   .pipe(csv());
+      // // .on("data", (row) => {
+      // //   console.log(row);
+      // // })
+      // // .on("end", () => {
+      // //   console.log("CSV file successfully processed");
+      // // });
+
+      let rows = await csv().fromFile(__dirname + "/data/output.csv");
+
+      //filter 
+
+      rows = rows
+        .slice()
+        .sort((a, b) => new Date(a.predictedatum) - new Date(b.predictedatum));
+
+      return res.status(200).send(rows);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   },
 };
