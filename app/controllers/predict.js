@@ -83,6 +83,19 @@ module.exports = {
   async getOutputData(req, res) {
     const ssh = new NodeSSH();
 
+    let validationMessages = [];
+    if (req.body.BoxID === Object) {
+      validationMessages.push("BoxID is required.");
+    }
+
+    // if (req.body.SensorTypeName === Object) {
+    //   validationMessages.push("SensorTypeName is required.");
+    // }
+
+    if (validationMessages.length != 0) {
+      return res.status(400).send({ messages: validationMessages });
+    }
+
     // ssh yourivanlaer@uservm.terrascope.be -p 24148
     // bzpkthAM7BnApC5RnhAQ
 
@@ -99,21 +112,32 @@ module.exports = {
         "/home/yourivanlaer/Public/predictions/output.csv"
       );
 
-      //get csv object
-      // let row = await fs
-      //   .createReadStream(__dirname + "/data/output.csv")
-      //   .pipe(csv());
-      // // .on("data", (row) => {
-      // //   console.log(row);
-      // // })
-      // // .on("end", () => {
-      // //   console.log("CSV file successfully processed");
-      // // });
-
       let rows = await csv().fromFile(__dirname + "/data/output.csv");
 
-      //filter 
+      //
+      //filter
+      //
 
+      //boxid
+      rows = rows.filter((row) => row.boxID == req.body.BoxID);
+
+      //sensorType
+
+      //datum optioneel
+      if (req.body.StartDate != null && req.body.EndDate != null) {
+        rows = rows.filter(
+          (row) =>
+            new Date(row.predictedatum) >= new Date(req.body.StartDate) - 1 &&
+            new Date(row.predictedatum) <= new Date(req.body.EndDate)
+        );
+        console.log("ok");
+      }
+
+      //
+      //sorteren
+      //
+
+      // datum
       rows = rows
         .slice()
         .sort((a, b) => new Date(a.predictedatum) - new Date(b.predictedatum));

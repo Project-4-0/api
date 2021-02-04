@@ -120,7 +120,7 @@ router.get("/terrascope/box/:id", terrascopeController.getUrlByBoxID);
 
 /*Predict */
 router.post("/predict", predictController.getInputData);
-router.get("/predict/box/:id", predictController.getOutputData);
+router.post("/predict/box", predictController.getOutputData);
 
 /*KPIS*/
 router.get("/kpi/adminDashboard", kpisController.getAdminDashboardKPI);
