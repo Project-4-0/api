@@ -69,8 +69,8 @@ module.exports = {
           boxID: measurements[i].BoxID,
           sensorType: sensor.SensorType.Name,
           value: measurements[i].Value,
-          latitude: location != null ? location.Longitude : null,
-          longitude: location != null ? location.Latitude : null,
+          latitude: location != null ? location.Latitude : null,
+          longitude: location != null ? location.Longitude : null,
         });
       }
 
