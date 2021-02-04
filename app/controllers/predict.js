@@ -112,6 +112,8 @@ module.exports = {
 
       let rows = await csv().fromFile(__dirname + "/data/output.csv");
 
+      //filter 
+
       rows = rows
         .slice()
         .sort((a, b) => new Date(a.predictedatum) - new Date(b.predictedatum));

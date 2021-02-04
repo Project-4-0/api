@@ -218,6 +218,7 @@ module.exports = {
                 model: Box,
                 as: "boxes",
                 where: { BoxID: req.body.BoxID },
+                through: { where: { EndDate: null } },
                 include: [
                   {
                     paranoid: true,
@@ -243,6 +244,7 @@ module.exports = {
                 paranoid: true,
                 model: Box,
                 as: "boxes",
+                through: { where: { EndDate: null } },
                 include: [
                   {
                     paranoid: true,
