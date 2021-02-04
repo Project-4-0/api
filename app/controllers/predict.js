@@ -110,9 +110,11 @@ module.exports = {
       // //   console.log("CSV file successfully processed");
       // // });
 
-      const rows = await csv().fromFile(__dirname + "/data/output.csv");
+      let rows = await csv().fromFile(__dirname + "/data/output.csv");
 
-      // console.log(rows);
+      rows = rows
+        .slice()
+        .sort((a, b) => new Date(a.predictedatum) - new Date(b.predictedatum));
 
       return res.status(200).send(rows);
     } catch (error) {
