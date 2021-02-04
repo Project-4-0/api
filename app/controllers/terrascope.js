@@ -146,14 +146,16 @@ module.exports = {
 
       dataPr.forEach((element) => {
         console.log(element);
-        if (element.data > 0.6) {
+        if (element.data > 0.5) {
           selectFrame = element;
         }
       });
 
       //check if found
       if (selectFrame == null) {
-        return res.status(400).send({ error: "Geen satellietbeeld gevonden!" });
+        return res
+          .status(400)
+          .send({ error: "Geen satellietbeeld gevonden!", lon3, lat3 });
       }
 
       // get image
@@ -180,6 +182,7 @@ module.exports = {
 
       return res.status(200).send({
         url,
+        date: selectFrame.datum,
       });
 
       //boxUser

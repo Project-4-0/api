@@ -1,6 +1,9 @@
 const Box = require("../models").Box;
 const Sensor = require("../models").Sensor;
 const SensorType = require("../models").SensorType;
+const Monitoring = require("../models").Monitoring;
+const BoxUser = require("../models").BoxUser;
+const Location = require("../models").Location;
 
 //Validation Box
 boxValidate = (req, res) => {
@@ -14,9 +17,9 @@ boxValidate = (req, res) => {
     validationMessages.push("Name is required.");
   }
 
-  if (!req.body.Comment) {
-    validationMessages.push("Comment is required.");
-  }
+  // if (!req.body.Comment) {
+  //   validationMessages.push("Comment is required.");
+  // }
 
   return validationMessages;
 };
@@ -30,12 +33,24 @@ async function boxExist(val) {
 
 //Models
 module.exports = {
-  list(req, res) {
-    Box.findAll()
-      .then((box) => res.status(200).send(box))
-      .catch((error) => {
-        res.status(400).send(error);
+  async list(req, res) {
+    try {
+      let box = await Box.findAll({
+        include: [
+          {
+            paranoid: true,
+            limit: 1,
+            model: Monitoring,
+            as: "monitoring",
+            order: [["TimeStamp", "DESC"]],
+          },
+        ],
       });
+
+      return res.status(200).send(box);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   },
 
   getById(req, res) {
@@ -51,19 +66,22 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-  getByIdAll(req, res) {
-    Box.findByPk(req.params.id, {
-      include: [{ all: true }],
-    })
-      .then((val) => {
-        if (!val) {
-          return res.status(404).send({
-            message: "Box Not Found",
-          });
-        }
-        return res.status(200).send(val);
-      })
-      .catch((error) => res.status(400).send(error));
+  async getByIdAll(req, res) {
+    try {
+      let box = await Box.findByPk(req.params.id, {
+        include: [{ all: true }],
+      });
+
+      if (!box) {
+        return res.status(404).send({
+          message: "Box Not Found",
+        });
+      }
+
+      return res.status(200).send(box);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   },
 
   getByMacAdress(req, res) {
@@ -208,7 +226,7 @@ module.exports = {
         }
 
         //create sensor
-        var c = await Sensor.create({
+        var sensor = await Sensor.create({
           Name: req.body.SensorName,
           SensorTypeID: sensorType.SensorTypeID,
         });

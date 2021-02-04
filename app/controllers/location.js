@@ -1,5 +1,8 @@
 const Location = require("../models").Location;
 const BoxUser = require("../models").BoxUser;
+const Box = require("../models").Box;
+
+const { Op } = require("sequelize");
 
 //Validation Location
 locationValidate = (req, res) => {
@@ -38,6 +41,38 @@ module.exports = {
       .catch((error) => {
         res.status(400).send(error);
       });
+  },
+
+  async getByBox(req, res) {
+    try {
+      let box = await Box.findByPk(req.params.id);
+
+      if (!box) {
+        return res.status(404).send({
+          message: "Box Not Found",
+        });
+      }
+
+      let boxUser = await BoxUser.findOne({
+        where: {
+          EndDate: null,
+          StartDate: {
+            [Op.not]: null, // Like: sellDate IS NOT NULL
+          },
+          BoxID: box.BoxID,
+        },
+        order: [["StartDate", "DESC"]],
+      });
+
+      let location = await Location.findOne({
+        where: { BoxUserID: boxUser.BoxUserID },
+        order: [["StartDate", "DESC"]],
+      });
+
+      return res.status(200).send(location);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   },
 
   getById(req, res) {
